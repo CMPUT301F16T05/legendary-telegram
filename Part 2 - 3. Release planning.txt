@@ -1,1 +1,50 @@
-Major use cases
+•	Must do: 
+o	Should do: 
+♣	Can do:  
+Request: 
+•	As a rider, I want to request rides between two locations. 
+•	As a rider, I want to confirm a driver’s acceptance. This allows us to choose from a list of acceptances if more than one driver accepts simultaneously. 
+•	As a rider, I want to confirm the completion of a request and enable payment.
+o	As a rider, I want to see current requests I have open.
+o	As a rider, I want to be notified if my request is accepted.
+o	As a rider, I want to cancel requests.
+o	As a rider, I want to be able to phone or email the driver who accepted a request.
+o	As a rider, I want an estimate of a fair fare to offer to drivers.
+♣	As a rider - Go Home Button: Just click on the button, the app will automatically set start location as current location, and set end location as home address (stored in user profile). 
+♣	As a rider, I want to choose a history location that I have been to from a list just below the location enter box (Use search box).  
+
+Status: 
+•	As a rider or driver, I want to see the status of a request that I am involved in. 
+
+User Profile: 
+•	As a user, I want a profile with a unique username and my contact information. 
+o	As a user, I want to edit the contact information in my profile.
+o	As a user, I want to, when a username is presented for a thing, retrieve and show its contact information. 
+♣	As a driver, 
+♣	As a rider, I want to be able to store home address in user profile (Others cannot see it).  
+♣	As a rider, I want to automatically store the history location that I have been to (have completed a ride) online. 
+
+Searching: 
+•	As a driver, I want to browse and search for open requests by geo-location. 
+•	As a driver, I want to browse and search for open requests by keywords. 
+
+Accepting: 
+•	As a driver, I want to accept a request I agree with and accept that offered payment upon completion. 
+•	As a driver, I want to see if my acceptance was accepted. 
+o	As a driver, I want to view a list of things I have accepted that are pending, each request with its description, and locations.
+o	As a driver, I want to be notified if my ride offer was accepted.
+
+Offline Behavior: 
+o	As a driver, I want to see requests that I already accepted while offline. 
+o	As a rider, I want to see requests that I have made while offline.
+o	As a rider, I want to make requests that will be sent once I get connectivity again. 
+o	As a driver, I want to accept requests that will be sent once I get connectivity again.
+
+Location: 
+•	As a rider, I want to specify a start and end geo locations on a map for a request.
+•	As a driver, I want to view start and end geo locations on a map for a request.
+
+
+
+
+
