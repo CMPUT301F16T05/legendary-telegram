@@ -5,7 +5,7 @@ import android.location.Location;
 /**
  *
  */
-public class Job {
+public class Request {
 
     private String name;
     private Driver driver = new Driver();
@@ -14,7 +14,7 @@ public class Job {
     private Location endLocation;
     private Location startLocation;
 
-    public Job(String name, Rider rider, Float payment,
+    public Request(String name, Rider rider, Float payment,
                Location endLocation, Location startLocation){
 
         this.name = name;
