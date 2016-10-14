@@ -1,5 +1,7 @@
 package CMPUT301F16T05.legendary_telegram;
 
+import java.util.ArrayList;
+
 /**
  * Governs the details exclusive to Driver
  */
@@ -27,28 +29,35 @@ Searching
 */
 public class Driver extends User {
 
+    private ArrayList<Request> acceptedRequests = new ArrayList<Request>();
+    private ArrayList<Request> availableRequest = new ArrayList<Request>();
+
     public Driver(){
         super();
     }
 
-    public void FilterLocation(){
-
+    public ArrayList<Request> LoadRequestList(){
+        return null;
     }
 
-    public void FilterKeyword(){
-
+    public ArrayList<Request> FilterLocation(){
+        return null;
     }
 
-    public void AcceptJob(){
-
+    public ArrayList<Request> FilterKeyword(){
+        return null;
     }
 
-    public void ListAvailableJobs(){
-
+    public void AcceptRequest(Request request){
+        this.acceptedRequests.add(request);
     }
 
-    public void ListActiveJobs(){
+    public ArrayList<Request> ListAvailableJobs(){
+        return this.availableRequest;
+    }
 
+    public ArrayList<Request> ListActiveJobs(){
+        return this.acceptedRequests;
     }
 
     public void NotifyDriver(){

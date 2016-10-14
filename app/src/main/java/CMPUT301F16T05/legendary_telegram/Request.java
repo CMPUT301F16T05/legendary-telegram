@@ -5,20 +5,20 @@ import android.location.Location;
 /**
  *
  */
-public class Job {
+
+public class Request {
 
     private String name;
     private Driver driver = new Driver();
     private Rider rider = new Rider();
-    private Float payment;
+    private Double payment;
     private Location endLocation;
     private Location startLocation;
 
-    public Job(String name, Rider rider, Float payment,
-               Location endLocation, Location startLocation){
+    public Request(String name, Double payment,
+                   Location endLocation, Location startLocation){
 
         this.name = name;
-        this.rider = rider;
         this.payment = payment;
         this.endLocation = endLocation;
         this.startLocation = startLocation;
@@ -49,11 +49,11 @@ public class Job {
         this.rider = rider;
     }
 
-    public Float getPayment() {
+    public Double getPayment() {
         return payment;
     }
 
-    public void setPayment(Float payment) {
+    public void setPayment(Double payment) {
         this.payment = payment;
     }
 
