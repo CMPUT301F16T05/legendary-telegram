@@ -15,7 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainRequest"></activity>
+        <activity android:name=".MainRequest" />
+        <activity android:name=".mapActivity" />
+        <activity android:name=".requestStatus" />
+        <activity android:name=".contactScreen" />
+        <activity android:name=".userProfile"></activity>
     </application>
 
 </manifest>

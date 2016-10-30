@@ -7,4 +7,14 @@
     <string name="goToSettings">Settings</string>
     <string name="findRequests">Find Requests</string>
     <string name="makeRequests">Make A Request</string>
+    <string name="cancelReq">Cancel Request</string>
+    <string name="NameET">Name:</string>
+    <string name="pw">Password:</string>
+    <string name="confirm">Confirm:</string>
+    <string name="email">Email:</string>
+    <string name="phone">Phone:</string>
+    <string name="vehicle">Vehicle?</string>
+    <string name="editAccount">Change Settings</string>
+    <string name="checkIfExists">Check</string>
+
 </resources>
