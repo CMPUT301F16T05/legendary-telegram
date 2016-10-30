@@ -12,9 +12,9 @@ import android.widget.EditText;
  */
 public class LogIn extends AppCompatActivity {
 
-    EditText userName;
-    Button login;
-    Button newUser;
+    private EditText userName;
+    private Button login;
+    private Button newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

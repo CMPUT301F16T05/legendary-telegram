@@ -3,4 +3,8 @@
     <string name="userNameET">User Name...</string>
     <string name="logIn">Login</string>
     <string name="NewUsr">New User</string>
+    <string name="mainReqScrTxt">Relevant Open Requests</string>
+    <string name="goToSettings">Settings</string>
+    <string name="findRequests">Find Requests</string>
+    <string name="makeRequests">Make A Request</string>
 </resources>
