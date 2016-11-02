@@ -6,20 +6,26 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- * Right now, this only contains the basic information.
- * For simplicity, I've taken the liberty of instantiating all the view variables.
- * I will do the same for the remaining activities.
+ * You see the xml corresponding to this activity as soon as the App starts
+ * User enters a username. If that username exists (i.e. has a file in system memory)
+ * they proceed. If not, they must enter an existing name or create a new user account.
+ * This class displays all the information. The act of seeing if the Username exists
+ * is delegated to LogInController
  */
-public class LogIn extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
 
     private EditText userName;
     private Button login;
     private Button newUser;
 
+    private LogInController myController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        myController = new LogInController();
 
         userName = (EditText) findViewById(R.id.userNameET);
         login = (Button) findViewById(R.id.loginButton);

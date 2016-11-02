@@ -7,7 +7,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainRequest extends AppCompatActivity {
+/**
+ * After a user logs in, they see this screen.
+ * It's where they choose to find requests or make them
+ * Or see a listview of requests they can choose from/have made.
+ */
+public class MainRequestActivity extends AppCompatActivity {
 
     private TextView title;
     private Button goToSettings;
@@ -16,11 +21,15 @@ public class MainRequest extends AppCompatActivity {
     private ListView relevantRequests;
     private ArrayAdapter<Request> adapter;
 
+    private MainRequestController myController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_request);
+
+        myController = new MainRequestController();
 
         title = (TextView) findViewById(R.id.mainRequestTitle);
         goToSettings = (Button) findViewById(R.id.settingsButton);

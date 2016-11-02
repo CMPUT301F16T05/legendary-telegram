@@ -23,7 +23,7 @@ When the user creates or modifies an account the function that checks the name s
 separate button exists for convience.
 */
 
-public class userProfile extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     private Button checkUser;
     private Button changeSettings;
@@ -32,10 +32,14 @@ public class userProfile extends AppCompatActivity {
     private EditText emailEntered;
     private EditText vehicleEntered;
 
+    private UserProfileController myController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        myController = new UserProfileController();
 
         checkUser = (Button) findViewById(R.id.checkUsrName);
         changeSettings = (Button) findViewById(R.id.changeSettings);

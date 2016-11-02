@@ -7,17 +7,27 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class requestStatus extends AppCompatActivity {
+/**
+ * Clicking on a Request in MainRequestActivity should lead to this.
+ * For a Rider this would be more detailed information like the number of
+ * Drivers have offered to fulfill that request. From there they could click on a driver shown
+ * in a ListView and go to ContactScreenActivity to see the phone/email and contact them.
+ */
+public class RequestStatusActivity extends AppCompatActivity {
 
     private TextView title;
     private Button cancelButton;
     private ListView requestsDriversLV;
     private ArrayAdapter<String> adapter;
 
+    private RequestStatusController myController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_status);
+
+        myController = new RequestStatusController();
 
         title = (TextView) findViewById(R.id.specificRequestStatus);
         cancelButton = (Button) findViewById(R.id.cancelReqButton);

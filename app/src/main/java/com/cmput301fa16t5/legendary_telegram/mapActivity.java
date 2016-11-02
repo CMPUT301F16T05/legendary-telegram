@@ -4,14 +4,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
- * Tom, you looked at the Google Map API the most.
- * Make this activity look appropriate based on what you learned.
+ * Riders pick where they are and where they want to go.
+ * Drivers pick where they are looking for Requests in.
  */
-public class mapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
+
+    private MapController myController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        myController = new MapController();
     }
 }
