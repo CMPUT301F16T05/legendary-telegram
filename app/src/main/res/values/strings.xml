@@ -14,7 +14,6 @@
     <string name="email">Email:</string>
     <string name="phone">Phone:</string>
     <string name="vehicle">Vehicle?</string>
-    <string name="editAccount">Change Settings</string>
     <string name="checkIfExists">Check</string>
 
 </resources>

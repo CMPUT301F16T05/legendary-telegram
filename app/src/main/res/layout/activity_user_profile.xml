@@ -27,7 +27,7 @@
         android:ems="10"
         android:id="@+id/userNameSettings"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/passwordSetting" />
+        android:layout_toEndOf="@+id/phoneSettings" />
 
     <Button
         android:text="@string/checkIfExists"
@@ -40,104 +40,44 @@
         android:layout_toEndOf="@+id/userNameSettings" />
 
     <TextView
-        android:text="@string/pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nameSettings"
-        android:layout_alignParentStart="true"
-        android:id="@+id/passwordSetting"
-        android:layout_alignBottom="@+id/userPassword" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/nameSettings"
-        android:id="@+id/userPassword"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/passwordSetting" />
-
-    <TextView
-        android:text="@string/confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordSetting"
-        android:layout_alignParentStart="true"
-        android:id="@+id/confirmSetting"
-        android:layout_alignBottom="@+id/userConfirmPassword"
-        android:layout_toStartOf="@+id/userPassword" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/passwordSetting"
-        android:id="@+id/userConfirmPassword"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/passwordSetting" />
-
-    <TextView
         android:text="@string/phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/confirmSetting"
         android:layout_alignParentStart="true"
         android:id="@+id/phoneSettings"
         android:layout_alignBottom="@+id/userPhone"
-        android:layout_toStartOf="@+id/userConfirmPassword" />
+        android:layout_toStartOf="@+id/userEmail"
+        android:layout_alignTop="@+id/userPhone" />
+
+    <TextView
+        android:text="@string/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/emailSettings"
+        android:layout_alignBottom="@+id/userEmail"
+        android:layout_toStartOf="@+id/userPhone"
+        android:layout_alignTop="@+id/userEmail" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:layout_below="@+id/confirmSetting"
         android:id="@+id/userPhone"
+        android:layout_below="@+id/userNameSettings"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/confirmSetting"
-        android:layout_alignStart="@+id/userConfirmPassword" />
-
-    <TextView
-        android:text="@string/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/phoneSettings"
-        android:layout_alignParentStart="true"
-        android:id="@+id/emailSettings"
-        android:layout_alignBottom="@+id/userEmail"
-        android:layout_toStartOf="@+id/userPhone" />
+        android:layout_toEndOf="@+id/nameSettings" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
-        android:layout_below="@+id/phoneSettings"
         android:id="@+id/userEmail"
+        android:layout_below="@+id/userPhone"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/phoneSettings"
-        android:layout_alignStart="@+id/userPhone" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/emailSettings"
-        android:id="@+id/userVehicle"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/emailSettings"
-        android:layout_alignStart="@+id/userEmail" />
-
-    <Button
-        android:text="@string/editAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/changeSettings" />
+        android:layout_toEndOf="@+id/vehicleSetting" />
 
     <TextView
         android:text="@string/vehicle"
@@ -146,6 +86,23 @@
         android:id="@+id/vehicleSetting"
         android:layout_below="@+id/emailSettings"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/userVehicle"
-        android:layout_toStartOf="@+id/userEmail" />
+        android:layout_alignBottom="@+id/userVehicle" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/userVehicle"
+        android:layout_below="@+id/userEmail"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/vehicleSetting" />
+
+    <Button
+        android:text="ToBeAssignedByController"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeSettings"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

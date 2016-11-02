@@ -16,8 +16,6 @@ says "create new account"
 In the second case, the fields are to be filled with the existing information about the user, which they can modify.
 The button at the bottom will say "change settings"
 
-I need to get rid of the password fields. Forgot about that. There is no password. Will do at home.
-
 The check button at the top checks the name entered into the field. If a user with that name already exists
 a new user account cannot be made/the existing account cannot be modified. 
 
@@ -30,8 +28,6 @@ public class userProfile extends AppCompatActivity {
     private Button checkUser;
     private Button changeSettings;
     private EditText nameEntered;
-    private EditText pwEntered;
-    private EditText confirmPW;
     private EditText phoneEntered;
     private EditText emailEntered;
     private EditText vehicleEntered;
@@ -44,8 +40,6 @@ public class userProfile extends AppCompatActivity {
         checkUser = (Button) findViewById(R.id.checkUsrName);
         changeSettings = (Button) findViewById(R.id.changeSettings);
         nameEntered = (EditText) findViewById(R.id.userNameSettings);
-        pwEntered = (EditText) findViewById(R.id.userPassword);
-        confirmPW = (EditText) findViewById(R.id.userConfirmPassword);
         phoneEntered = (EditText) findViewById(R.id.userPhone);
         emailEntered = (EditText) findViewById(R.id.userEmail);
         vehicleEntered = (EditText) findViewById(R.id.userVehicle);
