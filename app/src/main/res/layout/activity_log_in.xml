@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="@string/userNameET"
+        android:hint="@string/userNameET"
         android:ems="10"
         android:id="@+id/userNameET"
         android:layout_marginBottom="60dp"
