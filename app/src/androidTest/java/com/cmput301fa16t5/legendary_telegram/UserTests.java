@@ -1,6 +1,6 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by idrea on 2016/11/5.
