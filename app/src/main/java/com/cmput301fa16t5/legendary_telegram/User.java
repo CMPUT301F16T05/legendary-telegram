@@ -1,5 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.Context;
+
 /**
  * Created by keith on 11/2/2016.
  * User class.
@@ -22,7 +24,7 @@ public class User {
         this.userName = userName;
         this.email = email;
         this.telephone = telephone;
-        this.vehicle = "N/A";
+        this.vehicle = "N/A"; // can use to check if the user can be a driver
         this.myDriver = null;
         this.myRider = new Rider();
     }
@@ -73,5 +75,31 @@ public class User {
 
     public void setMyDriver(Driver myDriver) {
         this.myDriver = myDriver;
+    }
+
+    public void saveChanges(User  NewUser){
+        if (this.getUserName() == NewUser.getUserName()){
+            this.setEmail(NewUser.getEmail());
+            this.setTelephone(NewUser.getTelephone());
+            this.setVehicle(NewUser.getVehicle());
+            this.setEmail(NewUser.getEmail());
+            this.setMyRider(NewUser.getMyRider());
+            this.setMyDriver(NewUser.getMyDriver());
+        }
+        else{
+            // Delete Username from the local file need GSON stuff(wait for the function)
+            // GsonController.deleteUserInDisk(user,"");
+            // Add new Username and information to the local file(maybe also the server)
+            // Context context = new Context;
+            // GsonController.saveUserToDisk(NewUser,context);
+        }
+    }
+
+    public String showInfo(){
+        return this.userName + ":\n" + this.telephone + " " + this.email;
+    }
+
+    public void checkUserName(String userName){
+
     }
 }
