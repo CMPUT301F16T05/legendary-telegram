@@ -13,8 +13,14 @@ public class Rider {
     private ArrayList<Request> openRequests;
     // No RequestList, just an arraylist.
 
+    // Constructor
     public Rider() {
+        openRequests = new ArrayList<Request>();
+    }
 
+    // Add a request
+    public void addRequest(Request newRequest) {
+        openRequests.add(newRequest);
     }
 
 }
