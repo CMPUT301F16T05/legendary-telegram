@@ -15,5 +15,6 @@
     <string name="phone">Phone:</string>
     <string name="vehicle">Vehicle?</string>
     <string name="checkIfExists">Check</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
