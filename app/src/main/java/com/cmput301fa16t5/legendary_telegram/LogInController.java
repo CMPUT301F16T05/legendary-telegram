@@ -5,6 +5,7 @@ import android.content.Context;
 /**
  * Controller for Log In Screen Activity
  * Very simple, given the activity.
+ * @author kgmills
  */
 public class LogInController {
 

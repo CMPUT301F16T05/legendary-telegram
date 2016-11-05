@@ -19,15 +19,6 @@
         android:id="@+id/newUserLogin"
         android:onClick="newUserClick" />
 
-    <Button
-        android:text="@string/logIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/loginButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="loginClick" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,5 +28,14 @@
         android:id="@+id/userNameET"
         android:layout_marginBottom="60dp"
         android:layout_above="@+id/loginButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/logIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginButton"
+        android:onClick="loginClick"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

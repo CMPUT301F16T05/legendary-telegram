@@ -13,6 +13,7 @@ import android.widget.Toast;
  * If you press the new user button, you get taken to an activity where you can make a new user,
  * no questions asked.
  * If you press the login button, you must first provide a valid username for this device.
+ * @author kgmills
  */
 public class LogInActivity extends AppCompatActivity {
 

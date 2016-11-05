@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
  * A method to check if a file exists on disk.
  * A method to load a User Object from disk.
  * A method to save a User Object to disk.
+ * @author kgmills
  */
 public class GsonController {
 
