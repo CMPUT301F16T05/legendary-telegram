@@ -16,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 /**
+<<<<<<< Updated upstream
  * Gson controller class.
  * All methods are static; no objects needed, no constructor.
  * Contains:
@@ -23,6 +24,16 @@ import java.lang.reflect.Type;
  * A method to load a User Object from disk.
  * A method to save a User Object to disk.
  * @author kgmills
+=======
+ * Created by keith on 11/2/2016.
+ *
+ * It's the GsonController.
+ * It's accessed typically by the CentralController only.
+ * Saves and loads the user information to disk.
+ *
+ * PLEASE CHECK THE EXAMPLE FUNCTION TO SEE OUR SYNTAX FOR SAVING FILES TO DISK.
+ *
+>>>>>>> Stashed changes
  */
 public class GsonController {
 

@@ -17,10 +17,14 @@ public class User {
     private Rider myRider;
     private Driver myDriver;
 
+    // Constructor - Initialize all attributes
     public User(String userName, String email, String telephone) {
         this.userName = userName;
         this.email = email;
         this.telephone = telephone;
+        this.vehicle = "N/A";
+        this.myDriver = null;
+        this.myRider = new Rider();
     }
 
     public String getUserName() {
@@ -35,19 +39,39 @@ public class User {
         return telephone;
     }
 
-    // Used for both adding a vehicle and modifying existing.
-    public void modifyVehicle(String vehicle) {
-        if (vehicle.equals("")) {
-            this.vehicle = "";
-            this.myDriver = null;
-        }
+    public String getVehicle() {
+        return vehicle;
+    }
 
-        else {
-            this.vehicle = vehicle;
-            if (this.myDriver.equals(null)) {
-                this.myDriver = new Driver();
-            }
-        }
+    public Rider getMyRider() {
+        return myRider;
+    }
 
+    public Driver getMyDriver() {
+        return myDriver;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public void setMyRider(Rider myRider) {
+        this.myRider = myRider;
+    }
+
+    public void setMyDriver(Driver myDriver) {
+        this.myDriver = myDriver;
     }
 }
