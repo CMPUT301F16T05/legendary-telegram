@@ -23,6 +23,18 @@ public class User {
         this.telephone = telephone;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
     // Used for both adding a vehicle and modifying existing.
     public void modifyVehicle(String vehicle) {
         if (vehicle.equals("")) {

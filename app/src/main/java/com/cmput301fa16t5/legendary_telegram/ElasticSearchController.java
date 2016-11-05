@@ -1,6 +1,6 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import com.searchly.jestdroid.DroidClientConfig;
+/*import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
@@ -18,7 +18,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
+import io.searchbox.core.SearchResult;*/
 
 /**
  * Created by keith on 11/2/2016.
@@ -32,7 +32,7 @@ import io.searchbox.core.SearchResult;
  * from user SRomansky
  */
 
-public class ElasticSearchController {
+/*public class ElasticSearchController {
     private static JestDroidClient client;
 
     // TODO we need a function that gets requests!
@@ -110,4 +110,4 @@ public class ElasticSearchController {
         }
     }
 
-}
+} */
