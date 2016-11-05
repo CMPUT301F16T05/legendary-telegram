@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,6 +33,10 @@ public class GsonController {
      * @return True of the file exists. False otherwise.
      */
     public static boolean checkIfExists(String userName, Context context) {
+        if (userName.equals("") || userName == null) {
+            return false;
+        }
+
         for (String s: context.fileList()) {
             if ((userName + ".sav").equals(s)) {
                 return true;
