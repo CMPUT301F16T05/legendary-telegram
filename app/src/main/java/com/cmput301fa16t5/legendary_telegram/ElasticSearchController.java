@@ -1,6 +1,6 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-/*import com.searchly.jestdroid.DroidClientConfig;
+import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
@@ -13,12 +13,13 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;*/
+import io.searchbox.core.SearchResult;
 
 /**
  * Created by keith on 11/2/2016.
@@ -27,15 +28,14 @@ import io.searchbox.core.SearchResult;*/
  * Only accessed by the instance of CentralController.
  * Probably where we'll spend a lot of time.
  *
- * Code adapted from
+ * Base code adapted from the  lab demonstration code found at
  * https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
  * from user SRomansky
  */
 
-/*public class ElasticSearchController {
+public class ElasticSearchController {
     private static JestDroidClient client;
 
-    // TODO we need a function that gets requests!
     public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
         @Override
         protected ArrayList<Request> doInBackground(String... search_parameters) {
@@ -66,17 +66,28 @@ import io.searchbox.core.SearchResult;*/
             return requests;
         }
     }
+    /**
+     * Adds a request to the ElasticSearch server
+     * @param userName: The username as a string.
+     * @param context: Needed to get file list.
+     * @return True of the file exists. False otherwise.
+     */
 
+    /**
+     * Usage:
+     * ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+     * addRequestsTask.execute(newRequest);
+     */
+    public static class AddRequestsTask extends AsyncTask<Request, Void, String> {
 
-    // TODO we need a function which adds a request!
-    public static class AddRequestsTask extends AsyncTask<Request, Void, Void> {
+        final CountDownLatch signal = new CountDownLatch(1);
 
         @Override
-        protected Void doInBackground(Request... requests) {
+        protected String doInBackground(Request... requests) {
             verifySettings();
 
             for (Request request: requests) {
-                Index index = new Index.Builder(request).index("testing").type("request").build();
+                Index index = new Index.Builder(request).index("fa16t5").type("request").build();
 
                 try {
                     DocumentResult result = client.execute(index);
@@ -95,6 +106,12 @@ import io.searchbox.core.SearchResult;*/
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            signal.countDown();
+        }
     }
 
 
@@ -110,4 +127,4 @@ import io.searchbox.core.SearchResult;*/
         }
     }
 
-} */
+}
