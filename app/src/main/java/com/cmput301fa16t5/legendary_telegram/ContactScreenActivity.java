@@ -1,7 +1,10 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -52,6 +55,14 @@ public class ContactScreenActivity extends AppCompatActivity {
 
         commitButton.setText("Accepting a Driver as a Rider? Accepting a Rider as a Driver? Depends on context");
 
-
+        phoneTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //http://stackoverflow.com/questions/5403308/make-a-phone-call-click-on-a-button//
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:+" + phoneTxt.getText().toString().trim()));
+                startActivity(callIntent);
+            }
+        });
     }
 }

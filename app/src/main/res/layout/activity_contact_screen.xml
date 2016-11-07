@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/infoTextView"
         android:layout_alignParentStart="true"
-        android:id="@+id/phoneTextView" />
+        android:id="@+id/phoneTextView"
+        android:clickable="true"/>
 
     <TextView
         android:text="setByController"
