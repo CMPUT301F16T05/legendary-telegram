@@ -2,6 +2,8 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+
 /**
  * Created by keith on 10/30/2016.
  * Request
@@ -12,13 +14,16 @@ public class Request {
     //I won't put down the coordinates for the map... should be filled out later using a specified
     // way.
 
-    // Should have a field noting the ID that ElasticSearch gives it.
+    // Should have a
 
-    //ID created by ElasticSearchController
+    //ID created by ElasticSearchControllerfield noting the ID that ElasticSearch gives it.
     private String id;
     //Rider that created request and driver that will fulfill it
     private Rider rider;
-    private Driver driver;
+
+    private ArrayList<Driver> waitingDrivers;
+
+    private Driver finalDriver;
     //Location rider wishes to be picked up and dropped off at
     private Location startLocation;
     private Location endLocation;
@@ -26,13 +31,37 @@ public class Request {
     private double fee;
     // State of the request. See RequestEnum.java for details.
     private RequestEnum state;
+    // Use to calculate the fee (may improve after using the map)
+    private double distance;
 
     public Request(Rider rider, Location start, Location end){
         this.rider = rider;
         this.startLocation = start;
         this.endLocation = end;
         this.state = RequestEnum.openRequest;
-        this.fee = calculateFee(start, end);
+        this.fee = calculateFee();
+        this.distance = distance;
+    }
+
+    public void setFinalDriver(Driver finalDriver) {
+        this.finalDriver = finalDriver;
+    }
+
+    public Driver getFinalDriver() {
+        return finalDriver;
+    }
+
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public ArrayList<Driver> getWaitingDrivers() {
+        return waitingDrivers;
     }
 
     public String getId() {
@@ -49,14 +78,6 @@ public class Request {
 
     public void setRider(Rider rider) {
         this.rider = rider;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
     }
 
     public Location getStartLocation() {
@@ -83,9 +104,9 @@ public class Request {
         this.fee = fee;
     }
 
-    //TODO, figure out the formula for this
-    public double calculateFee(Location start, Location end){
-        return 0;
+    //TODO, figure out the formula for this (Similar one with the UBER's)
+    public double calculateFee(){
+        return 2.25 + 0.8 * distance;
     }
 
     public RequestEnum getState() {
@@ -94,6 +115,10 @@ public class Request {
 
     public void setState(RequestEnum state) {
         this.state = state;
+    }
+
+    public void addWaitingDrivers(Driver driver){
+        waitingDrivers.add(driver);
     }
 
 }

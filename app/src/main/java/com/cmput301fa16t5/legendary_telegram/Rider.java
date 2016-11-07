@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Rider {
 
-    private Request currentRequest;
-    private ArrayList<Request> openRequests;
+    public Request currentRequest;
+    public ArrayList<Request> openRequests;
     // No RequestList, just an arraylist.
 
     // Constructor
@@ -21,6 +21,19 @@ public class Rider {
     // Add a request
     public void addRequest(Request newRequest) {
         openRequests.add(newRequest);
+    }
+
+    public Request showCurrentRequest(){
+        return currentRequest;
+    }
+
+    public void cancelRequest(Request newRequest){
+        openRequests.remove(newRequest);
+        //should add the nofications to the drivers ??
+    }
+
+    public void pickDriver(Driver driver){
+        currentRequest.setFinalDriver(driver);
     }
 
 }
