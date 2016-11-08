@@ -54,7 +54,7 @@ public class ContactScreenActivity extends AppCompatActivity {
         emailTxt.setText("Email. Clicking it should... you get the idea.");
 
         commitButton.setText("Accepting a Driver as a Rider? Accepting a Rider as a Driver? Depends on context");
-
+        //@Yu Tang Lin
         phoneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

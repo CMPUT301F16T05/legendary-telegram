@@ -8,34 +8,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cmput301fa16t5.legendary_telegram.LogInActivity">
+    tools:context="com.cmput301fa16t5.legendary_telegram.LogInActivity"
+    android:background="@drawable/drive_city">
 
     <Button
+        android:id="@+id/newUserLogin"
         android:text="@string/NewUsr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="newUserClick"
+        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/newUserLogin"
-        android:onClick="newUserClick" />
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:text="@string/logIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="loginClick"
+        android:layout_alignBottom="@+id/userNameET"
+        android:layout_alignParentEnd="true" />
 
     <EditText
+        android:id="@+id/userNameET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="@string/userNameET"
         android:ems="10"
-        android:id="@+id/userNameET"
-        android:layout_marginBottom="60dp"
-        android:layout_above="@+id/loginButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/newUserLogin"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/loginButton" />
 
-    <Button
-        android:text="@string/logIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/loginButton"
-        android:onClick="loginClick"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
