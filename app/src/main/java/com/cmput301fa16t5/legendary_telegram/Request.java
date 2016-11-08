@@ -2,6 +2,8 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.location.Location;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 
 /**
@@ -34,13 +36,21 @@ public class Request {
     // Use to calculate the fee (may improve after using the map)
     private double distance;
 
+    //Used as an indicator for adding and deleting things from the elasticsearch server
+    private Boolean onServer;
+
     public Request(Rider rider, Location start, Location end){
+
+        SecureRandom random = new SecureRandom();
+        this.id = new BigInteger(64, random).toString(32);
         this.rider = rider;
         this.startLocation = start;
         this.endLocation = end;
         this.state = RequestEnum.openRequest;
         this.fee = calculateFee();
+        //TODO figure out the distance based on start and end location
         this.distance = distance;
+        this.onServer = Boolean.FALSE;
     }
 
     public void setFinalDriver(Driver finalDriver) {
@@ -119,6 +129,14 @@ public class Request {
 
     public void addWaitingDrivers(Driver driver){
         waitingDrivers.add(driver);
+    }
+
+    public Boolean isOnServer() {
+        return onServer;
+    }
+
+    public void setOnServer(Boolean onServer) {
+        this.onServer = onServer;
     }
 
 }
