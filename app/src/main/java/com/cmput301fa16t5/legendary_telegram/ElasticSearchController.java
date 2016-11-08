@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.searchbox.client.JestClient;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -35,33 +36,65 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchController {
     private static JestDroidClient client;
 
-    public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class DeleteRequestsTask extends AsyncTask<String, Void, Void>{
         @Override
-        protected ArrayList<Request> doInBackground(String... search_parameters) {
+        protected Void doInBackground(String... search_params) {
+            verifySettings();
+
+            for (String params: search_params) {
+                Delete delete = new Delete.Builder(params)
+                        .index("fa16t5")
+                        .type("request")
+                        .build();
+
+                try {
+                    DocumentResult result = client.execute(delete);
+                    if (result.isSucceeded()) {
+                        //yay
+                    }
+                    else {
+                        Log.i("Error", "Elastic search was not able to delete the request.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Uhoh", "We failed to delete a request fromt elastic search!");
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class GetRequestsFromIDTask extends AsyncTask<String, Void, ArrayList<Request>> {
+        @Override
+        protected ArrayList<Request> doInBackground(String... search_params) {
             verifySettings();
 
             ArrayList<Request> requests = new ArrayList<Request>();
+            String query;
 
-            // assume that search_parameters[0] is the only search term we are interested in using
-            Search search = new Search.Builder(search_parameters[0])
-                    .addIndex("fa16t5")
-                    .addType("request")
-                    .build();
+            for (String params: search_params) {
+                // assume that search_parameters[0] is the only search term we are interested in using
+                query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
+                //query = "{\"from\"; 0, \"size\": 10000, \"query\": {\"match\": {\"_id\": \"" + params + "\"}}}";
+                Search search = new Search.Builder(query)
+                        .addIndex("fa16t5")
+                        .addType("request")
+                        .build();
 
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
-                    requests.addAll(foundRequests);
-                }
-                else {
-                    Log.i("Error", "The search query failed to find any requests that matched.");
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
+                        requests.addAll(foundRequests);
+                    } else {
+                        Log.i("Error", "The search query failed to find any requests that matched.");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
             }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
             return requests;
         }
     }
@@ -84,7 +117,10 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Request request: requests) {
-                Index index = new Index.Builder(request).index("fa16t5").type("request").build();
+                Index index = new Index.Builder(request)
+                        .index("fa16t5")
+                        .type("request")
+                        .build();
 
                 try {
                     DocumentResult result = client.execute(index);
