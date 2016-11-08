@@ -13,7 +13,6 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
@@ -78,12 +77,10 @@ public class ElasticSearchController {
      * ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
      * addRequestsTask.execute(newRequest);
      */
-    public static class AddRequestsTask extends AsyncTask<Request, Void, String> {
-
-        final CountDownLatch signal = new CountDownLatch(1);
+    public static class AddRequestsTask extends AsyncTask<Request, Void, Void> {
 
         @Override
-        protected String doInBackground(Request... requests) {
+        protected Void doInBackground(Request... requests) {
             verifySettings();
 
             for (Request request: requests) {
@@ -105,12 +102,6 @@ public class ElasticSearchController {
             }
 
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            signal.countDown();
         }
     }
 

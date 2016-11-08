@@ -1,16 +1,24 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.util.Log;
+
 import org.junit.Test;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.*;
 
 /**
  * Created by Randy on 2016-11-06.
  *
- * Basic idea for asynctask testing from
- * http://stackoverflow.com/questions/2321829/android-asynctask-testing-with-android-test-framework
- * user Billy Brackeen
+ * Basic idea for synchronising asynctask for testing from
+ * http://stackoverflow.com/questions/631598/how-to-use-junit-to-test-asynchronous-processes
+ * user Strawberry
  */
 public class ElasticSearchControllerTest {
+
+    private CountDownLatch lock = new CountDownLatch(1);
 
     /**
      * Remove any test requests sent to the server
@@ -28,11 +36,25 @@ public class ElasticSearchControllerTest {
         //When initialized a request will have an empty ID
         assertTrue(newRequest.getId().isEmpty());
 
-        //Add the reqeuest
-        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        //Initialize the ESC task and override onPostExecute so I can synchronize the test
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
+        {
+            @Override
+            public void onPostExecute(Void result)
+            {
+                lock.countDown();
+            }
+        };
         addRequestsTask.execute(newRequest);
 
+        try {
+            lock.await(2000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //The server wil grant an ID when added sucessfully
+        Log.d("tag", newRequest.getId());
         assertFalse(newRequest.getId().isEmpty());
     }
 

@@ -35,6 +35,7 @@ public class Request {
     private double distance;
 
     public Request(Rider rider, Location start, Location end){
+        this.id = "";
         this.rider = rider;
         this.startLocation = start;
         this.endLocation = end;
