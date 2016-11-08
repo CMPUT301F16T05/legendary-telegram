@@ -36,9 +36,9 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchController {
     private static JestDroidClient client;
 
-    public static class DeleteRequestsTask extends AsyncTask<String, Void, Void>{
+    public static class DeleteRequestsTask extends AsyncTask<String, Void, Boolean>{
         @Override
-        protected Void doInBackground(String... search_params) {
+        protected Boolean doInBackground(String... search_params) {
             verifySettings();
 
             for (String params: search_params) {
@@ -62,7 +62,7 @@ public class ElasticSearchController {
                 }
             }
 
-            return null;
+            return Boolean.TRUE;
         }
     }
 
@@ -78,9 +78,8 @@ public class ElasticSearchController {
                 // assume that search_parameters[0] is the only search term we are interested in using
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
-                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"id\": \"" + params + "\"}}}";
-
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
+                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"id\": \"" + params + "\"}}}";
                 Search search = new Search.Builder(query)
                         .addIndex("fa16t5")
                         .addType("request")
@@ -113,10 +112,10 @@ public class ElasticSearchController {
      * ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
      * addRequestsTask.execute(newRequest);
      */
-    public static class AddRequestsTask extends AsyncTask<Request, Void, Void> {
+    public static class AddRequestsTask extends AsyncTask<Request, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(Request... requests) {
+        protected Boolean doInBackground(Request... requests) {
             verifySettings();
 
             for (Request request: requests) {
@@ -144,7 +143,7 @@ public class ElasticSearchController {
                 }
             }
 
-            return null;
+            return Boolean.TRUE;
         }
     }
 

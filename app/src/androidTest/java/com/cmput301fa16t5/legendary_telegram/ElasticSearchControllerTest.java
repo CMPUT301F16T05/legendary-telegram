@@ -1,9 +1,11 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -11,13 +13,10 @@ import static org.junit.Assert.*;
 /**
  * Created by Randy on 2016-11-06.
  *
- * Basic idea for synchronising asynctask for testing from
- * http://stackoverflow.com/questions/631598/how-to-use-junit-to-test-asynchronous-processes
- * user Strawberry
  */
 public class ElasticSearchControllerTest {
 
-    private CountDownLatch lock = new CountDownLatch(1);
+    private static final int sleepTimer = 5;
 
     /**
      * Remove any test requests sent to the server.
@@ -44,22 +43,13 @@ public class ElasticSearchControllerTest {
         assertFalse(newRequest.isOnServer());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
-        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
-        {
-            @Override
-            public void onPostExecute(Void result)
-            {
-                lock.countDown();
-            }
-        };
-        addRequestsTask.execute(newRequest);
-
-        try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            addRequestsTask.execute(newRequest).get();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
-
         //The server wil grant an ID when added sucessfully
         assertTrue(newRequest.isOnServer());
 
@@ -75,18 +65,17 @@ public class ElasticSearchControllerTest {
         assertTrue(gotRequest.isEmpty());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
-        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
-        {
-            @Override
-            public void onPostExecute(Void result)
-            {
-                lock.countDown();
-            }
-        };
-        addRequestsTask.execute(newRequest);
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            addRequestsTask.execute(newRequest).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        //KISS, Keep It Simple Stupid
         try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
+            TimeUnit.SECONDS.sleep(sleepTimer);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -94,9 +83,6 @@ public class ElasticSearchControllerTest {
         assertTrue(newRequest.isOnServer());
 
         ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
-
-
-        //Latch not needed, get is a synchronisation
         try {
             gotRequest = getRequestsTask.execute(newRequest.getId()).get();
         }
@@ -118,50 +104,63 @@ public class ElasticSearchControllerTest {
         assertFalse(newRequest.isOnServer());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
-        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
-        {
-            @Override
-            public void onPostExecute(Void result)
-            {
-                lock.countDown();
-            }
-        };
-        addRequestsTask.execute(newRequest);
-
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
         try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
+            addRequestsTask.execute(newRequest).get();
+        }catch (Exception e) {
             e.printStackTrace();
         }
-
-        //The server wil grant an ID when added sucessfully
         assertTrue(newRequest.isOnServer());
 
-        ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask()
-        {
-            @Override
-            public void onPostExecute(Void result)
-            {
-                lock.countDown();
-            }
-        };
-        deleteRequestsTask.execute(newRequest.getId());
-
+        //KISS, Keep It Simple Stupid
         try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
+            TimeUnit.SECONDS.sleep(sleepTimer);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
-        getRequestsTask.execute(newRequest.getId());
         try {
-            gotRequest = getRequestsTask.get();
+            gotRequest = getRequestsTask.execute(newRequest.getId()).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertFalse(gotRequest.isEmpty());
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask();
+        deleteRequestsTask.execute(newRequest.getId());
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Now try a get
+        ElasticSearchController.GetRequestsFromIDTask getRequestsTask2 = new ElasticSearchController.GetRequestsFromIDTask();
+        try {
+            gotRequest = getRequestsTask2.execute(newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        assertNotEquals(newRequest, gotRequest.get(0));
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(gotRequest.isEmpty());
     }
 }
