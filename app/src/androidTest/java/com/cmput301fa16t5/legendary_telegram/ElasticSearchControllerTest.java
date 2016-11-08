@@ -71,7 +71,7 @@ public class ElasticSearchControllerTest {
     public void testGetRequestFromID(){
         //Specific details are not important for this test
         Request newRequest = new Request(null, null, null);
-        Request gotRequest = new Request(null, null, null);
+        ArrayList<Request> gotRequest = new ArrayList();
         //When initialized a request will have an empty ID
         assertTrue(newRequest.getId().isEmpty());
 
@@ -106,7 +106,7 @@ public class ElasticSearchControllerTest {
         getRequestsTask.execute(newRequest.getId());
 
         try {
-            gotRequest = getRequestsTask.get().get(0);
+            gotRequest = getRequestsTask.get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -117,8 +117,8 @@ public class ElasticSearchControllerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        assertEquals(newRequest.getId(), gotRequest.getId());
+        assertFalse(gotRequest.isEmpty());
+        assertEquals(newRequest.getId(), gotRequest.get(0).getId());
         cleanUpRequests(newRequest);
     }
 

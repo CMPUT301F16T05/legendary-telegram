@@ -76,13 +76,15 @@ public class ElasticSearchController {
 
             for (String params: search_params) {
                 // assume that search_parameters[0] is the only search term we are interested in using
-                query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
-                //query = "{\"from\"; 0, \"size\": 10000, \"query\": {\"match\": {\"_id\": \"" + params + "\"}}}";
+                //query = params;
+                //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
+                //query = "{\"from\"; 0, \"size\": 1, \"query\": {\"match\": {\"fee\": \"" + params + "\"}}}";
+
+                query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
                 Search search = new Search.Builder(query)
                         .addIndex("fa16t5")
                         .addType("request")
                         .build();
-
                 try {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
