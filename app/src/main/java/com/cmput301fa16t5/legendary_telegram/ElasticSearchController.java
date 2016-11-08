@@ -71,16 +71,16 @@ public class ElasticSearchController {
         protected ArrayList<Request> doInBackground(String... search_params) {
             verifySettings();
 
-            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<Request> requests = new ArrayList<>();
             String query;
 
             for (String params: search_params) {
                 // assume that search_parameters[0] is the only search term we are interested in using
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
-                //query = "{\"from\"; 0, \"size\": 1, \"query\": {\"match\": {\"fee\": \"" + params + "\"}}}";
+                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"id\": \"" + params + "\"}}}";
 
-                query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
+                //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
                 Search search = new Search.Builder(query)
                         .addIndex("fa16t5")
                         .addType("request")
@@ -90,6 +90,7 @@ public class ElasticSearchController {
                     if (result.isSucceeded()) {
                         List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
                         requests.addAll(foundRequests);
+                        Log.i("Error", "yay");
                     } else {
                         Log.i("Error", "The search query failed to find any requests that matched.");
                     }
@@ -119,17 +120,21 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Request request: requests) {
+                request.setOnServer(Boolean.TRUE);
                 Index index = new Index.Builder(request)
                         .index("fa16t5")
                         .type("request")
+                        .id(request.getId())
                         .build();
 
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
-                        request.setId(result.getId());
+                        //yay
+                        request.setOnServer(Boolean.TRUE);
                     }
                     else {
+                        request.setOnServer(Boolean.FALSE);
                         Log.i("Error", "Elastic search was not able to add the request.");
                     }
                 }

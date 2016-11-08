@@ -41,8 +41,7 @@ public class ElasticSearchControllerTest {
     public void testAddRequest(){
         //Specific details are not important for this test
         Request newRequest = new Request(null, null, null);
-        //When initialized a request will have an empty ID
-        assertTrue(newRequest.getId().isEmpty());
+        assertFalse(newRequest.isOnServer());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
@@ -62,7 +61,7 @@ public class ElasticSearchControllerTest {
         }
 
         //The server wil grant an ID when added sucessfully
-        assertFalse(newRequest.getId().isEmpty());
+        assertTrue(newRequest.isOnServer());
 
         cleanUpRequests();
     }
@@ -72,8 +71,8 @@ public class ElasticSearchControllerTest {
         //Specific details are not important for this test
         Request newRequest = new Request(null, null, null);
         ArrayList<Request> gotRequest = new ArrayList();
-        //When initialized a request will have an empty ID
-        assertTrue(newRequest.getId().isEmpty());
+        assertFalse(newRequest.isOnServer());
+        assertTrue(gotRequest.isEmpty());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
@@ -92,31 +91,19 @@ public class ElasticSearchControllerTest {
             e.printStackTrace();
         }
 
-        //The server wil grant an ID when added sucessfully
-        assertFalse(newRequest.getId().isEmpty());
+        assertTrue(newRequest.isOnServer());
 
-        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask()
-        {
-            @Override
-            public void onPostExecute(ArrayList<Request> result)
-            {
-                lock.countDown();
-            }
-        };
-        getRequestsTask.execute(newRequest.getId());
+        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
 
+
+        //Latch not needed, get is a synchronisation
         try {
-            gotRequest = getRequestsTask.get();
+            gotRequest = getRequestsTask.execute(newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         assertFalse(gotRequest.isEmpty());
         assertEquals(newRequest.getId(), gotRequest.get(0).getId());
         cleanUpRequests(newRequest);
@@ -126,10 +113,9 @@ public class ElasticSearchControllerTest {
     public void testDeleteRequest(){
         //Specific details are not important for this test
         Request newRequest = new Request(null, null, null);
-        Request gotRequest = new Request(null, null, null);
-        gotRequest.setId("test");
+        ArrayList<Request> gotRequest = new ArrayList<>();
         //When initialized a request will have an empty ID
-        assertTrue(newRequest.getId().isEmpty());
+        assertFalse(newRequest.isOnServer());
 
         //Initialize the ESC task and override onPostExecute so I can synchronize the test
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask()
@@ -149,7 +135,7 @@ public class ElasticSearchControllerTest {
         }
 
         //The server wil grant an ID when added sucessfully
-        assertFalse(newRequest.getId().isEmpty());
+        assertTrue(newRequest.isOnServer());
 
         ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask()
         {
@@ -167,29 +153,15 @@ public class ElasticSearchControllerTest {
             e.printStackTrace();
         }
 
-        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask()
-        {
-            @Override
-            public void onPostExecute(ArrayList<Request> result)
-            {
-                lock.countDown();
-            }
-        };
+        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
         getRequestsTask.execute(newRequest.getId());
-
         try {
-            lock.await(2000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            gotRequest = getRequestsTask.get().get(0);
+            gotRequest = getRequestsTask.get();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        assertTrue(gotRequest.getId().isEmpty());
+        assertNotEquals(newRequest, gotRequest.get(0));
     }
 }
