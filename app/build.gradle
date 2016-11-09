@@ -30,6 +30,7 @@ dependencies {
 
     // For Google Map
     compile 'com.google.android.gms:play-services-maps:7.+'
+    compile 'com.google.android.gms:play-services-location:7.+'
     compile 'com.google.maps.android:android-maps-utils:0.4+'
     testCompile 'junit:junit:4.12'
     compile 'io.searchbox:jest-droid:2.0.3'
