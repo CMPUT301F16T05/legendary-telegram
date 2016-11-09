@@ -36,13 +36,13 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchController {
     private static JestDroidClient client;
 
-    public static class DeleteRequestsTask extends AsyncTask<String, Void, Boolean>{
+    public static class DeleteRequestsTask extends AsyncTask<Request, Void, Boolean>{
         @Override
-        protected Boolean doInBackground(String... search_params) {
+        protected Boolean doInBackground(Request... search_params) {
             verifySettings();
 
-            for (String params: search_params) {
-                Delete delete = new Delete.Builder(params)
+            for (Request params: search_params) {
+                Delete delete = new Delete.Builder(params.getId())
                         .index("fa16t5")
                         .type("request")
                         .build();
@@ -50,7 +50,8 @@ public class ElasticSearchController {
                 try {
                     DocumentResult result = client.execute(delete);
                     if (result.isSucceeded()) {
-                        //yay
+                        params.setId(null);
+                        Log.i("Success", "Deletion yay");
                     }
                     else {
                         Log.i("Error", "Elastic search was not able to delete the request.");
@@ -73,7 +74,7 @@ public class ElasticSearchController {
         @Override
         protected ArrayList<Request> doInBackground(String... search_params) {
 
-            if (search_params.length < 1){
+            if (search_params.length < 2){
                 Log.i("Error", "Too few arguements for the get");
                 throw new IndexOutOfBoundsException();
             }
@@ -90,7 +91,12 @@ public class ElasticSearchController {
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + query_type + "\": \"" + search_params[q] + "\"}}}";
+                if (query_type.equalsIgnoreCase("id")){
+                    query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
+                }else{
+                    query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + query_type + "\": \"" + search_params[q] + "\"}}}";
+                }
+
                 Search search = new Search.Builder(query)
                         .addIndex("fa16t5")
                         .addType("request")
@@ -100,7 +106,7 @@ public class ElasticSearchController {
                     if (result.isSucceeded()) {
                         List<Request> foundRequests = result.getSourceAsObjectList(Request.class);
                         requests.addAll(foundRequests);
-                        Log.i("Error", "yay");
+                        Log.i("Get", "yay");
                     } else {
                         Log.i("Error", "The search query failed to find any requests that matched.");
                     }
@@ -128,20 +134,20 @@ public class ElasticSearchController {
         @Override
         protected Boolean doInBackground(Request... requests) {
             verifySettings();
-
+            Log.i("DEBUG", "Server entered add");
             for (Request request: requests) {
-                request.setOnServer(Boolean.TRUE);
+                //request.setOnServer(Boolean.TRUE);
                 Index index = new Index.Builder(request)
                         .index("fa16t5")
                         .type("request")
-                        .id(request.getId())
                         .build();
-
+                Log.i("DEBUG", "Server started add");
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
-                        //yay
+                        Log.i("DEBUG", "Server "+ result.getId());
                         request.setOnServer(Boolean.TRUE);
+                        request.setId(result.getId());
                     }
                     else {
                         request.setOnServer(Boolean.FALSE);
