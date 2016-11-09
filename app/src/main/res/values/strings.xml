@@ -2,7 +2,7 @@
     <string name="app_name">Legendary-telegram</string>
     <string name="userNameET">User Name...</string>
     <string name="logIn">Login</string>
-    <string name="NewUsr">Register</string>
+    <string name="NewUsr">New User</string>
     <string name="mainReqScrTxt">Relevant Open Requests</string>
     <string name="goToSettings">Settings</string>
     <string name="findRequests">Find Requests</string>

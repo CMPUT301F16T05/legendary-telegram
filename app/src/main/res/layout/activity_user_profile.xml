@@ -27,7 +27,7 @@
         android:ems="10"
         android:id="@+id/userNameSettings"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/phoneSettings" />
+        android:layout_toEndOf="@+id/emailSettings" />
 
     <Button
         android:text="@string/checkIfExists"
@@ -40,16 +40,6 @@
         android:layout_toEndOf="@+id/userNameSettings" />
 
     <TextView
-        android:text="@string/phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:id="@+id/phoneSettings"
-        android:layout_alignBottom="@+id/userPhone"
-        android:layout_toStartOf="@+id/userEmail"
-        android:layout_alignTop="@+id/userPhone" />
-
-    <TextView
         android:text="@string/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,12 +49,22 @@
         android:layout_toStartOf="@+id/userPhone"
         android:layout_alignTop="@+id/userEmail" />
 
+    <TextView
+        android:text="@string/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/phoneSettings"
+        android:layout_alignBottom="@+id/userPhone"
+        android:layout_toStartOf="@+id/userEmail"
+        android:layout_alignTop="@+id/userPhone" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/userPhone"
+        android:id="@+id/userEmail"
         android:layout_below="@+id/userNameSettings"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/nameSettings" />
@@ -74,17 +74,18 @@
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
-        android:id="@+id/userEmail"
-        android:layout_below="@+id/userPhone"
+        android:id="@+id/userPhone"
+        android:layout_below="@+id/userEmail"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/vehicleSetting" />
+
 
     <TextView
         android:text="@string/vehicle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vehicleSetting"
-        android:layout_below="@+id/emailSettings"
+        android:layout_below="@+id/phoneSettings"
         android:layout_alignParentStart="true"
         android:layout_alignBottom="@+id/userVehicle" />
 
@@ -94,7 +95,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/userVehicle"
-        android:layout_below="@+id/userEmail"
+        android:layout_below="@+id/userPhone"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/vehicleSetting" />
 
