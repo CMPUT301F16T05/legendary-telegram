@@ -1,7 +1,8 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * Created by keith on 11/2/2016.
+ * MapController class is the controller of the map.
+ * @author zhimao
  */
 
 public class MapController {
@@ -11,4 +12,6 @@ public class MapController {
     public MapController() {
         centralCommand = CentralController.getInstance();
     }
+
+
 }
