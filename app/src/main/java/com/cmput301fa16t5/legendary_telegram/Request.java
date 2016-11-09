@@ -2,6 +2,8 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -27,8 +29,8 @@ public class Request {
 
     private Driver finalDriver;
     //Location rider wishes to be picked up and dropped off at
-    private Location startLocation;
-    private Location endLocation;
+    private LatLng startLocation;
+    private LatLng endLocation;
     // How much the ride will cost. Calculated based on startLocation and endLocation
     private double fee;
     // State of the request. See RequestEnum.java for details.
@@ -39,7 +41,7 @@ public class Request {
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
 
-    public Request(Rider rider, Location start, Location end){
+    public Request(Rider rider, LatLng start, LatLng end){
 
         SecureRandom random = new SecureRandom();
         this.id = new BigInteger(64, random).toString(32);
@@ -90,19 +92,19 @@ public class Request {
         this.rider = rider;
     }
 
-    public Location getStartLocation() {
+    public LatLng getStartLocation() {
         return startLocation;
     }
 
-    public void setStartLocation(Location startLocation) {
+    public void setStartLocation(LatLng startLocation) {
         this.startLocation = startLocation;
     }
 
-    public Location getEndLocation() {
+    public LatLng getEndLocation() {
         return endLocation;
     }
 
-    public void setEndLocation(Location endLocation) {
+    public void setEndLocation(LatLng endLocation) {
         this.endLocation = endLocation;
     }
 
