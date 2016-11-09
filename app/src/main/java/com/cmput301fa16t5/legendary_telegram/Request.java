@@ -8,6 +8,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by keith on 10/30/2016.
  * Request
@@ -15,138 +17,75 @@ import java.util.ArrayList;
 
 public class Request {
 
-    //I won't put down the coordinates for the map... should be filled out later using a specified
-    // way.
-
-    // Should have a
-
     //ID created by ElasticSearchControllerfield noting the ID that ElasticSearch gives it.
+    @JestId
     private String id;
-    //Rider that created request and driver that will fulfill it
-    private Rider rider;
 
-    private ArrayList<Driver> waitingDrivers;
+    private IdentificationCard myRider;
+    private ArrayList<IdentificationCard> potentialDrivers;
+    private IdentificationCard myDriver;
 
-    private Driver finalDriver;
-    //Location rider wishes to be picked up and dropped off at
     private LatLng startLocation;
     private LatLng endLocation;
-    // How much the ride will cost. Calculated based on startLocation and endLocation
-    private double fee;
-    // State of the request. See RequestEnum.java for details.
+
+    private Double fee;
     private RequestEnum state;
-    // Use to calculate the fee (may improve after using the map)
-    private double distance;
-    // Use to record the current state for the request
-    public String currentState;
 
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
 
-    public Request(Rider rider, LatLng start, LatLng end){
-
-        SecureRandom random = new SecureRandom();
-        this.id = new BigInteger(64, random).toString(32);
-        this.rider = rider;
+    public Request(IdentificationCard me, LatLng start, LatLng end) {
+        this.id = null;
+        this.myRider = me;
         this.startLocation = start;
         this.endLocation = end;
         this.state = RequestEnum.openRequest;
-        this.fee = calculateFee();
-        //TODO figure out the distance based on start and end location
-        this.distance = distance;
-        this.onServer = Boolean.FALSE;
-        this.currentState = "Pending";
+        this.potentialDrivers = new ArrayList<IdentificationCard>();
+        this.computeEstimate();
     }
 
-    public void setFinalDriver(User user) {
-        this.finalDriver = user.getMyDriver();
+    /**
+     * Function that computes the price estimate using Manhattan Diztance
+     * https://en.wiktionary.org/wiki/Manhattan_distance
+     * https://en.wikipedia.org/wiki/Geographic_coordinate_system
+     * This was chosen based on the first Assignment of CMPUT 274, where you use
+     * Manhattan distance to list restaurants in order of distance.
+     * to get from Lat/Long to KM
+     */
+    public void computeEstimate() {
+        Double latDegToKM = (111132.92 - 559.82*Math.cos(2*startLocation.latitude)
+            + 1.175*Math.cos(4*startLocation.latitude) - 0.0023*Math.cos(6*startLocation.latitude)) /
+                1000;
+
+        Double longDegToKM = (111412.84*Math.cos(startLocation.longitude) -
+                93.5*Math.cos(3*startLocation.longitude) + 0.118*Math.cos(5*startLocation.longitude))
+                / 1000;
+
+        double manhattanLat = Math.abs(startLocation.latitude-endLocation.latitude) * latDegToKM;
+        double manhattanLong = Math.abs(startLocation.longitude-endLocation.longitude) * longDegToKM;
+        this.fee = 2.25 + 0.8*(manhattanLat + manhattanLong);
+
     }
 
-    public Driver getFinalDriver() {
-        return finalDriver;
+    public void addADriver(IdentificationCard newDriver) {
+        this.potentialDrivers.add(newDriver);
+        this.state = RequestEnum.hasADriver;
+        this.setOnServer(false);
     }
 
-
-    public double getDistance() {
-        return distance;
+    public void acceptADriver(Integer index) {
+        this.myDriver = potentialDrivers.get(index);
+        this.state = RequestEnum.AcceptedADriver;
+        this.setOnServer(false);
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    public boolean checkCommittedDriver(IdentificationCard card) {
+        return this.myDriver.isThisMe(card);
     }
 
-    public ArrayList<Driver> getWaitingDrivers() {
-        return waitingDrivers;
+    public void commitToRequest() {
+        this.state = RequestEnum.DriverHasCommitted;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Rider getRider() {
-        return rider;
-    }
-
-    public void setRider(Rider rider) {
-        this.rider = rider;
-    }
-
-    public LatLng getStartLocation() {
-        return startLocation;
-    }
-
-    public void setStartLocation(LatLng startLocation) {
-        this.startLocation = startLocation;
-    }
-
-    public LatLng getEndLocation() {
-        return endLocation;
-    }
-
-    public void setEndLocation(LatLng endLocation) {
-        this.endLocation = endLocation;
-    }
-
-    public double getFee() {
-        return fee;
-    }
-
-    public void setFee(double fee) {
-        this.fee = fee;
-    }
-
-    //TODO, figure out the formula for this (Similar one with the UBER's)
-    public double calculateFee(){
-        return 2.25 + 0.8 * distance;
-    }
-
-    public RequestEnum getState() {
-        return state;
-    }
-    public void setCurrentState(String currentState) {
-        this.currentState = currentState;
-    }
-
-    public String getCurrentState() {
-        return currentState;
-    }
-
-    public void setState(RequestEnum state) {
-        this.state = state;
-    }
-
-    public void addWaitingDrivers(User user){
-        waitingDrivers.add(user.getMyDriver());
-    }
-
-    public String getDriverInfo(User user){
-        return "Email: " + user.getEmail() + "     Tele: " + user.getTelephone();
-    }
-
 
     public Boolean isOnServer() {
         return onServer;
@@ -156,4 +95,11 @@ public class Request {
         this.onServer = onServer;
     }
 
+    public Double getFee() {
+        return fee;
+    }
+
+    public RequestEnum getState() {
+        return state;
+    }
 }
