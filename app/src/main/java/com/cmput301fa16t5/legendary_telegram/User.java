@@ -12,7 +12,7 @@ import android.content.Context;
 
 public class User {
 
-    private String userName;
+    public String userName;
     private String email;
     private String telephone;
     private String vehicle;
@@ -77,6 +77,7 @@ public class User {
         this.myDriver = myDriver;
     }
 
+    // can be moved to the UserProfileActivity
     public void saveChanges(User  NewUser){
         if (this.getUserName() == NewUser.getUserName()){
             this.setEmail(NewUser.getEmail());

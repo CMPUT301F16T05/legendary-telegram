@@ -37,6 +37,8 @@ public class Request {
     private RequestEnum state;
     // Use to calculate the fee (may improve after using the map)
     private double distance;
+    // Use to record the current state for the request
+    public String currentState;
 
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
@@ -53,10 +55,11 @@ public class Request {
         //TODO figure out the distance based on start and end location
         this.distance = distance;
         this.onServer = Boolean.FALSE;
+        this.currentState = "Pending";
     }
 
-    public void setFinalDriver(Driver finalDriver) {
-        this.finalDriver = finalDriver;
+    public void setFinalDriver(User user) {
+        this.finalDriver = user.getMyDriver();
     }
 
     public Driver getFinalDriver() {
@@ -124,14 +127,26 @@ public class Request {
     public RequestEnum getState() {
         return state;
     }
+    public void setCurrentState(String currentState) {
+        this.currentState = currentState;
+    }
+
+    public String getCurrentState() {
+        return currentState;
+    }
 
     public void setState(RequestEnum state) {
         this.state = state;
     }
 
-    public void addWaitingDrivers(Driver driver){
-        waitingDrivers.add(driver);
+    public void addWaitingDrivers(User user){
+        waitingDrivers.add(user.getMyDriver());
     }
+
+    public String getDriverInfo(User user){
+        return "Email: " + user.getEmail() + "     Tele: " + user.getTelephone();
+    }
+
 
     public Boolean isOnServer() {
         return onServer;

@@ -7,7 +7,13 @@ import java.util.ArrayList;
  * Rider.
  */
 
+/**
+ *  This class is used to record the request that the user opened as a rider
+ *  User can open, cancel and get the infomation for his current request
+ */
+
 public class Rider {
+
 
     public Request currentRequest;
     public ArrayList<Request> openRequests;
@@ -32,8 +38,10 @@ public class Rider {
         //should add the nofications to the drivers ??
     }
 
-    public void pickDriver(Driver driver){
-        currentRequest.setFinalDriver(driver);
+    public void pickDriver(User user){
+        currentRequest.setFinalDriver(user);
+        currentRequest.setCurrentState("Working");
+        currentRequest.getFinalDriver().setAcceptedRequest(currentRequest);
     }
 
 }
