@@ -66,20 +66,31 @@ public class ElasticSearchController {
         }
     }
 
-    public static class GetRequestsFromIDTask extends AsyncTask<String, Void, ArrayList<Request>> {
+    /**
+     *
+     */
+    public static class GetRequests extends AsyncTask<String, Void, ArrayList<Request>> {
         @Override
         protected ArrayList<Request> doInBackground(String... search_params) {
+
+            if (search_params.length < 1){
+                Log.i("Error", "Too few arguements for the get");
+                throw new IndexOutOfBoundsException();
+            }
+
             verifySettings();
 
             ArrayList<Request> requests = new ArrayList<>();
             String query;
+            String query_type = search_params[0];
 
-            for (String params: search_params) {
+
+            for (int q=1; q<search_params.length; q++) {
                 // assume that search_parameters[0] is the only search term we are interested in using
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"id\": \"" + params + "\"}}}";
+                query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + query_type + "\": \"" + search_params[q] + "\"}}}";
                 Search search = new Search.Builder(query)
                         .addIndex("fa16t5")
                         .addType("request")

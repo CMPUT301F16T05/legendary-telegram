@@ -82,9 +82,9 @@ public class ElasticSearchControllerTest {
 
         assertTrue(newRequest.isOnServer());
 
-        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute(newRequest.getId()).get();
+            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -119,9 +119,9 @@ public class ElasticSearchControllerTest {
             e.printStackTrace();
         }
 
-        ElasticSearchController.GetRequestsFromIDTask getRequestsTask = new ElasticSearchController.GetRequestsFromIDTask();
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute(newRequest.getId()).get();
+            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -146,9 +146,9 @@ public class ElasticSearchControllerTest {
         }
 
         //Now try a get
-        ElasticSearchController.GetRequestsFromIDTask getRequestsTask2 = new ElasticSearchController.GetRequestsFromIDTask();
+        ElasticSearchController.GetRequests getRequestsTask2 = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask2.execute(newRequest.getId()).get();
+            gotRequest = getRequestsTask2.execute("id", newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
