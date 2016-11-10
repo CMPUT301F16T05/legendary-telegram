@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +43,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng end;
     private Marker startMarker;
     private Marker endMarker;
+    private Button okButton;
 
 
 
@@ -70,6 +74,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        okButton = (Button) findViewById(R.id.OkButton);
 
         // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
         // Show the zoom button on the map
@@ -123,6 +128,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
                     Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        // Click ok button to return start and end points
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Start: ", start.toString());
+                Log.d("End: ", end.toString());
             }
         });
     }
