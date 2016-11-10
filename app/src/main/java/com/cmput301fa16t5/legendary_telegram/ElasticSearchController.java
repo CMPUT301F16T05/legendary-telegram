@@ -134,18 +134,15 @@ public class ElasticSearchController {
         @Override
         protected Boolean doInBackground(Request... requests) {
             verifySettings();
-            Log.i("DEBUG", "Server entered add");
             for (Request request: requests) {
                 //request.setOnServer(Boolean.TRUE);
                 Index index = new Index.Builder(request)
                         .index("fa16t5")
                         .type("request")
                         .build();
-                Log.i("DEBUG", "Server started add");
                 try {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
-                        Log.i("DEBUG", "Server "+ result.getId());
                         request.setOnServer(Boolean.TRUE);
                         request.setId(result.getId());
                     }
@@ -157,6 +154,41 @@ public class ElasticSearchController {
                 catch (Exception e) {
                     Log.i("Uhoh", "We failed to add a request to elastic search!");
                     e.printStackTrace();
+                }
+            }
+
+            return Boolean.TRUE;
+        }
+    }
+
+    public static class UpdateRequestsTask extends AsyncTask<Request, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Request... requests) {
+
+            verifySettings();
+            for (Request request: requests) {
+                if (request.getId() == null) {
+                    Log.i("Error", "Cannot update a request unless it has been added first");
+                }else {
+                    Index index = new Index.Builder(request)
+                            .index("fa16t5")
+                            .type("request")
+                            .id(request.getId())
+                            .build();
+                    try {
+                        DocumentResult result = client.execute(index);
+                        if (result.isSucceeded()) {
+                            request.setOnServer(Boolean.TRUE);
+                            request.setId(result.getId());
+                        } else {
+                            request.setOnServer(Boolean.FALSE);
+                            Log.i("Error", "Elastic search was not able to add the request.");
+                        }
+                    } catch (Exception e) {
+                        Log.i("Uhoh", "We failed to add a request to elastic search!");
+                        e.printStackTrace();
+                    }
                 }
             }
 

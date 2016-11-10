@@ -53,7 +53,67 @@ public class ElasticSearchControllerTest {
         //The server wil grant an ID when added sucessfully
         assertTrue(newRequest.isOnServer());
         Log.i("DEBUG", "Added " + newRequest.getId());
-        assertFalse(newRequest.getId().isEmpty());
+        assertFalse(newRequest.getId() == null);
+        cleanUpRequests();
+    }
+
+    @Test
+    public void testUpdateRequest(){
+        //Specific details are not important for this test
+        Request newRequest = new Request(null, null, null);
+        ArrayList<Request> gotRequest = new ArrayList();
+
+        //Make sure that we're dealing with a newly made, offline request
+        assertFalse(newRequest.isOnServer());
+        assertTrue(newRequest.getId() == null);
+
+        //Start the task and place it on the server
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            addRequestsTask.execute(newRequest).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //The server wil grant an ID when added sucessfully
+        assertTrue(newRequest.isOnServer());
+        Log.i("DEBUG", "Added " + newRequest.getId());
+        assertFalse(newRequest.getId() == null);
+
+        //Change a value and call an update so the change is reflected on the server
+        newRequest.setState(RequestEnum.hasADriver);
+        ElasticSearchController.UpdateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
+        try{
+            updateRequestsTask.execute(newRequest).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse(gotRequest.isEmpty());
+        assertEquals(RequestEnum.hasADriver, gotRequest.get(0).getState());
+
         cleanUpRequests();
     }
 
