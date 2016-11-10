@@ -1,6 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -103,10 +104,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (marker == startMarker) {
+                if (marker.getTitle().equals("Start")) {
+                    Context context = getApplicationContext();
                     start = marker.getPosition();
-                } else {
+                    Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                } else if (marker.getTitle().equals("End")) {
+                    Context context = getApplicationContext();
                     end = marker.getPosition();
+                    Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
                 }
             }
         });
