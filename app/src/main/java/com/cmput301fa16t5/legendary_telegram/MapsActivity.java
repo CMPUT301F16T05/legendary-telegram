@@ -235,6 +235,17 @@ public class MapsActivity extends AppCompatActivity implements
 
     }
 
+    // Create a URL from Start point and End point - used for searching the route
+    private String createURL(LatLng origin, LatLng destination) {
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(origin.latitude) + "," + String.valueOf(origin.longitude)
+                + "&destination=" + String.valueOf(destination.latitude) + "," + String.valueOf(destination.longitude)
+                // + "&mode=driving" (Default mode is driving)
+                + "&key=" + "YOUR API KEY";
+    }
+
+
+
+
 
 
 
