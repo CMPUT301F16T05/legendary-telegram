@@ -13,6 +13,18 @@ public class IdentificationCard {
     private String email;
     private String vehicle;
 
+    /**
+     * Two constructors
+     * One for Rider, one for Driver
+     * Polymorphism at play.
+     */
+
+    /**
+     * Rider constructor.
+     * @param n Name from User.
+     * @param p Phone number from user.
+     * @param e Email from User.
+     */
     public IdentificationCard(String n, String p, String e) {
         this.name = n;
         this.phone = p;
@@ -20,6 +32,13 @@ public class IdentificationCard {
         this.vehicle = null;
     }
 
+    /**
+     * Driver Constructor
+     * @param n Name from User.
+     * @param p Phone number from User.
+     * @param e Email from User.
+     * @param v Vehicle from User.
+     */
     public IdentificationCard(String n, String p, String e, String v) {
         this.name = n;
         this.phone = p;
@@ -27,12 +46,22 @@ public class IdentificationCard {
         this.vehicle = v;
     }
 
+    /**
+     * Compares two and see if they're the same.
+     * @param card: Another card to be compared.
+     * @return True if a match, false otherwise.
+     */
     public boolean isThisMe(IdentificationCard card) {
         return ((this.name.equals(card.getName())) &&
                 this.phone.equals(card.getPhone()) &&
                 this.email.equals(card.getEmail()));
     }
 
+    /**
+     * Called on the Request Status activity.
+     * For ArrayAdapter.
+     * @return String describing the card.
+     */
     @Override
     public String toString() {
         String defaultAnswer = this.getName() + "\n" +
