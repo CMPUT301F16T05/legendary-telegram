@@ -1,7 +1,9 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,5 +38,22 @@ public class MainRequestActivity extends AppCompatActivity {
         findRequests = (Button) findViewById(R.id.driverButton);
         makeRequests = (Button) findViewById(R.id.riderButton);
         relevantRequests = (ListView) findViewById(R.id.mainRequestLV);
+
+        /**
+         *@ Yu Tang Lin
+         * goes to UserProfileActivity to change User setting
+         * we pass a message so the UserProfileActivity will know
+         * which activity is calling it
+         */
+
+        goToSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainRequestActivity.this, UserProfileActivity.class);
+                intent.putExtra("Setting", "fromMainRequest");
+                startActivity(intent);
+            }
+        });
+
     }
 }

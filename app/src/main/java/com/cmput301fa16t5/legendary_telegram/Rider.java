@@ -14,19 +14,22 @@ import java.util.ArrayList;
 
 public class Rider {
 
-
+    private User user;
     public Request currentRequest;
     public ArrayList<Request> openRequests;
     // No RequestList, just an arraylist.
 
     // Constructor
-    public Rider() {
+    public Rider(User user) {
+        this.user = user;
         openRequests = new ArrayList<Request>();
     }
 
     // Add a request
     public void addRequest(Request newRequest) {
         openRequests.add(newRequest);
+        this.currentRequest = newRequest;
+        currentRequest.setCurrentState("Open");
     }
 
     public Request showCurrentRequest(){
@@ -35,6 +38,7 @@ public class Rider {
 
     public void cancelRequest(Request newRequest){
         openRequests.remove(newRequest);
+        currentRequest.setCurrentState("Cancelled");
         //should add the nofications to the drivers ??
     }
 

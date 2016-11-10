@@ -14,11 +14,13 @@ import java.util.ArrayList;
 
 public class Driver {
 
+    private User user;
     private Request acceptedRequest;
     private ArrayList<Request> acceptedRequests;
 
     // Constructor
-    public Driver() {
+    public Driver(User user) {
+        this. user = user;
         acceptedRequests = new ArrayList<Request>();
     }
 
