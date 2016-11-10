@@ -82,6 +82,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
         endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
 
+        //zoom to start position:
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         /* Sample code
         // Add a marker in Sydney and move the camera
