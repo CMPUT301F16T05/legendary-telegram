@@ -1,3 +1,4 @@
+<!-- original xml file
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     map:mapType="normal"
@@ -7,3 +8,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cmput301fa16t5.legendary_telegram.MapsActivity" />
+-->
+<!--
+code from: http://stackoverflow.com/questions/29999163/how-to-add-buttons-to-the-default-maps-project-in-android-studio
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:gravity="center">
+
+<fragment
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    tools:context=".MapsActivity" />
+
+<Button
+    android:id="@+id/OkButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ok" />
+
+</LinearLayout>
+
