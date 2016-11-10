@@ -65,22 +65,38 @@ public class Request {
 
     }
 
+    /**
+     * Should only ever be called by the Driver class
+     * @param newDriver: Card of the new Driver.
+     */
     public void addADriver(IdentificationCard newDriver) {
         this.potentialDrivers.add(newDriver);
         this.state = RequestEnum.hasADriver;
         this.setOnServer(false);
     }
 
+    /**
+     * Should only ever be called by a Rider
+     * @param index: Index of the Driver accepted.
+     */
     public void acceptADriver(Integer index) {
         this.myDriver = potentialDrivers.get(index);
         this.state = RequestEnum.acceptedADriver;
         this.setOnServer(false);
     }
 
+    /**
+     * Called by Driver to see if the committed Driver is in fact them.
+     * @param card
+     * @return
+     */
     public boolean checkCommittedDriver(IdentificationCard card) {
         return this.myDriver.isThisMe(card);
     }
 
+    /**
+     * Should only ever be called by Driver.
+     */
     public void commitToRequest() {
         this.state = RequestEnum.driverHasCommitted;
     }
@@ -93,7 +109,7 @@ public class Request {
     @Override
     public String toString() {
 
-        String stringFee = String.format("%.2f", this.fee);
+        String stringFee = "$" + String.format("%.2f", this.fee);
         switch (this.state) {
             case pendingUpload:
                 return "New Request Pending Upload" + "\n" + stringFee;
@@ -134,5 +150,13 @@ public class Request {
 
     public ArrayList<IdentificationCard> getPotentialDrivers() {
         return potentialDrivers;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

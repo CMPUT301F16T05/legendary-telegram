@@ -1,47 +1,45 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
  * Created by keith on 11/2/2016.
  * Rider.
  */
-
-/**
- *  This class is used to record the request that the user opened as a rider
- *  User can open, cancel and get the infomation for his current request
- */
-
 public class Rider {
 
+    private ArrayList<Request> openRequests;
+    private Request currentRequest;
 
-    public Request currentRequest;
-    public ArrayList<Request> openRequests;
-    // No RequestList, just an arraylist.
-
-    // Constructor
     public Rider() {
         openRequests = new ArrayList<Request>();
     }
 
-    // Add a request
-    public void addRequest(Request newRequest) {
-        openRequests.add(newRequest);
+    public void createNewRequest(IdentificationCard me, LatLng start, LatLng end) {
+        openRequests.add(new Request(me, start, end));
     }
 
-    public Request showCurrentRequest(){
+    public void setCurrentRequest(Integer index) {
+        this.currentRequest = openRequests.get(index);
+    }
+
+    public void selectDriver(Integer index) {
+        this.currentRequest.acceptADriver(index);
+    }
+
+    // This needs to return a string so that ESearch knows what to banish to the void (delete).
+    public String removeOrComplete() {
+        this.openRequests.remove(this.currentRequest);
+        return this.currentRequest.getId();
+    }
+
+    public Request getCurrentRequest() {
         return currentRequest;
     }
 
-    public void cancelRequest(Request newRequest){
-        openRequests.remove(newRequest);
-        //should add the nofications to the drivers ??
+    public ArrayList<Request> getOpenRequests() {
+        return openRequests;
     }
-
-    public void pickDriver(User user){
-        currentRequest.setFinalDriver(user);
-        currentRequest.setCurrentState("Working");
-        currentRequest.getFinalDriver().setAcceptedRequest(currentRequest);
-    }
-
 }
