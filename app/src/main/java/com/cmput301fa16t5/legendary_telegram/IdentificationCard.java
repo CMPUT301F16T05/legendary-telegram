@@ -31,6 +31,19 @@ public class IdentificationCard {
         this.isROrD = true;
     }
 
+    public boolean isThisMe(IdentificationCard card) {
+        return ((this.name.equals(card.getName())) &&
+                this.phone.equals(card.getPhone()) &&
+                this.email.equals(card.getEmail()));
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() + "\n" +
+                this.getEmail() + "\n" +
+                this.getPhone();
+    }
+
     public String getName() {
         return name;
     }
@@ -71,9 +84,4 @@ public class IdentificationCard {
         isROrD = ROrD;
     }
 
-    public boolean isThisMe(IdentificationCard card) {
-        return ((this.name.equals(card.getName())) &&
-            this.phone.equals(card.getPhone()) &&
-            this.email.equals(card.getEmail()));
-    }
 }

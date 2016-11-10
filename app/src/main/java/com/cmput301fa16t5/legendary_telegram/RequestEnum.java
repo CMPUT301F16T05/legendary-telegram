@@ -5,8 +5,9 @@ package com.cmput301fa16t5.legendary_telegram;
  */
 
 public enum RequestEnum {
+    pendingUpload,
     openRequest,
     hasADriver,
-    AcceptedADriver,
-    DriverHasCommitted
+    acceptedADriver,
+    driverHasCommitted
 }

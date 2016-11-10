@@ -1,11 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
@@ -39,7 +35,7 @@ public class Request {
         this.myRider = me;
         this.startLocation = start;
         this.endLocation = end;
-        this.state = RequestEnum.openRequest;
+        this.state = RequestEnum.pendingUpload;
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
     }
@@ -50,7 +46,7 @@ public class Request {
      * https://en.wikipedia.org/wiki/Geographic_coordinate_system
      * This was chosen based on the first Assignment of CMPUT 274, where you use
      * Manhattan distance to list restaurants in order of distance.
-     * to get from Lat/Long to KM
+     * to get from Lat/Long to kilometers
      */
     public void computeEstimate() {
         Double latDegToKM = (111132.92 - 559.82*Math.cos(2*startLocation.latitude)
@@ -63,6 +59,8 @@ public class Request {
 
         double manhattanLat = Math.abs(startLocation.latitude-endLocation.latitude) * latDegToKM;
         double manhattanLong = Math.abs(startLocation.longitude-endLocation.longitude) * longDegToKM;
+
+        // $2.25 plus 80 cents on the kilometer
         this.fee = 2.25 + 0.8*(manhattanLat + manhattanLong);
 
     }
@@ -75,7 +73,7 @@ public class Request {
 
     public void acceptADriver(Integer index) {
         this.myDriver = potentialDrivers.get(index);
-        this.state = RequestEnum.AcceptedADriver;
+        this.state = RequestEnum.acceptedADriver;
         this.setOnServer(false);
     }
 
@@ -84,7 +82,35 @@ public class Request {
     }
 
     public void commitToRequest() {
-        this.state = RequestEnum.DriverHasCommitted;
+        this.state = RequestEnum.driverHasCommitted;
+    }
+
+    /**
+     * Here's the purpose of our enum.
+     * Request will say different things depending on state.
+     * @return A string to be printed in an array adapter depending on state.
+     */
+    @Override
+    public String toString() {
+
+        String stringFee = String.format("%.2f", this.fee);
+        switch (this.state) {
+            case pendingUpload:
+                return "New Request Pending Upload" + "\n" + stringFee;
+
+            case openRequest:
+                return this.id + "\n" + stringFee + "\nNo Accepting Drivers";
+
+            case hasADriver:
+                return this.id + "\n" + stringFee + "\nDrivers: " + this.potentialDrivers.size();
+
+            case acceptedADriver:
+                return this.id + "\n" + stringFee + "\nAccepted Driver: " + myDriver.getName();
+
+            case driverHasCommitted:
+                return this.id + "\n" + stringFee + "\n" + myDriver.getName() + " has committed.";
+        }
+        return stringFee;
     }
 
     public Boolean isOnServer() {
@@ -92,6 +118,9 @@ public class Request {
     }
 
     public void setOnServer(Boolean onServer) {
+        if (state == RequestEnum.pendingUpload && onServer) {
+            state = RequestEnum.openRequest;
+        }
         this.onServer = onServer;
     }
 
@@ -101,5 +130,9 @@ public class Request {
 
     public RequestEnum getState() {
         return state;
+    }
+
+    public ArrayList<IdentificationCard> getPotentialDrivers() {
+        return potentialDrivers;
     }
 }
