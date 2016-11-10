@@ -12,15 +12,12 @@ public class IdentificationCard {
     private String phone;
     private String email;
     private String vehicle;
-    // False if Rider, True if Driver
-    // Do not confuse.
-    private Boolean isROrD;
 
     public IdentificationCard(String n, String p, String e) {
         this.name = n;
         this.phone = p;
         this.email = e;
-        this.isROrD = false;
+        this.vehicle = null;
     }
 
     public IdentificationCard(String n, String p, String e, String v) {
@@ -28,7 +25,6 @@ public class IdentificationCard {
         this.phone = p;
         this.email = e;
         this.vehicle = v;
-        this.isROrD = true;
     }
 
     public boolean isThisMe(IdentificationCard card) {
@@ -39,9 +35,15 @@ public class IdentificationCard {
 
     @Override
     public String toString() {
-        return this.getName() + "\n" +
+        String defaultAnswer = this.getName() + "\n" +
                 this.getEmail() + "\n" +
                 this.getPhone();
+
+        if (this.vehicle != null) {
+            defaultAnswer += "\n" + this.vehicle;
+        }
+
+        return defaultAnswer;
     }
 
     public String getName() {
@@ -74,14 +76,6 @@ public class IdentificationCard {
 
     public void setVehicle(String vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public Boolean getROrD() {
-        return isROrD;
-    }
-
-    public void setROrD(Boolean ROrD) {
-        isROrD = ROrD;
     }
 
 }

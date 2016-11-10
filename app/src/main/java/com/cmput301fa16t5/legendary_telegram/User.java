@@ -1,7 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
-
 /**
  * Created by keith on 11/2/2016.
  * User class.
@@ -18,6 +16,7 @@ public class User {
     private String vehicle;
     private Rider myRider;
     private Driver myDriver;
+    private RiderDriverParent myCurrentMode;
 
     // Constructor - Initialize all attributes
     public User(String userName, String email, String telephone) {
@@ -27,6 +26,31 @@ public class User {
         this.vehicle = "N/A"; // can use to check if the user can be a driver
         this.myDriver = null;
         this.myRider = new Rider();
+        this.myCurrentMode = null;
+    }
+
+    public void setAsRider() {
+        this.myCurrentMode = this.myRider;
+    }
+
+    public void setAsDriver() {
+        this.myCurrentMode = this.myDriver;
+    }
+
+    /**
+     * Uses reflection to determine if we're a Rider or Driver right now.
+     * Will be core for certain UI aspects dependant on context.
+     * @return True if Driver. False if Rider.
+     */
+    public boolean askForMode() {
+        if (this.myCurrentMode == null) {
+            return false;
+        }
+
+        else if (myCurrentMode.getClass().equals(Driver.class)) {
+            return true;
+        }
+        return false;
     }
 
     public String getUserName() {

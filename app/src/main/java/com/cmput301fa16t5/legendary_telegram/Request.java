@@ -33,6 +33,7 @@ public class Request {
     public Request(IdentificationCard me, LatLng start, LatLng end) {
         this.id = null;
         this.myRider = me;
+        this.myDriver = null;
         this.startLocation = start;
         this.endLocation = end;
         this.state = RequestEnum.pendingUpload;
@@ -91,6 +92,9 @@ public class Request {
      * @return
      */
     public boolean checkCommittedDriver(IdentificationCard card) {
+        if (this.myDriver == null) {
+            return false;
+        }
         return this.myDriver.isThisMe(card);
     }
 
@@ -111,8 +115,6 @@ public class Request {
 
         String stringFee = "$" + String.format("%.2f", this.fee);
         switch (this.state) {
-            case pendingUpload:
-                return "New Request Pending Upload" + "\n" + stringFee;
 
             case openRequest:
                 return this.id + "\n" + stringFee + "\nNo Accepting Drivers";
@@ -126,7 +128,8 @@ public class Request {
             case driverHasCommitted:
                 return this.id + "\n" + stringFee + "\n" + myDriver.getName() + " has committed.";
         }
-        return stringFee;
+        // The default to pendingUpload.
+        return "New Request Pending Upload" + "\n" + stringFee;
     }
 
     public Boolean isOnServer() {

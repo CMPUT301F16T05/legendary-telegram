@@ -6,31 +6,43 @@ import java.util.ArrayList;
  * Created by keith on 11/2/2016.
  * Driver
  */
+public class Driver extends RiderDriverParent {
 
-/**
- *  This class is used to record the request that the user accepted as a driver
- *  User can accept, get the infomation for his accepted request
- */
+    private ArrayList<Request> openRequests;
+    private Request currentRequest;
+    private IdentificationCard cardToRequest;
 
-public class Driver {
+    /**
+     * Constructor does not include instantiation of ArrayList
+     * Because the arraylist should be provided by Map+ESearch.
+     */
+    public Driver() {    }
 
-    private Request acceptedRequest;
-    private ArrayList<Request> acceptedRequests;
-
-    // Constructor
-    public Driver() {
-        acceptedRequests = new ArrayList<Request>();
+    public ArrayList<Request> getOpenRequests() {
+        return openRequests;
     }
 
-    public Request getAcceptedRequest() {
-        return acceptedRequest;
+    public void setOpenRequests(ArrayList<Request> openRequests) {
+        this.openRequests = openRequests;
     }
 
-    public void addRequest(Request newRequest) {
-        acceptedRequests.add(newRequest);
+    public Request getCurrentRequest() {
+        return currentRequest;
     }
 
-    public void setAcceptedRequest(Request request){
-        this.acceptedRequest = request;
+    public void acceptARequest(Integer index, IdentificationCard me) {
+        this.cardToRequest = me;
+        this.currentRequest = this.openRequests.get(index);
+        this.currentRequest.addADriver(this.cardToRequest);
+        this.currentRequest.setOnServer(false);
+    }
+
+    public boolean checkIfPicked() {
+        return this.currentRequest.checkCommittedDriver(this.cardToRequest);
+    }
+
+    public void commit() {
+        this.currentRequest.commitToRequest();
+        this.currentRequest.setOnServer(false);
     }
 }

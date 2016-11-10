@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by keith on 11/2/2016.
  * Rider.
  */
-public class Rider {
+public class Rider extends RiderDriverParent {
 
     private ArrayList<Request> openRequests;
     private Request currentRequest;

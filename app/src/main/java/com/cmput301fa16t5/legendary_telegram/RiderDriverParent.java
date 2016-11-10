@@ -1,0 +1,18 @@
+package com.cmput301fa16t5.legendary_telegram;
+
+import java.util.ArrayList;
+
+/**
+ * Created by keith on 11/9/2016.
+ * This class exists for the purpose
+ * of using Java reflection in user
+ * to determine if we're acting
+ * as a Rider or Driver.
+ */
+
+public abstract class RiderDriverParent {
+    private ArrayList<Request> openRequests;
+    private Request currentRequest;
+
+    public RiderDriverParent() {    }
+}
