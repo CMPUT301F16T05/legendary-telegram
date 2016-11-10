@@ -23,6 +23,7 @@ import io.searchbox.core.SearchResult;
 
 /**
  * Created by keith on 11/2/2016.
+ * filled in by Randy
  * It's the ESearch Controller
  * Gets, Posts, etc to ESearch.
  * Only accessed by the instance of CentralController.
@@ -32,17 +33,28 @@ import io.searchbox.core.SearchResult;
  * https://github.com/SRomansky/lonelyTwitter/blob/lab7end/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java
  * from user SRomansky
  */
-
 public class ElasticSearchController {
     private static JestDroidClient client;
 
+    /**
+     * Task for deleting requests
+     * Usage:
+     * ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask();
+     * addRequestsTask.execute(deadRequest);
+     */
     public static class DeleteRequestsTask extends AsyncTask<Request, Void, Boolean>{
+
+        /**
+         * Deletes a request from the ElasticSearch server
+         * @param search_params: a Vararg of requests
+         * @return sets the ID for the request to null and updates onServer boolean
+         */
         @Override
         protected Boolean doInBackground(Request... search_params) {
             verifySettings();
 
-            for (Request params: search_params) {
-                Delete delete = new Delete.Builder(params.getId())
+            for (Request request: search_params) {
+                Delete delete = new Delete.Builder(request.getId())
                         .index("fa16t5")
                         .type("request")
                         .build();
@@ -50,7 +62,8 @@ public class ElasticSearchController {
                 try {
                     DocumentResult result = client.execute(delete);
                     if (result.isSucceeded()) {
-                        params.setId(null);
+                        request.setOnServer(Boolean.FALSE);
+                        request.setId(null);
                         Log.i("Success", "Deletion yay");
                     }
                     else {
@@ -68,9 +81,21 @@ public class ElasticSearchController {
     }
 
     /**
-     *
+     * Task for getting requests
+     * Usage:
+     * ElasticSearchController.GetRequestsTask getRequestsTask = new ElasticSearchController.GetRequestsTask();
+     * requestList = addRequestsTask.execute(queryType, stringsToLookFor).get();
      */
     public static class GetRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Retrieves a request from the ElasticSearch server
+         * @param search_params: a Vararg of strings. Expects at least two elements,
+         *                     first element is the field query is for, must match ElasticSearch documentation
+         *                     ex "id", "distance", "SOME OTHER THING THAT MATCHES THE NEW REQUEST FORMAT"
+         *                     remaining arguements are the values you are searching for
+         * @return an ArrayList<Request>, care should be taken to check that results were actually found
+         */
         @Override
         protected ArrayList<Request> doInBackground(String... search_params) {
 
@@ -83,7 +108,7 @@ public class ElasticSearchController {
 
             ArrayList<Request> requests = new ArrayList<>();
             String query;
-            String query_type = search_params[0];
+            String queryType = search_params[0];
 
 
             for (int q=1; q<search_params.length; q++) {
@@ -91,10 +116,10 @@ public class ElasticSearchController {
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                if (query_type.equalsIgnoreCase("id")){
+                if (queryType.equalsIgnoreCase("id")){
                     query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
                 }else{
-                    query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + query_type + "\": \"" + search_params[q] + "\"}}}";
+                    query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
                 }
 
                 Search search = new Search.Builder(query)
@@ -117,20 +142,19 @@ public class ElasticSearchController {
             return requests;
         }
     }
-    /**
-     * Adds a request to the ElasticSearch server
-     * @param userName: The username as a string.
-     * @param context: Needed to get file list.
-     * @return True of the file exists. False otherwise.
-     */
 
     /**
+     * Task for adding requests
      * Usage:
      * ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
      * addRequestsTask.execute(newRequest);
      */
     public static class AddRequestsTask extends AsyncTask<Request, Void, Boolean> {
-
+        /**
+         * Adds a request to the ElasticSearch server
+         * @param requests: a Vararg of requests
+         * @return sets the generated ID for the request and updates onServer boolean
+         */
         @Override
         protected Boolean doInBackground(Request... requests) {
             verifySettings();
@@ -161,8 +185,19 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Task for updating requests
+     * Usage:
+     * ElasticSearchController.updateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
+     * addRequestsTask.execute(updatedRequest);
+     */
     public static class UpdateRequestsTask extends AsyncTask<Request, Void, Boolean> {
 
+        /**
+         * Updates a request already on the server. Does nothing if no ID can be found
+         * @param requests: a Vararg of requests
+         * @return sets the generated ID for the request and updates onServer boolean
+         */
         @Override
         protected Boolean doInBackground(Request... requests) {
 
@@ -180,7 +215,6 @@ public class ElasticSearchController {
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             request.setOnServer(Boolean.TRUE);
-                            request.setId(result.getId());
                         } else {
                             request.setOnServer(Boolean.FALSE);
                             Log.i("Error", "Elastic search was not able to add the request.");

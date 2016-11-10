@@ -12,7 +12,13 @@ import static org.junit.Assert.*;
 
 /**
  * Created by Randy on 2016-11-06.
- *
+ * Just a note for these tests, many of them call
+ * get() and sleep(). These are to ensure the AsyncTask
+ * thread has finished. These will slow the tests
+ * down noticably but is a nescessary evil for
+ * as synchronization is needed for proper testing.
+ * These should NOT be called outside of the test...
+ * well except for getRequests, that needs get() obviously
  */
 public class ElasticSearchControllerTest {
 
