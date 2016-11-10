@@ -39,6 +39,7 @@ public class Request {
         this.state = RequestEnum.pendingUpload;
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
+        this.onServer = false;
     }
 
     /**

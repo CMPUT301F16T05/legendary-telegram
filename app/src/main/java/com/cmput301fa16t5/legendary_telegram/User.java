@@ -93,28 +93,8 @@ public class User {
         this.vehicle = vehicle;
     }
 
-    // can be moved to the UserProfileActivity
-    public void saveChanges(User  NewUser){
-        if (this.getUserName() == NewUser.getUserName()){
-            this.setEmail(NewUser.getEmail());
-            this.setTelephone(NewUser.getTelephone());
-            this.setVehicle(NewUser.getVehicle());
-            this.setEmail(NewUser.getEmail());
-        }
-        else{
-            // Delete Username from the local file need GSON stuff(wait for the function)
-            // GsonController.deleteUserInDisk(user,"");
-            // Add new Username and information to the local file(maybe also the server)
-            // Context context = new Context;
-            // GsonController.saveUserToDisk(NewUser,context);
-        }
-    }
-
     public String showInfo(){
         return this.userName + ":\n" + this.telephone + " " + this.email;
     }
 
-    public void checkUserName(String userName){
-
-    }
 }

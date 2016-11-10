@@ -2,6 +2,8 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void testAddRequest(){
         //Specific details are not important for this test
-        Request newRequest = new Request(null, null, null);
+        Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
 
         //Make sure that we're dealing with a newly made, offline request
         assertFalse(newRequest.isOnServer());
@@ -66,7 +68,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void testUpdateRequest(){
         //Specific details are not important for this test
-        Request newRequest = new Request(null, null, null);
+        Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
         ArrayList<Request> gotRequest = new ArrayList();
 
         //Make sure that we're dealing with a newly made, offline request
@@ -88,7 +90,7 @@ public class ElasticSearchControllerTest {
         assertFalse(newRequest.getId() == null);
 
         //Change a value and call an update so the change is reflected on the server
-        newRequest.setState(RequestEnum.hasADriver);
+        newRequest.commitToRequest();
         ElasticSearchController.UpdateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
         try{
             updateRequestsTask.execute(newRequest).get();
@@ -118,7 +120,7 @@ public class ElasticSearchControllerTest {
         }
 
         assertFalse(gotRequest.isEmpty());
-        assertEquals(RequestEnum.hasADriver, gotRequest.get(0).getState());
+        assertEquals(RequestEnum.driverHasCommitted, gotRequest.get(0).getState());
 
         cleanUpRequests();
     }
@@ -126,7 +128,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void testGetRequestFromID(){
         //Specific details are not important for this test
-        Request newRequest = new Request(null, null, null);
+        Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
         ArrayList<Request> gotRequest = new ArrayList();
 
         //Make sure that we're dealing with a newly made, offline request
@@ -167,7 +169,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void testDeleteRequest(){
         //Specific details are not important for this test
-        Request newRequest = new Request(null, null, null);
+        Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
         ArrayList<Request> gotRequest = new ArrayList<>();
 
         //Make sure that we're dealing with a newly made, offline request
