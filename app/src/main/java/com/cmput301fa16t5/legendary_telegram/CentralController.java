@@ -1,6 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by keith on 11/2/2016.
@@ -39,5 +40,23 @@ public class CentralController {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public void addNewRequest(Request... requests){
+        for (Request r : requests){
+            //Should only add if request is not on server, no ID in other words
+            if (r.getId() == null){
+                //Start the task and place it on the server
+                ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+                try{
+                    addRequestsTask.execute(r);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Log.i("ESCErr","Tried to add something already on the server. Delete first or call update instead");
+            }
+        }
     }
 }

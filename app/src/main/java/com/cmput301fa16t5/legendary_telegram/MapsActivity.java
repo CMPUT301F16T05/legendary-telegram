@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * MapsActivity class is the view of the map.
+ * @author zhimao
+ */
+
 public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -32,8 +38,10 @@ public class MapsActivity extends AppCompatActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-
+    // Variables related to permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private boolean mPermissionDenied = false;
+
     // This is the actual map object
     private GoogleMap mMap;
 
@@ -88,9 +96,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     // Code from: https://github.com/googlemaps/android-samples
-    /**
-     * Enables the My Location layer if the fine location permission has been granted.
-     */
+    // Enables the My Location layer if the fine location permission has been granted.
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -102,6 +108,43 @@ public class MapsActivity extends AppCompatActivity implements
             mMap.setMyLocationEnabled(true);
         }
     }
+
+    // Deal with permission
+    // Code from: https://github.com/googlemaps/android-samples
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+            return;
+        }
+
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Enable the my location layer if the permission has been granted.
+            enableMyLocation();
+        } else {
+            // Display the missing permission error dialog when the fragments resume.
+            mPermissionDenied = true;
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPermissionDenied) {
+            // Permission was not granted, display error dialog.
+            showMissingPermissionError();
+            mPermissionDenied = false;
+        }
+    }
+
+
+    // Displays a dialog with error message explaining that the location permission is missing.
+    private void showMissingPermissionError() {
+        PermissionUtils.PermissionDeniedDialog
+                .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
 
     // Click my location button
     @Override
@@ -191,6 +234,19 @@ public class MapsActivity extends AppCompatActivity implements
         //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
     }
+
+    // Create a URL from Start point and End point - used for searching the route
+    private String createURL(LatLng origin, LatLng destination) {
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(origin.latitude) + "," + String.valueOf(origin.longitude)
+                + "&destination=" + String.valueOf(destination.latitude) + "," + String.valueOf(destination.longitude)
+                // + "&mode=driving" (Default mode is driving)
+                + "&key=" + "YOUR API KEY";
+    }
+
+
+
+
+
 
 
 }

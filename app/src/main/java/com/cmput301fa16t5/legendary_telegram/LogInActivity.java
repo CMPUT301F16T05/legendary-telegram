@@ -31,11 +31,17 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     /**
+     * @ Yu Tang Lin
      * On click function for R.id.newUserLogin
-     * Go to new user activity.
+     * Go to UserProfileActivity to create new User.
+     * Since we got 2 Activity calling the UserProfileActivity, we
+     * pass a message see which activity is calling the UserProfileActivity
+     * (MainRequestActivity also called the UserProfileActivity to change setting)
      * @param v: Needed or else runtime exception.
      */
     public void newUserClick(View v) {
+        Intent intent = new Intent(LogInActivity.this, UserProfileActivity.class);
+        intent.putExtra("Register", "fromRegister");
         startActivity(new Intent(this, UserProfileActivity.class));
     }
 
@@ -50,7 +56,6 @@ public class LogInActivity extends AppCompatActivity {
         if (myController.validateUserName(userName.getText().toString(), getApplicationContext())) {
             startActivity(new Intent(this, MainRequestActivity.class));
         }
-
         else {
             Toast.makeText(getApplicationContext(), "User does not exist.", Toast.LENGTH_SHORT).show();
         }
