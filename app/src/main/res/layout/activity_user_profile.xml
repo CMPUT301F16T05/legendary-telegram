@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_user_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.cmput301fa16t5.legendary_telegram.UserProfileActivity">
+
+    <TextView
+        android:text="@string/NameET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/nameSettings"
+        android:layout_alignBottom="@+id/userNameSettings"
+        android:layout_toStartOf="@+id/userNameSettings" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/userNameSettings"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/emailSettings" />
+
+    <Button
+        android:text="@string/checkIfExists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/checkUsrName"
+        android:layout_alignBottom="@+id/userNameSettings"
+        android:layout_toEndOf="@+id/userNameSettings" />
+
+    <TextView
+        android:text="@string/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/emailSettings"
+        android:layout_alignBottom="@+id/userEmail"
+        android:layout_toStartOf="@+id/userPhone"
+        android:layout_alignTop="@+id/userEmail" />
+
+    <TextView
+        android:text="@string/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/phoneSettings"
+        android:layout_alignBottom="@+id/userPhone"
+        android:layout_toStartOf="@+id/userEmail"
+        android:layout_alignTop="@+id/userPhone" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/userEmail"
+        android:layout_below="@+id/userNameSettings"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/nameSettings" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/userPhone"
+        android:layout_below="@+id/userEmail"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/vehicleSetting" />
+
+
+    <TextView
+        android:text="@string/vehicle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vehicleSetting"
+        android:layout_below="@+id/phoneSettings"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/userVehicle" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/userVehicle"
+        android:layout_below="@+id/userPhone"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/vehicleSetting" />
+
+    <Button
+        android:text="Add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addUser"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/updateUser"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
