@@ -25,8 +25,6 @@ public class User {
         this.email = email;
         this.telephone = telephone;
         this.vehicle = "N/A"; // can use to check if the user can be a driver
-        this.myDriver = null;
-        this.myRider = new Rider();
     }
 
     public String getUserName() {
@@ -69,12 +67,12 @@ public class User {
         this.vehicle = vehicle;
     }
 
-    public void setMyRider(Rider myRider) {
-        this.myRider = myRider;
+    public void setMyRider() {
+        this.myRider = new Rider(this);
     }
 
-    public void setMyDriver(Driver myDriver) {
-        this.myDriver = myDriver;
+    public void setMyDriver() {
+        this.myDriver = new Driver(this);
     }
 
     // can be moved to the UserProfileActivity
@@ -84,8 +82,8 @@ public class User {
             this.setTelephone(NewUser.getTelephone());
             this.setVehicle(NewUser.getVehicle());
             this.setEmail(NewUser.getEmail());
-            this.setMyRider(NewUser.getMyRider());
-            this.setMyDriver(NewUser.getMyDriver());
+            this.setMyRider();
+            this.setMyDriver();
         }
         else{
             // Delete Username from the local file need GSON stuff(wait for the function)
