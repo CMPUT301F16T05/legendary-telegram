@@ -36,6 +36,7 @@ public class RiderTests {
         assertFalse(testRider.getOpenRequests().contains(testRequest));
     }
 
+    @Test
     public void testSelectDriver(){
         IdentificationCard driver1 = new IdentificationCard("a", "a@test.com", "1234567890");
         IdentificationCard driver2 = new IdentificationCard("b", "b@test.com", "12345678901");
