@@ -162,4 +162,12 @@ public class Request {
     public void setId(String id) {
         this.id = id;
     }
+
+    public LatLng getStartLocation() {
+        return startLocation;
+    }
+
+    public LatLng getEndLocation() {
+        return endLocation;
+    }
 }
