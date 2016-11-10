@@ -28,7 +28,6 @@ public class Driver extends RiderDriverParent {
      */
     public Driver() {    }
 
-<<<<<<< HEAD
     /**
      * Getter for the open requests to be displayed.
      * @return An ArrayList of Requests
@@ -51,16 +50,6 @@ public class Driver extends RiderDriverParent {
      */
     public Request getCurrentRequest() {
         return currentRequest;
-=======
-    private User user;
-    private Request acceptedRequest;
-    private ArrayList<Request> acceptedRequests;
-
-    // Constructor
-    public Driver(User user) {
-        this. user = user;
-        acceptedRequests = new ArrayList<Request>();
->>>>>>> 28cb1ccdb103e62f3ea015c3a0c44d63adb6145a
     }
 
     /**
