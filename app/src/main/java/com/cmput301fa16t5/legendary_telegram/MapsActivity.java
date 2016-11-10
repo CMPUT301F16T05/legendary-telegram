@@ -30,25 +30,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @author zhimao
  */
 
-public class MapsActivity extends AppCompatActivity implements
-        OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        GoogleMap.OnMyLocationButtonClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    // Variables related to permission
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private boolean mPermissionDenied = false;
 
     // This is the actual map object
     private GoogleMap mMap;
+    private LatLng start;
+    private LatLng end;
+    private Marker startMarker;
+    private Marker endMarker;
 
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private LatLng currentLocation;
-    private Marker currLocationMarker;
+
 
     // View has the controller
     private MapController mapcontroller = new MapController();
@@ -82,9 +74,12 @@ public class MapsActivity extends AppCompatActivity implements
         // Show the zoom button on the map
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-
-        mMap.setOnMyLocationButtonClickListener(this);
-        enableMyLocation();
+        start = new LatLng(53.522945, -113.525594);
+        end = new LatLng(53.525037, -113.521324);
+        // Learn from: https://developers.google.com/maps/documentation/android-api/marker
+        // https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker
+        startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+        endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
 
 
         /* Sample code
@@ -93,155 +88,31 @@ public class MapsActivity extends AppCompatActivity implements
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         */
-    }
 
-    // Code from: https://github.com/googlemaps/android-samples
-    // Enables the My Location layer if the fine location permission has been granted.
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
-        }
-    }
+        // Learn from: http://stackoverflow.com/questions/30067228/onmarkerdraglistener-for-marker-position-along-associated-circles-google-maps-an
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
 
-    // Deal with permission
-    // Code from: https://github.com/googlemaps/android-samples
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return;
-        }
+            }
 
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true;
-        }
-    }
+            @Override
+            public void onMarkerDrag(Marker marker) {
 
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
-        }
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                if (marker == startMarker) {
+                    start = marker.getPosition();
+                } else {
+                    end = marker.getPosition();
+                }
+            }
+        });
     }
 
 
-    // Displays a dialog with error message explaining that the location permission is missing.
-    private void showMissingPermissionError() {
-        PermissionUtils.PermissionDeniedDialog
-                .newInstance(true).show(getSupportFragmentManager(), "dialog");
-    }
-
-
-    // Click my location button
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }
-
-    // Code from: http://stackoverflow.com/questions/33739971/how-to-show-my-current-location-in-google-map-android-using-google-api-client
-    protected synchronized void buildGoogleApiClient() {
-        Toast.makeText(this,"buildGoogleApiClient",Toast.LENGTH_SHORT).show();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Toast.makeText(this,"onConnected",Toast.LENGTH_SHORT).show();
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            //place marker at current position
-            //mMap.clear();
-            // ETLC: 53.527400, -113.529435
-
-            //latLng = new LatLng(53.527400, -113.529435);
-            currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(currentLocation);
-            markerOptions.title("Current Position");
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            currLocationMarker = mMap.addMarker(markerOptions);
-        }
-
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void onConnectionSuspended(int i) {
-        Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        //place marker at current position
-        //mMap.clear();
-        if (currLocationMarker != null) {
-            currLocationMarker.remove();
-        }
-        currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLocation);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        currLocationMarker = mMap.addMarker(markerOptions);
-
-        Toast.makeText(this,"Location Changed",Toast.LENGTH_SHORT).show();
-
-        //zoom to current position:
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(currentLocation).zoom(14).build();
-
-        mMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(cameraPosition));
-
-        //If you only need one location, unregister the listener
-        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-
-    }
-
-    // Create a URL from Start point and End point - used for searching the route
-    private String createURL(LatLng origin, LatLng destination) {
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(origin.latitude) + "," + String.valueOf(origin.longitude)
-                + "&destination=" + String.valueOf(destination.latitude) + "," + String.valueOf(destination.longitude)
-                // + "&mode=driving" (Default mode is driving)
-                + "&key=" + "YOUR API KEY";
-    }
 
 
 
