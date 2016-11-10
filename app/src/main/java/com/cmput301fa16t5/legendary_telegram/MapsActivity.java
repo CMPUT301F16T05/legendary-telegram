@@ -82,6 +82,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
         endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
 
+        // Add a indicator for the marker
+        // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+        startMarker.setTitle("Start");
+        endMarker.setTitle("End");
+
         //zoom to start position:
         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
