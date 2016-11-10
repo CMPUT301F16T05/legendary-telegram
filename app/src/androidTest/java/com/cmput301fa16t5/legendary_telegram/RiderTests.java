@@ -17,9 +17,9 @@ public class RiderTests {
         LatLng end = new LatLng(1,1);
         Rider testRider = new Rider();
         testRider.createNewRequest(me , start, end);
-        Request testRequest = new Request(me, start, end);
 
-        assertTrue(testRider.getOpenRequests().contains(testRequest));
+        assertEquals(testRider.getOpenRequests().get(0).getStartLocation(), start);
+        assertEquals(testRider.getOpenRequests().get(0).getEndLocation(), end);
     }
 
     @Test
@@ -29,7 +29,11 @@ public class RiderTests {
         LatLng end = new LatLng(1,1);
         Rider testRider = new Rider();
         testRider.createNewRequest(me , start, end);
-        Request testRequest = testRider.getOpenRequests().get(0);
+        testRider.setCurrentRequest(0);
+        Request testRequest = testRider.getCurrentRequest();
+
         assertEquals(testRequest.getId(), testRider.removeOrComplete());
+        assertFalse(testRider.getOpenRequests().contains(testRequest));
     }
+
 }
