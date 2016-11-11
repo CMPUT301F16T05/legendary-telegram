@@ -10,8 +10,13 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class MapTests {
+    /* This is an example
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+    */
+
+
+
 }
