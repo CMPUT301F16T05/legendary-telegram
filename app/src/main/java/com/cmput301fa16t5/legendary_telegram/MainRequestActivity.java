@@ -55,5 +55,34 @@ public class MainRequestActivity extends AppCompatActivity {
             }
         });
 
+
+        /**
+         * makerequest button is for rider to make a new request
+         * set the user as rider
+         * when click go to MapActivity
+         */
+        makeRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myController.setUserAsRider();
+                Intent mapintent = new Intent(MainRequestActivity.this, MapsActivity.class);
+                startActivity(mapintent);
+            }
+        });
+
+        /**
+         * findRequest button is for driver to find requests
+         * set the user as driver
+         * when click go to MapActivity
+         */
+        findRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myController.setUserAsDriver();
+                Intent mapintent2 = new Intent(MainRequestActivity.this, MapsActivity.class);
+                startActivity(mapintent2);
+            }
+        });
+
     }
 }
