@@ -70,6 +70,11 @@ public class CentralController {
         this.currentUser = currentUser;
     }
 
+    /**
+     * Wrapper for the add task of the ElasticSearchController
+     * Any additional logic involved should be handled outside of this function
+     * @param requests a vararg of requests to add to the server
+     */
     public void addNewRequest(Request... requests){
         for (Request r : requests){
             //Should only add if request is not on server, no ID in other words
@@ -84,6 +89,29 @@ public class CentralController {
                 }
             }else{
                 Log.i("ESCErr","Tried to add something already on the server. Delete first or call update instead");
+            }
+        }
+    }
+
+    /**
+     * Wrapper for the update task of the ElasticSearchController
+     * Any additional logic involved should be handled outside of this function
+     * @param requests a vararg of requests to update on the server
+     */
+    public void updateRequest(Request... requests){
+        for (Request r : requests){
+            //Should only update if request is on server, has an ID in other words
+            if (r.getId() != null){
+                //Start the task and place it on the server
+                ElasticSearchController.UpdateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
+                try{
+                    updateRequestsTask.execute(r);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
         }
     }

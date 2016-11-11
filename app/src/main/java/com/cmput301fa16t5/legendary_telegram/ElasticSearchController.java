@@ -91,8 +91,8 @@ public class ElasticSearchController {
         /**
          * Retrieves a request from the ElasticSearch server
          * @param search_params: a Vararg of strings. Expects at least two elements,
-         *                     first element is the field query is for, must match ElasticSearch documentation
-         *                     ex "id", "distance", "SOME OTHER THING THAT MATCHES THE NEW REQUEST FORMAT"
+         *                     first element is expected to be an ElasticSearchQuery constant
+         *                     ex "ID", "GEODISTANCE", "SOME OTHER THING THAT MATCHES THE NEW REQUEST FORMAT"
          *                     remaining arguements are the values you are searching for
          * @return an ArrayList<Request>, care should be taken to check that results were actually found
          */
@@ -116,7 +116,7 @@ public class ElasticSearchController {
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                if (queryType.equalsIgnoreCase("id")){
+                if (queryType.equalsIgnoreCase(ElasticSearchQueries.ID)){
                     query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
                 }else{
                     query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";

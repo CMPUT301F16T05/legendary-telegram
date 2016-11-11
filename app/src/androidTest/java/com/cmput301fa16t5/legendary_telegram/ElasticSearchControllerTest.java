@@ -107,7 +107,7 @@ public class ElasticSearchControllerTest {
 
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.ID, newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +156,7 @@ public class ElasticSearchControllerTest {
         assertTrue(newRequest.isOnServer());
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.ID, newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -196,7 +196,7 @@ public class ElasticSearchControllerTest {
         //Ensure we are deleting the correct request
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute("id", newRequest.getId()).get();
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.ID, newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -225,7 +225,7 @@ public class ElasticSearchControllerTest {
         //Now try and retrieve the newly deleted request. No result is expected.
         ElasticSearchController.GetRequests getRequestsTask2 = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask2.execute("id", newRequest.getId()).get();
+            gotRequest = getRequestsTask2.execute(ElasticSearchQueries.ID, newRequest.getId()).get();
         }
         catch (Exception e) {
             e.printStackTrace();
