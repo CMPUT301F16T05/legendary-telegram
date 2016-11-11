@@ -38,6 +38,16 @@ public class CentralController {
         return currentUser;
     }
 
+    //set user as rider
+    public void setUserRider(){
+        currentUser.setAsRider();
+    }
+
+    //set user as driver
+    public void setUserDriver(){
+        currentUser.setAsDriver();
+    }
+
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }

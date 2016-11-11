@@ -8,20 +8,17 @@ package com.cmput301fa16t5.legendary_telegram;
 public class MainRequestController {
 
     private CentralController centralCommand;
-    private User currentUser;
 
     public MainRequestController() {
 
         centralCommand = CentralController.getInstance();
     }
-
+    //set the user as driver
     public void setUserAsDriver(){
-        currentUser = centralCommand.getCurrentUser();
-        currentUser.setAsDriver();
+        centralCommand.setUserDriver();
     }
-
+    //set the user as rider
     public void setUserAsRider(){
-        currentUser = centralCommand.getCurrentUser();
-        currentUser.setAsRider();
+        centralCommand.setUserRider();
     }
 }
