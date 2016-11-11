@@ -1,6 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 import android.content.Context;
+import android.widget.EditText;
 
 /**
  * Created by keith on 11/2/2016.
@@ -32,5 +33,16 @@ public class UserProfileController {
     }
     public void DeleteOldUsers(String oldUser, Context context){
         centralCommand.DeleteUser(oldUser, context);
+    }
+
+    public boolean CompareName(User user, EditText editTextName, EditText phone, EditText email, EditText vehicle){
+        if(centralCommand.getCurrentUser().getUserName().equals(editTextName)){
+            centralCommand.getCurrentUser().setTelephone(phone.getText().toString());
+            centralCommand.getCurrentUser().setEmail(email.getText().toString());
+            centralCommand.getCurrentUser().setVehicle(vehicle.getText().toString());
+            return true;
+        }else{
+            return false;
+        }
     }
 }

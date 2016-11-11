@@ -39,9 +39,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private boolean validation;
     private User newUser;
 
-    //the currentUser will be null if not login
-    private User currentUser;
-
 
     private UserProfileController myController;
 
@@ -73,11 +70,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
         if(key_string.equals("fromMainRequest")){
             addButton.setVisibility(View.GONE);
-            currentUser = myController.GetCurrentUser();
-            nameEntered.setText(currentUser.getUserName());
-            phoneEntered.setText(currentUser.getTelephone());
-            emailEntered.setText(currentUser.getEmail());
-            vehicleEntered.setText(currentUser.getVehicle());
+
+            nameEntered.setText(myController.GetCurrentUser().getUserName());
+            phoneEntered.setText(myController.GetCurrentUser().getTelephone());
+            emailEntered.setText(myController.GetCurrentUser().getEmail());
+            vehicleEntered.setText(myController.GetCurrentUser().getVehicle());
         }else{
             updateButton.setVisibility(View.GONE);
         }
@@ -110,7 +107,7 @@ public class UserProfileActivity extends AppCompatActivity {
                  * if it is same we set the validation to true;
                  */
 
-                if (currentUser.getUserName().equals(nameEntered.getText().toString())){
+                if (myController.GetCurrentUser().getUserName().equals(nameEntered.getText().toString())){
                     validation =true;
                 }
             }
@@ -152,15 +149,13 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validation == true) {
-                    if (currentUser.getUserName().equals(nameEntered.getText().toString())) {
-                        //change the attribute.... need safe?
-                        currentUser.setTelephone(phoneEntered.getText().toString());
-                        currentUser.setEmail(emailEntered.getText().toString());
-                        currentUser.setVehicle(vehicleEntered.getText().toString());
+                    if (myController.CompareName(myController.GetCurrentUser(),nameEntered, phoneEntered, emailEntered, vehicleEntered)){
+                        finish();
                     }else{
                         //deleteFile and create a new one
                         myController.DeleteOldUsers(nameEntered.getText().toString(), getApplicationContext());
-                        myController.SaveChanges(currentUser, getApplicationContext());
+                        myController.SaveChanges(myController.GetCurrentUser(), getApplicationContext());
+                        finish();
                     }
                 }
             }
