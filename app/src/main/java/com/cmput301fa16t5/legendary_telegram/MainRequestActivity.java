@@ -66,6 +66,7 @@ public class MainRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 myController.setUserAsRider();
                 Intent mapintent = new Intent(MainRequestActivity.this, MapsActivity.class);
+                mapintent.putExtra("Map", "fromRider");
                 startActivity(mapintent);
             }
         });
@@ -80,6 +81,7 @@ public class MainRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 myController.setUserAsDriver();
                 Intent mapintent2 = new Intent(MainRequestActivity.this, MapsActivity.class);
+                mapintent2.putExtra("Map", "fromDriver");
                 startActivity(mapintent2);
             }
         });
