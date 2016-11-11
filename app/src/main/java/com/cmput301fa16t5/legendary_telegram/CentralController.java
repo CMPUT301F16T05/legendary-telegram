@@ -43,6 +43,24 @@ public class CentralController {
         currentUser.setAsRider();
     }
 
+    //check if user name is valid
+    public boolean CheckUserName(String username, Context context){
+        if(GsonController.checkIfExists(username, context)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //save changes to user profile
+    public void CreateUser(User newUser, Context context){
+        GsonController.saveUserToDisk(newUser, context);
+    }
+    //delete user from gson
+    public void DeleteUser(String oldUser, Context context){
+        GsonController.deleteOldUserName(oldUser, context);
+    }
+
     //set user as driver
     public void setUserDriver(){
         currentUser.setAsDriver();

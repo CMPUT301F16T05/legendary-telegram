@@ -97,7 +97,7 @@ public class UserProfileActivity extends AppCompatActivity {
         checkUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GsonController.checkIfExists(nameEntered.getText().toString(), getApplicationContext())) {
+                if (myController.ValidateName(nameEntered.getText().toString(), getApplicationContext())){
                     Toast.makeText(getApplicationContext(), "User Name Already Exist.", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -132,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         newUser.setVehicle(vehicleEntered.getText().toString());
                     }
                     // save to disk
-                    GsonController.saveUserToDisk(newUser, getApplicationContext());
+                    myController.SaveChanges(newUser, getApplicationContext());
                     finish();
                 }
                 else{
@@ -159,8 +159,8 @@ public class UserProfileActivity extends AppCompatActivity {
                         currentUser.setVehicle(vehicleEntered.getText().toString());
                     }else{
                         //deleteFile and create a new one
-                        GsonController.deleteOldUserName(nameEntered.getText().toString(), getApplicationContext());
-                        GsonController.saveUserToDisk(currentUser, getApplicationContext());
+                        myController.DeleteOldUsers(nameEntered.getText().toString(), getApplicationContext());
+                        myController.SaveChanges(currentUser, getApplicationContext());
                     }
                 }
             }

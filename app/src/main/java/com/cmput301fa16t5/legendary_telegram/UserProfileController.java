@@ -19,4 +19,18 @@ public class UserProfileController {
     }
 
 
+    public boolean ValidateName(String username, Context context){
+        if(centralCommand.CheckUserName(username,context)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void SaveChanges(User newUser, Context context){
+        centralCommand.CreateUser(newUser, context);
+    }
+    public void DeleteOldUsers(String oldUser, Context context){
+        centralCommand.DeleteUser(oldUser, context);
+    }
 }

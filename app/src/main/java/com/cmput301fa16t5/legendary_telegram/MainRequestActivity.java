@@ -66,7 +66,6 @@ public class MainRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 myController.setUserAsRider();
                 Intent mapintent = new Intent(MainRequestActivity.this, MapsActivity.class);
-
                 startActivity(mapintent);
             }
         });
