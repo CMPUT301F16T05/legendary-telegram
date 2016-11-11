@@ -66,7 +66,7 @@ public class UserProfileActivity extends AppCompatActivity {
          *    get the info of current login user, and set them to EditText
          * else this activity is called from LoginActivity and hide the updateButton
          */
-        key_string = getIntent().getStringExtra("fromMainRequest");
+        key_string = getIntent().getStringExtra("Setting");
 
         if(key_string.equals("fromMainRequest")){
             addButton.setVisibility(View.GONE);
