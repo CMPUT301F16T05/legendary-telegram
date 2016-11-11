@@ -29,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * MapsActivity class is the view of the map.
  * @author zhimao
@@ -44,6 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker startMarker;
     private Marker endMarker;
     private Button okButton;
+    private ArrayList<LatLng> positionPair;
 
 
 
@@ -135,8 +138,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                positionPair = new ArrayList<LatLng>();
+                positionPair.add(start);
+                positionPair.add(end);
                 Log.d("Start: ", start.toString());
                 Log.d("End: ", end.toString());
+                // You can use positionPair now ...
             }
         });
     }
