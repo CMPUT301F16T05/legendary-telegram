@@ -44,13 +44,14 @@ public class DriverTests {
         requests.add(new Request(rider1, start, end));
         Driver driver = new Driver();
         Driver OtherDriver = new Driver();
-
+        // Check if the driver is picker (return true)
         driver.setOpenRequests(requests);
         driver.acceptARequest(0, me);
         requests.get(0).acceptADriver(0);
 
         assertTrue(driver.checkIfPicked());
 
+        // Check if the driver is not picker (return false)
         requests.add(new Request(rider1, start, end));
         driver.setOpenRequests(requests);
         driver.acceptARequest(1, me);

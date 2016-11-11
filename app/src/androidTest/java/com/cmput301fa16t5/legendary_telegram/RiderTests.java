@@ -18,6 +18,7 @@ public class RiderTests {
         Rider testRider = new Rider();
         testRider.createNewRequest(me , start, end);
 
+        // Check the parameters in the OpenRequest are the same as what we saved
         assertEquals(testRider.getOpenRequests().get(0).getStartLocation(), start);
         assertEquals(testRider.getOpenRequests().get(0).getEndLocation(), end);
     }
@@ -32,7 +33,10 @@ public class RiderTests {
         testRider.setCurrentRequest(0);
         Request testRequest = testRider.getCurrentRequest();
 
+        //Check the return value
         assertEquals(testRequest.getId(), testRider.removeOrComplete());
+
+        // Check if the request is saved into the OpenRequest
         assertFalse(testRider.getOpenRequests().contains(testRequest));
     }
 
@@ -44,15 +48,23 @@ public class RiderTests {
         LatLng start = new LatLng(0, 0);
         LatLng end = new LatLng(1,1);
 
-        Request request = new Request(me, start, end);
-        request.addADriver(driver1);
-        request.addADriver(driver2);
+        Rider testRider = new Rider();
+        testRider.createNewRequest(me, start, end);
+        testRider.setCurrentRequest(0);
+        testRider.getCurrentRequest().addADriver(driver1);
+        testRider.getCurrentRequest().addADriver(driver2);
+        testRider.selectDriver(0);
 
-        request.acceptADriver(0);
 
-        //assertEquals(request.getPotentialDrivers().get(0), request.myDriver);
-        assertEquals(request.getState(), RequestEnum.acceptedADriver);
-        assertEquals(request.isOnServer(), false);
+        // Make sure after we call the selectDriver
+        //CurrentRequest.myDriver = the picked driver
+        assertEquals(testRider.getCurrentRequest().getPotentialDrivers().get(0), driver1);
+
+        //CurrentRequest's state changes
+        assertEquals(testRider.getCurrentRequest().getState(), RequestEnum.acceptedADriver);
+
+        //The state of if it is on server changes
+        assertEquals(testRider.getCurrentRequest().isOnServer(), false);
     }
 
 }
