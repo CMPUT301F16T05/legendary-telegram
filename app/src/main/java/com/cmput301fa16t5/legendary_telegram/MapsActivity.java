@@ -2,6 +2,7 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -47,11 +48,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker endMarker;
     private Button okButton;
     private ArrayList<LatLng> positionPair;
+    private String riderOrDriver;
 
 
 
     // View has the controller
-    private MapController mapcontroller = new MapController();
+    private MapController mapController = new MapController();
 
 
     @Override
@@ -62,6 +64,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Intent intent = getIntent();
+        riderOrDriver = intent.getStringExtra("Map");
     }
 
 
@@ -87,14 +92,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         end = new LatLng(53.525037, -113.521324);
         // Learn from: https://developers.google.com/maps/documentation/android-api/marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker
-        startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-        endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+        if (riderOrDriver.equals("fromRider")) {
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
 
-        // Add a indicator for the marker
-        // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
-        startMarker.setTitle("Start");
-        endMarker.setTitle("End");
-
+            // Add a indicator for the marker
+            // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+            startMarker.setTitle("Start");
+            endMarker.setTitle("End");
+        } else {
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            startMarker.setTitle("Start");
+        }
         //zoom to start position:
         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -138,10 +147,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                positionPair = new ArrayList<LatLng>();
-                positionPair.add(start);
-                positionPair.add(end);
-                Log.d("Start: ", start.toString());
+                if (riderOrDriver == "fromRider") {
+                    positionPair = new ArrayList<LatLng>();
+                    positionPair.add(start);
+                    positionPair.add(end);
+                    Log.d("Start: ", start.toString());
+                }
                 Log.d("End: ", end.toString());
                 // You can use positionPair now ...
             }
