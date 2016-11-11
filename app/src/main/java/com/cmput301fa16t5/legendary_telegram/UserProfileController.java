@@ -11,4 +11,7 @@ public class UserProfileController {
     public UserProfileController() {
         centralCommand = CentralController.getInstance();
     }
+    public User GetCurrentUser(){
+        return centralCommand.getCurrentUser();
+    }
 }

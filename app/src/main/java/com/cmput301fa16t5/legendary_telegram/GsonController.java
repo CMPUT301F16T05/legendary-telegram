@@ -51,7 +51,7 @@ public class GsonController {
      * @param oldName: String of the old user.
      * @param context: Needed to use Gson.
      */
-    public void deleteOldUserName(String oldName, Context context) {
+    public static void deleteOldUserName(String oldName, Context context) {
         context.deleteFile(oldName + ".sav");
     }
 
