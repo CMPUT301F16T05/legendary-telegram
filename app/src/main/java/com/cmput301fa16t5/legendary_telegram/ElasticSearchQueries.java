@@ -25,6 +25,14 @@ public final class ElasticSearchQueries {
 }
 
 {
+    "request" : {
+        "properties" : {
+            "elasticEnd" : {"type" : "geo_point"}
+        }
+    }
+}
+
+{
         "properties" : {
             "elasticEnd" : {
                 "type" : "geo_point"

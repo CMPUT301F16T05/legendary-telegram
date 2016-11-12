@@ -3,6 +3,7 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -135,6 +136,19 @@ public class CentralController {
             e.printStackTrace();
         }
 
+        return gotRequest;
+    }
+
+    public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        String parsedString = String.valueOf(near.latitude) + "," + String.valueOf(near.longitude);
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, parsedString).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return gotRequest;
     }
 

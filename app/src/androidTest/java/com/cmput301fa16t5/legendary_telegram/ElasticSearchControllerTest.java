@@ -209,11 +209,20 @@ public class ElasticSearchControllerTest {
         //TODO FIGURE OUT LATLNG TO STRING
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
-            gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, "THINGS").get();
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, "90,90").get();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertEquals(2, gotRequest.size());
+        cleanUpRequests(far, near1, near2);
     }
 
     @Test

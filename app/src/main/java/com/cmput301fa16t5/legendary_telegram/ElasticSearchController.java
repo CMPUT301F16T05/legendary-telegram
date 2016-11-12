@@ -126,7 +126,15 @@ public class ElasticSearchController {
                         query = "\"{\"from\": 0, \"size\": 20}";
                         break;
                     case ElasticSearchQueries.GEODISTANCE:
-                        query = "";
+                        //yay for auto parsing
+                        query = "{\n" +
+                                "        \"filter\" : {\n" +
+                                "            \"geo_distance\" : {\n" +
+                                "                \"distance\" : \"100km\",\n" +
+                                "                \"elasticEnd\" : \""+search_params[q]+"\"\n" +
+                                "            }\n" +
+                                "        }\n" +
+                                "}";
                         break;
                     default:
                         query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
