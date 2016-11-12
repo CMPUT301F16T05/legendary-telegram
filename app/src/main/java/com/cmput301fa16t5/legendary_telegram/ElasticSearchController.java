@@ -116,10 +116,29 @@ public class ElasticSearchController {
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                if (queryType.equalsIgnoreCase(ElasticSearchQueries.ID)){
-                    query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
-                }else{
-                    query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
+
+                switch (queryType) {
+                    case ElasticSearchQueries.ID:
+                        query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
+                        break;
+                    case ElasticSearchQueries.ALL:
+                        //NOTE the size can be adjusted to match whatever is desired
+                        query = "\"{\"from\": 0, \"size\": 20}";
+                        break;
+                    case ElasticSearchQueries.GEODISTANCE:
+                        //yay for auto parsing
+                        query = "{\n" +
+                                "        \"filter\" : {\n" +
+                                "            \"geo_distance\" : {\n" +
+                                "                \"distance\" : \"100km\",\n" +
+                                "                \"elasticEnd\" : \""+search_params[q]+"\"\n" +
+                                "            }\n" +
+                                "        }\n" +
+                                "}";
+                        break;
+                    default:
+                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
+                        break;
                 }
 
                 Search search = new Search.Builder(query)

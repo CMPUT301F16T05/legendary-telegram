@@ -113,6 +113,62 @@ public class CentralController {
         }
     }
 
+    /**
+     * Wrapper for ElasticSearch get that focuses on ID
+     * @param searchItems an array of IDs to look for
+     * @return an ArrayList of requests that match the query
+     */
+    public ArrayList<Request> getRequestsByID(String... searchItems){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        String[] newSearchItems = new String[searchItems.length+1];
+
+        //Parse a new array to add as a new vararg
+        newSearchItems[0] = ElasticSearchQueries.ID;
+        for (int q = 0;q<searchItems.length;q++){
+            newSearchItems[q+1] = searchItems[q];
+        }
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(newSearchItems).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return gotRequest;
+    }
+
+    public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        String parsedString = String.valueOf(near.latitude) + "," + String.valueOf(near.longitude);
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, parsedString).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return gotRequest;
+    }
+
+    /**
+     * Wrapper for ElasticSearch get that grabs the first few requests
+     * @return an ArrayList of requests that match the query
+     */
+    public ArrayList<Request> getRequestsAll() {
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.ALL).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return gotRequest;
+    }
+
     public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
         User newbie = new User(name, email, phone);
 

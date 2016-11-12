@@ -24,6 +24,11 @@ public class Request {
     private LatLng startLocation;
     private LatLng endLocation;
 
+    //LatLng encodes on the server in a way that the GeoDistance query
+    //does like so they have to be parsed into a format that it does like
+    private String elasticStart;
+    private String elasticEnd;
+
     private Double fee;
     private RequestEnum state;
 
@@ -40,6 +45,10 @@ public class Request {
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
         this.onServer = false;
+
+        //parse the server friendly locations
+        this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
+        this.elasticEnd = String.valueOf(end.latitude) + "," + String.valueOf(end.longitude);
     }
 
     /**
@@ -178,5 +187,13 @@ public class Request {
 
     public IdentificationCard getMyDriver() {
         return myDriver;
+    }
+    
+    public String getElasticStart(){
+        return elasticStart;
+    }
+
+    public String getElasticEnd(){
+        return elasticEnd;
     }
 }

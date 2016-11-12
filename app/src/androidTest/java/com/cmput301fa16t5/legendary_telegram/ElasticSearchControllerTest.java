@@ -166,6 +166,65 @@ public class ElasticSearchControllerTest {
         cleanUpRequests(newRequest);
     }
 
+    //Extra bonus of testing multiple returns of each test
+    @Test
+    public void testGetRequestByGeoDistance(){
+        Request far = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
+        Request near1 = new Request(null, new LatLng(90, 90), new LatLng(89.9, 89.9));
+        Request near2 = new Request(null, new LatLng(89.9, 89.9), new LatLng(90, 90));
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        //Ensure everything is initialized correctly
+        assertFalse(far.isOnServer());
+        assertTrue(far.getId() == null);
+        assertFalse(near1.isOnServer());
+        assertTrue(near1.getId() == null);
+        assertFalse(near2.isOnServer());
+        assertTrue(near2.getId() == null);
+        assertTrue(gotRequest.isEmpty());
+
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            addRequestsTask.execute(far, near1, near2).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //The server wil grant an ID when added sucessfully
+        assertTrue(far.isOnServer());
+        assertFalse(far.getId() == null);
+        assertTrue(near1.isOnServer());
+        assertFalse(near1.getId() == null);
+        assertTrue(near2.isOnServer());
+        assertFalse(near2.getId() == null);
+
+        //TODO FIGURE OUT LATLNG TO STRING
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, "90,90").get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertEquals(2, gotRequest.size());
+        cleanUpRequests(far, near1, near2);
+    }
+
     @Test
     public void testDeleteRequest(){
         //Specific details are not important for this test
