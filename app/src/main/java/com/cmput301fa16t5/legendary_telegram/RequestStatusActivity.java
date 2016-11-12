@@ -2,6 +2,7 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,7 +19,7 @@ public class RequestStatusActivity extends AppCompatActivity {
     private TextView title;
     private Button cancelButton;
     private ListView requestsDriversLV;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<IdentificationCard> adapter;
 
     private RequestStatusController myController;
 
@@ -33,13 +34,21 @@ public class RequestStatusActivity extends AppCompatActivity {
         cancelButton = (Button) findViewById(R.id.cancelReqButton);
         requestsDriversLV = (ListView) findViewById(R.id.RequestInfoLV);
 
-        // Ideally when the activity is called it unpacks the info about the request
-        // Then it will get the name of the request or more specifically its
-        // to and from location. And then change the title text;
-        setTitleText("Placeholder");
+        title.setText(myController.getRequestName());
+
+
     }
 
-    private void setTitleText(String titleText) {
-        title.setText(titleText);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.adapter = myController.setRequestAdapter(this);
+    }
+
+    public void cancelButtonPressed(View v) {
+        // Cancel the request.
+        // Remove it from view.
+        // Remove from ESearch.
+        // go back.
     }
 }

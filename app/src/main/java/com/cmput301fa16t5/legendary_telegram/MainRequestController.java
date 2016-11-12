@@ -1,5 +1,6 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.Context;
 import android.widget.ArrayAdapter;
 
 /**
@@ -16,8 +17,8 @@ public class MainRequestController {
         centralCommand = CentralController.getInstance();
     }
     //set the user as driver
-    public boolean setUserAsDriver(){
-        return centralCommand.canBeDriver();
+    public boolean setUserAsDriver(Context context){
+        return centralCommand.canBeDriver(context);
     }
     //set the user as rider
     public void setUserAsRider(){

@@ -131,6 +131,10 @@ public class CentralController {
         return myList;
     }
 
+    public ArrayList<IdentificationCard> getCards() {
+        return currentUser.getMyDriver().getCurrentRequest().getPotentialDrivers();
+    }
+
     public boolean selectCurrentRequest(int index) {
         if (this.currentUser.askForMode()) {
             this.currentUser.generateDriverCR(index);
@@ -143,11 +147,12 @@ public class CentralController {
         }
     }
 
-    public boolean canBeDriver() {
+    public boolean canBeDriver(Context context) {
         if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
             return false;
         }
         currentUser.setAsDriver();
+        saveCurrentUser(context);
         return true;
     }
 }
