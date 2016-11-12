@@ -27,9 +27,11 @@ public class Rider extends RiderDriverParent {
     }
 
     // This needs to return a string so that ESearch knows what to banish to the void (delete).
-    public String removeOrComplete() {
-        this.openRequests.remove(this.currentRequest);
-        return this.currentRequest.getId();
+    public Request removeOrComplete() {
+        Request r = this.currentRequest;
+        this.currentRequest = null;
+        this.openRequests.remove(r);
+        return r;
     }
 
     public Request getCurrentRequest() {

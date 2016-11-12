@@ -21,4 +21,10 @@ public class RequestStatusController {
     public ArrayAdapter<IdentificationCard> setRequestAdapter(RequestStatusActivity activity) {
         return new ArrayAdapter(activity, R.layout.card_items, centralCommand.getCards());
     }
+
+    public void cancel() {
+        Request cancelledRequest = centralCommand.getCurrentUser().getMyRider().removeOrComplete();
+        ElasticSearchController.DeleteRequestsTask delRequest = new ElasticSearchController.DeleteRequestsTask();
+        delRequest.execute(cancelledRequest);
+    }
 }

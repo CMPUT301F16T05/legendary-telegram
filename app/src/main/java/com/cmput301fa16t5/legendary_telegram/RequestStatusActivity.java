@@ -1,8 +1,10 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,19 +38,26 @@ public class RequestStatusActivity extends AppCompatActivity {
 
         title.setText(myController.getRequestName());
 
-
+        requestsDriversLV.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapt, View v, int position, long l) {
+                Intent intent = new Intent(RequestStatusActivity.this, ContactScreenActivity.class);
+                intent.putExtra("CardNum", Integer.toString(position));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         this.adapter = myController.setRequestAdapter(this);
+        requestsDriversLV.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void cancelButtonPressed(View v) {
-        // Cancel the request.
-        // Remove it from view.
-        // Remove from ESearch.
-        // go back.
+        myController.cancel();
+        finish();
     }
 }
