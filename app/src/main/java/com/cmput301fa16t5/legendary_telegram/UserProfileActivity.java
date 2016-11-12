@@ -55,12 +55,12 @@ public class UserProfileActivity extends AppCompatActivity {
         vehicleEntered = (EditText) findViewById(R.id.userVehicle);
 
         /**
-         * @ Yu Tang Lin                                      NOV-9-2016
-         * the key_string will get the string message pass from MainRequestActivity
-         * if the key_string is from MainRequestActivity, hide the addButton
-         * get the info of current login user, and set them to EditText
-         * else this activity is called from LoginActivity and hide the updateButton
-         */
+        * the key_string will get the string message pass from MainRequestActivity
+        * change the button text go Edit User Profile and get the info of current
+        * user and set it info to the Edit Text Field
+        * else we set the button text as Create New User since this activity will be
+        * called from login activity
+        */
         key_string = getIntent().getStringExtra("Setting");
 
         if (key_string.equals("fromMainRequest")) {
@@ -79,15 +79,10 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         /**
-         * @ Yu Tang Lin                                   NOV-9-2016
          * Click on the Check button to see if the User name is valid
          * if userName already exist in Gson fileList, pass a toast saying
          * the name already exists.
          * else, pass a toast saying Valid User Name" and set the validation to True
-         * Issue:
-         * When the user get to this activity from MainRequestActivity, the EditText will be filled
-         * up with the user info. However, if the user click the check button without changing the name,
-         * the user will not be able to update its changes
          */
         checkUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +97,8 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         /**
-         * updateButton only showed up when this Activity is called from MainRequestActivity
-         * if the name check pass, and the user did not change the user name,
-         * change the user properties to the new properties
-         * else deletetheFile and create a new one
+         * when click on update Button, it will check which activity is calling this activity
+         * and change or create user profile
          */
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override

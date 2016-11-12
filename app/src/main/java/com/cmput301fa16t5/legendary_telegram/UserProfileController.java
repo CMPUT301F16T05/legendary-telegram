@@ -36,8 +36,19 @@ public class UserProfileController {
         return data;
     }
 
+
+    /**
+     * this method will be used when the UserProfile Activity is called from MainRequestActivity
+     * @param name String type username from Edit Text
+     * @param email String type email from Edit Text
+     * @param phone String type phone from Edit Text
+     * @param vehicle String type  from Edit Text
+     * @param context just needed here
+     * @return false if username is changed, already exist or empty, else delete the old user gson file
+     * and create a new one, and return true
+     */
     public boolean attemptEditUser(String name, String email, String phone, String vehicle, Context context) {
-        if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name, context)) {
+        if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name, context) && name.equals("")) {
             return false;
         }
 
