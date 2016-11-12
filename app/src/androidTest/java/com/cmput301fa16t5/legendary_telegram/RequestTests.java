@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  */
 
 public class RequestTests {
-    //Need to be implemented
+
     @Test
     public void testAddADriver(){
         IdentificationCard me = new IdentificationCard("a", "a@test.com", "1234567890");
@@ -23,7 +23,11 @@ public class RequestTests {
 
         request.addADriver(driver);
 
+        // Make sure after call addADriver
+        // PotentialDrivers has the driver
         assertTrue(request.getPotentialDrivers().contains(driver));
+
+        // State changes to hasADriver
         assertEquals(RequestEnum.hasADriver, request.getState());
         assertFalse(request.isOnServer());
     }
@@ -39,7 +43,10 @@ public class RequestTests {
 
         request.acceptADriver(0);
 
+        // Check if myDriver = driver who is picked
         assertEquals(driver, request.getPotentialDrivers().get(0));
+
+        // State changes to accepted a driver
         assertEquals(RequestEnum.acceptedADriver, request.getState());
         assertFalse(request.isOnServer());
     }
