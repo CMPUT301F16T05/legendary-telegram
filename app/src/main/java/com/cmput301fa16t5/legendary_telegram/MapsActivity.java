@@ -52,6 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
     // View has the controller
     private MapController mapController = new MapController();
 
@@ -152,8 +153,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     positionPair.add(start);
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
+                    Log.d("End: ", end.toString());
                 }
-                Log.d("End: ", end.toString());
+                else {
+                    positionPair = new ArrayList<LatLng>();
+                    positionPair.add(start);
+                    Log.d("Start: ", start.toString());
+                }
+
                 // You can use positionPair now ...
             }
         });
