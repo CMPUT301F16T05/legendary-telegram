@@ -121,7 +121,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                else if (!key_string.equals("fromMainRequest")){
+                else if (key_string.equals("fromRegister")){
                     if (myController.attemptNewUser(nameEntered.getText().toString(),
                             emailEntered.getText().toString(),
                             phoneEntered.getText().toString(),

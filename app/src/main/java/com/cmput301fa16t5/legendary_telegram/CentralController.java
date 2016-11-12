@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 /**
  * Created by keith on 11/2/2016.
  *
@@ -118,5 +120,34 @@ public class CentralController {
         }
 
         GsonController.saveUserToDisk(newbie, context);
+    }
+
+    public ArrayList<Request> getRequests() {
+        ArrayList<Request> myList = currentUser.getMyCurrentMode().openRequests;
+
+        if (myList == null) {
+            return new ArrayList<>();
+        }
+        return myList;
+    }
+
+    public boolean selectCurrentRequest(int index) {
+        if (this.currentUser.askForMode()) {
+            this.currentUser.generateDriverCR(index);
+            return true;
+        }
+
+        else {
+            this.currentUser.getMyRider().setCurrentRequest(index);
+            return false;
+        }
+    }
+
+    public boolean canBeDriver() {
+        if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
+            return false;
+        }
+        currentUser.setAsDriver();
+        return true;
     }
 }

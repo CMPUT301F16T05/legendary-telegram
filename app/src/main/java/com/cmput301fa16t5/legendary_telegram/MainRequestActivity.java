@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * After a user logs in, they see this screen.
@@ -16,7 +18,6 @@ import android.widget.TextView;
  */
 public class MainRequestActivity extends AppCompatActivity {
 
-    private TextView title;
     private Button goToSettings;
     private Button findRequests;
     private Button makeRequests;
@@ -33,7 +34,6 @@ public class MainRequestActivity extends AppCompatActivity {
 
         myController = new MainRequestController();
 
-        title = (TextView) findViewById(R.id.mainRequestTitle);
         goToSettings = (Button) findViewById(R.id.settingsButton);
         findRequests = (Button) findViewById(R.id.driverButton);
         makeRequests = (Button) findViewById(R.id.riderButton);
@@ -79,12 +79,40 @@ public class MainRequestActivity extends AppCompatActivity {
         findRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myController.setUserAsDriver();
-                Intent mapintent2 = new Intent(MainRequestActivity.this, MapsActivity.class);
-                mapintent2.putExtra("Map", "fromDriver");
-                startActivity(mapintent2);
+                if (myController.setUserAsDriver()) {
+                    Intent mapintent2 = new Intent(MainRequestActivity.this, MapsActivity.class);
+                    mapintent2.putExtra("Map", "fromDriver");
+                    startActivity(mapintent2);
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), "Vehicle Field of User Data" +
+                            "must have entry before acting as a Driver", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.adapter = myController.setRequestAdapter(this);
+        relevantRequests.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        relevantRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapt, View v, int position, long l) {
+
+                if (myController.clickedARequest(position)) {
+                    startActivity(new Intent(MainRequestActivity.this, ContactScreenActivity.class));
+                }
+
+                else {
+                    startActivity(new Intent(MainRequestActivity.this, RequestStatusActivity.class));
+                }
+            }
+        });
     }
 }

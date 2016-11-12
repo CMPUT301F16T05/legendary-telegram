@@ -23,8 +23,8 @@ public class User {
         this.userName = userName;
         this.email = email;
         this.telephone = telephone;
-        this.vehicle = "N/A"; // can use to check if the user can be a driver
-        this.myDriver = null;
+        this.vehicle = null; // can use to check if the user can be a driver
+        this.myDriver = new Driver();
         this.myRider = new Rider();
         this.myCurrentMode = null;
     }
@@ -97,4 +97,12 @@ public class User {
         return this.userName + ":\n" + this.telephone + " " + this.email;
     }
 
+    public RiderDriverParent getMyCurrentMode() {
+        return myCurrentMode;
+    }
+
+    public void generateDriverCR(int index) {
+        this.getMyDriver().acceptARequest(index, new IdentificationCard(userName,
+                telephone, email, vehicle));
+    }
 }
