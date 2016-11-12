@@ -3,6 +3,8 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 /**
  * Created by keith on 11/2/2016.
  *
@@ -43,27 +45,19 @@ public class CentralController {
         currentUser.setAsRider();
     }
 
-    //check if user name is valid
-    public boolean CheckUserName(String username, Context context){
-        if(GsonController.checkIfExists(username, context)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    //save changes to user profile
-    public void CreateUser(User newUser, Context context){
-        GsonController.saveUserToDisk(newUser, context);
-    }
-    //delete user from gson
-    public void DeleteUser(String oldUser, Context context){
-        GsonController.deleteOldUserName(oldUser, context);
-    }
-
     //set user as driver
     public void setUserDriver(){
         currentUser.setAsDriver();
+    }
+
+    //check if user name is valid
+    public boolean checkUserName(String username, Context context){
+        return GsonController.checkIfExists(username, context);
+    }
+
+    //delete user from gson
+    public void deleteUser(String oldUser, Context context){
+        GsonController.deleteOldUserName(oldUser, context);
     }
 
     public void setCurrentUser(User currentUser) {
@@ -114,5 +108,15 @@ public class CentralController {
                 Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
         }
+    }
+
+    public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
+        User newbie = new User(name, email, phone);
+
+        if ((vehicle != null) || (!vehicle.equals(""))) {
+            newbie.setVehicle(vehicle);
+        }
+
+        GsonController.saveUserToDisk(newbie, context);
     }
 }
