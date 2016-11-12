@@ -14,8 +14,10 @@ public class Rider extends RiderDriverParent {
         openRequests = new ArrayList<Request>();
     }
 
-    public void createNewRequest(IdentificationCard me, LatLng start, LatLng end) {
-        openRequests.add(new Request(me, start, end));
+    public Request createNewRequest(IdentificationCard me, LatLng start, LatLng end) {
+        Request newR = new Request(me, start, end);
+        openRequests.add(newR);
+        return newR;
     }
 
     public void setCurrentRequest(Integer index) {
