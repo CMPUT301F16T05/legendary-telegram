@@ -116,10 +116,21 @@ public class ElasticSearchController {
                 //query = params;
                 //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
                 //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-                if (queryType.equalsIgnoreCase(ElasticSearchQueries.ID)){
-                    query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
-                }else{
-                    query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
+
+                switch (queryType) {
+                    case ElasticSearchQueries.ID:
+                        query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
+                        break;
+                    case ElasticSearchQueries.ALL:
+                        //NOTE the size can be adjusted to match whatever is desired
+                        query = "\"{\"from\": 0, \"size\": 20}";
+                        break;
+                    case ElasticSearchQueries.GEODISTANCE:
+                        query = "";
+                        break;
+                    default:
+                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
+                        break;
                 }
 
                 Search search = new Search.Builder(query)

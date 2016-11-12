@@ -3,6 +3,8 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by keith on 11/2/2016.
  *
@@ -114,5 +116,49 @@ public class CentralController {
                 Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
         }
+    }
+
+    /**
+     * Wrapper for ElasticSearch get that focuses on ID
+     * @param searchItems an array of IDs to look for
+     * @return an ArrayList of requests that match the query
+     */
+    public ArrayList<Request> getRequestsByID(String... searchItems){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        String[] newSearchItems = new String[searchItems.length+1];
+
+        //Parse a new array to add as a new vararg
+        newSearchItems[0] = ElasticSearchQueries.ID;
+        for (int q = 0;q<searchItems.length;q++){
+            newSearchItems[q+1] = searchItems[q];
+        }
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(newSearchItems).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return gotRequest;
+    }
+
+    /**
+     * Wrapper for ElasticSearch get that grabs the first few requests
+     * @return an ArrayList of requests that match the query
+     */
+    public ArrayList<Request> getRequestsAll(){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.ALL).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return gotRequest;
     }
 }
