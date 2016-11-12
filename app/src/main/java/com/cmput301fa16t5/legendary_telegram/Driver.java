@@ -18,8 +18,6 @@ public class Driver extends RiderDriverParent {
      * of a request and then decide to change your user info? For that
      * request, it will always be static.
      */
-    private ArrayList<Request> openRequests;
-    private Request currentRequest;
     private IdentificationCard cardToRequest;
 
     /**

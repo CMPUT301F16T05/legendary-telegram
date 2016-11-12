@@ -23,22 +23,19 @@ a new user account cannot be made/the existing account cannot be modified.
 
 When the user creates or modifies an account the function that checks the name should be called anyway. THe 
 separate button exists for convience.
+ Originally created by Keith.
+ Filled out by Yu Tang Lin
+ Refactored by Keith
 */
-
 public class UserProfileActivity extends AppCompatActivity {
 
     private Button updateButton;
     private Button checkUser;
-    private Button addButton;
     private EditText nameEntered;
     private EditText phoneEntered;
     private EditText emailEntered;
     private EditText vehicleEntered;
     private String key_string;
-
-    private boolean validation;
-    private User newUser;
-
 
     private UserProfileController myController;
 
@@ -47,12 +44,10 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        validation = false;
         myController = new UserProfileController();
 
         checkUser = (Button) findViewById(R.id.checkUsrName);
-        addButton = (Button) findViewById(R.id.addUser);
-        updateButton = (Button)findViewById(R.id.updateUser);
+        updateButton = (Button)findViewById(R.id.userSettingsMain);
 
         nameEntered = (EditText) findViewById(R.id.userNameSettings);
         phoneEntered = (EditText) findViewById(R.id.userPhone);
@@ -63,20 +58,24 @@ public class UserProfileActivity extends AppCompatActivity {
          * @ Yu Tang Lin                                      NOV-9-2016
          * the key_string will get the string message pass from MainRequestActivity
          * if the key_string is from MainRequestActivity, hide the addButton
-         *    get the info of current login user, and set them to EditText
+         * get the info of current login user, and set them to EditText
          * else this activity is called from LoginActivity and hide the updateButton
          */
         key_string = getIntent().getStringExtra("Setting");
 
-        if(key_string.equals("fromMainRequest")){
-            addButton.setVisibility(View.GONE);
+        if (key_string.equals("fromMainRequest")) {
+            updateButton.setText("Edit User Profile");
 
-            nameEntered.setText(myController.GetCurrentUser().getUserName());
-            phoneEntered.setText(myController.GetCurrentUser().getTelephone());
-            emailEntered.setText(myController.GetCurrentUser().getEmail());
-            vehicleEntered.setText(myController.GetCurrentUser().getVehicle());
-        }else{
-            updateButton.setVisibility(View.GONE);
+            String[] fieldData = myController.getProfileData();
+
+            nameEntered.setText(fieldData[0]);
+            phoneEntered.setText(fieldData[1]);
+            emailEntered.setText(fieldData[2]);
+            vehicleEntered.setText(fieldData[3]);
+        }
+
+        else {
+            updateButton.setText("Create New User");
         }
 
         /**
@@ -90,50 +89,15 @@ public class UserProfileActivity extends AppCompatActivity {
          * up with the user info. However, if the user click the check button without changing the name,
          * the user will not be able to update its changes
          */
-
         checkUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myController.ValidateName(nameEntered.getText().toString(), getApplicationContext())){
+                if (myController.validateName(nameEntered.getText().toString(), getApplicationContext())){
                     Toast.makeText(getApplicationContext(), "User Name Already Exist.", Toast.LENGTH_SHORT).show();
                 }
+
                 else {
-                    validation = true;
                     Toast.makeText(getApplicationContext(), "Valid User Name.", Toast.LENGTH_SHORT).show();
-                }
-                /**
-                 * My solution for issue is that we checked whether or not the user name of the currentUser is same
-                 * as the name in Name Edit Text
-                 * if it is same we set the validation to true;
-                 */
-
-                if (myController.GetCurrentUser().getUserName().equals(nameEntered.getText().toString())){
-                    validation =true;
-                }
-            }
-        });
-
-        /**
-         * @ Yu Tang Lin                                                       NOV-9-2016
-         * the  addButton only shows up when the previous activity is from login activity
-         * THis is for new user when they register(username does not exist in gson file)
-         * if the userName is valid (does not exsist in gson fileList) add it in.
-         * else pass a toast saying user name is unvalid
-         */
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validation==true){
-                    newUser = new User(nameEntered.getText().toString(),emailEntered.getText().toString(),phoneEntered.getText().toString());
-                    if(vehicleEntered.getText().toString()!= ""){
-                        newUser.setVehicle(vehicleEntered.getText().toString());
-                    }
-                    // save to disk
-                    myController.SaveChanges(newUser, getApplicationContext());
-                    finish();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Unvalid User Name.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -144,19 +108,32 @@ public class UserProfileActivity extends AppCompatActivity {
          * change the user properties to the new properties
          * else deletetheFile and create a new one
          */
-
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validation == true) {
-                    if (myController.CompareName(myController.GetCurrentUser(),nameEntered, phoneEntered, emailEntered, vehicleEntered)){
-                        finish();
-                    }else{
-                        //deleteFile and create a new one
-                        myController.DeleteOldUsers(nameEntered.getText().toString(), getApplicationContext());
-                        myController.SaveChanges(myController.GetCurrentUser(), getApplicationContext());
+                if (key_string.equals("fromMainRequest")) {
+                    if (myController.attemptEditUser(nameEntered.getText().toString(),
+                            emailEntered.getText().toString(),
+                            phoneEntered.getText().toString(),
+                            vehicleEntered.getText().toString(),
+                            getApplicationContext())) {
+                        Toast.makeText(getApplicationContext(), "User Settings Edited", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                else if (key_string.equals("fromRegister")){
+                    if (myController.attemptNewUser(nameEntered.getText().toString(),
+                            emailEntered.getText().toString(),
+                            phoneEntered.getText().toString(),
+                            vehicleEntered.getText().toString(),
+                            getApplicationContext())) {
+                        Toast.makeText(getApplicationContext(), "New User Created", Toast.LENGTH_SHORT).show();
                         finish();
                     }
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), "User Name Already Exists", Toast.LENGTH_SHORT).show();
                 }
             }
         });

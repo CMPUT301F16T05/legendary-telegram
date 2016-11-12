@@ -100,18 +100,10 @@
         android:layout_toEndOf="@+id/vehicleSetting" />
 
     <Button
-        android:text="Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/addUser"
+        android:id="@+id/userSettingsMain"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:text="Update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/updateUser"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

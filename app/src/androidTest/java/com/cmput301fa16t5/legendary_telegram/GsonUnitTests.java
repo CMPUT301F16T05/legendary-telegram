@@ -11,8 +11,12 @@ import static org.junit.Assert.*;
  * GsonController Unit Tests.
  * @author kgmills
  */
-public class GsonTests {
+public class GsonUnitTests {
 
+    /**
+     * If the tests fail you must go into the device manager and delete
+     * testUser.sav and testLoad.sav from memory.
+     */
     @Test
     public void testIfExists() {
 

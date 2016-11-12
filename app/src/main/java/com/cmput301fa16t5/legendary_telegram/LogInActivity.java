@@ -41,8 +41,8 @@ public class LogInActivity extends AppCompatActivity {
      */
     public void newUserClick(View v) {
         Intent intent = new Intent(LogInActivity.this, UserProfileActivity.class);
-        intent.putExtra("Register", "fromRegister");
-        startActivity(new Intent(this, UserProfileActivity.class));
+        intent.putExtra("Setting", "fromRegister");
+        startActivity(intent);
     }
 
     /**

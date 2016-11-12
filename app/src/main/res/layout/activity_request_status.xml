@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/cancelReqButton" />
+        android:id="@+id/cancelReqButton"
+        android:onClick="cancelButtonPressed" />
 
     <ListView
         android:layout_width="match_parent"

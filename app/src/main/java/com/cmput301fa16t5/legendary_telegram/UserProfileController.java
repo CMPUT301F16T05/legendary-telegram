@@ -10,39 +10,56 @@ import android.widget.EditText;
 public class UserProfileController {
 
     private CentralController centralCommand;
+    private User currentUser;
 
     public UserProfileController() {
         centralCommand = CentralController.getInstance();
+        currentUser = centralCommand.getCurrentUser();
     }
 
-    public User GetCurrentUser(){
-        return centralCommand.getCurrentUser();
-    }
-
-
-    public boolean ValidateName(String username, Context context){
-        if(centralCommand.CheckUserName(username,context)){
+    public boolean validateName(String username, Context context){
+        if(centralCommand.checkUserName(username,context)){
             return true;
         }else{
             return false;
         }
     }
 
-    public void SaveChanges(User newUser, Context context){
-        centralCommand.CreateUser(newUser, context);
-    }
-    public void DeleteOldUsers(String oldUser, Context context){
-        centralCommand.DeleteUser(oldUser, context);
+    public String[] getProfileData() {
+        String[] data = new String[4];
+
+        data[0] = currentUser.getUserName();
+        data[1] = currentUser.getEmail();
+        data[2] = currentUser.getTelephone();
+        data[3] = currentUser.getVehicle();
+
+        return data;
     }
 
-    public boolean CompareName(User user, EditText editTextName, EditText phone, EditText email, EditText vehicle){
-        if(centralCommand.getCurrentUser().getUserName().equals(editTextName)){
-            centralCommand.getCurrentUser().setTelephone(phone.getText().toString());
-            centralCommand.getCurrentUser().setEmail(email.getText().toString());
-            centralCommand.getCurrentUser().setVehicle(vehicle.getText().toString());
-            return true;
-        }else{
+    public boolean attemptEditUser(String name, String email, String phone, String vehicle, Context context) {
+        if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name, context)) {
             return false;
         }
+
+        String oldName = currentUser.getUserName();
+
+        currentUser.setUserName(name);
+        currentUser.setEmail(email);
+        currentUser.setTelephone(phone);
+        currentUser.setVehicle(vehicle);
+
+        centralCommand.deleteUser(oldName, context);
+        centralCommand.saveCurrentUser(context);
+
+        return true;
+    }
+
+    public boolean attemptNewUser(String name, String email, String phone, String vehicle, Context context) {
+        if (centralCommand.checkUserName(name, context)) {
+            return false;
+        }
+
+        centralCommand.createNewUser(name, email, phone, vehicle, context);
+        return true;
     }
 }

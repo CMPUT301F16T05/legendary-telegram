@@ -11,8 +11,8 @@ import java.util.ArrayList;
  */
 
 public abstract class RiderDriverParent {
-    private ArrayList<Request> openRequests;
-    private Request currentRequest;
+    protected ArrayList<Request> openRequests;
+    protected Request currentRequest;
 
     public RiderDriverParent() {    }
 }

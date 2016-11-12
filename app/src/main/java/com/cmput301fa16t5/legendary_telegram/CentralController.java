@@ -3,6 +3,8 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 /**
@@ -45,27 +47,19 @@ public class CentralController {
         currentUser.setAsRider();
     }
 
-    //check if user name is valid
-    public boolean CheckUserName(String username, Context context){
-        if(GsonController.checkIfExists(username, context)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    //save changes to user profile
-    public void CreateUser(User newUser, Context context){
-        GsonController.saveUserToDisk(newUser, context);
-    }
-    //delete user from gson
-    public void DeleteUser(String oldUser, Context context){
-        GsonController.deleteOldUserName(oldUser, context);
-    }
-
     //set user as driver
     public void setUserDriver(){
         currentUser.setAsDriver();
+    }
+
+    //check if user name is valid
+    public boolean checkUserName(String username, Context context){
+        return GsonController.checkIfExists(username, context);
+    }
+
+    //delete user from gson
+    public void deleteUser(String oldUser, Context context){
+        GsonController.deleteOldUserName(oldUser, context);
     }
 
     public void setCurrentUser(User currentUser) {
@@ -148,17 +142,60 @@ public class CentralController {
      * Wrapper for ElasticSearch get that grabs the first few requests
      * @return an ArrayList of requests that match the query
      */
-    public ArrayList<Request> getRequestsAll(){
+    public ArrayList<Request> getRequestsAll() {
         ArrayList<Request> gotRequest = new ArrayList<>();
 
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
             gotRequest = getRequestsTask.execute(ElasticSearchQueries.ALL).get();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return gotRequest;
+    }
+
+    public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
+        User newbie = new User(name, email, phone);
+
+        if ((vehicle != null) || (!vehicle.equals(""))) {
+            newbie.setVehicle(vehicle);
+        }
+
+        GsonController.saveUserToDisk(newbie, context);
+    }
+
+    public ArrayList<Request> getRequests() {
+        ArrayList<Request> myList = currentUser.getMyCurrentMode().openRequests;
+
+        if (myList == null) {
+            return new ArrayList<>();
+        }
+        return myList;
+    }
+
+    public ArrayList<IdentificationCard> getCards() {
+        return currentUser.getMyDriver().getCurrentRequest().getPotentialDrivers();
+    }
+
+    public boolean selectCurrentRequest(int index) {
+        if (this.currentUser.askForMode()) {
+            this.currentUser.generateDriverCR(index);
+            return true;
+        }
+
+        else {
+            this.currentUser.getMyRider().setCurrentRequest(index);
+            return false;
+        }
+    }
+
+    public boolean canBeDriver(Context context) {
+        if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
+            return false;
+        }
+        currentUser.setAsDriver();
+        saveCurrentUser(context);
+        return true;
     }
 }
