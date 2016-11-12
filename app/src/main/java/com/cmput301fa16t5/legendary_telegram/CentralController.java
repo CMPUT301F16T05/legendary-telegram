@@ -3,6 +3,7 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -155,4 +156,16 @@ public class CentralController {
         saveCurrentUser(context);
         return true;
     }
+
+    public void createRequest(ArrayList<LatLng> positionPair) {
+        // Rider creates srequest
+
+    }
+
+    public void searchRequests(ArrayList<LatLng> positionPair) {
+        // Driver searches for requests
+
+    }
+
+
 }
