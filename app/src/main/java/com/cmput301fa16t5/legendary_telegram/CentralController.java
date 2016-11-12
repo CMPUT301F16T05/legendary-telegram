@@ -159,11 +159,19 @@ public class CentralController {
 
     public void createRequest(ArrayList<LatLng> positionPair) {
         // Rider creates srequest
-
+        IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
+                currentUser.getTelephone(), currentUser.getEmail());
+        Request rToUpload = currentUser.getMyRider().createNewRequest(me,
+                positionPair.get(0), positionPair.get(1));
+        addNewRequest(rToUpload);
     }
 
     public void searchRequests(ArrayList<LatLng> positionPair) {
         // Driver searches for requests
+        // position is positionPair.get(0)
+        ArrayList<Request> driverRequests =
+                getRequestsByGeoDistance(positionPair.get(0));
+        currentUser.getMyDriver().setOpenRequests(driverRequests);
 
     }
 
