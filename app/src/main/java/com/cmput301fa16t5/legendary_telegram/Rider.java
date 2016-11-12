@@ -10,9 +10,6 @@ import java.util.ArrayList;
  */
 public class Rider extends RiderDriverParent {
 
-    private ArrayList<Request> openRequests;
-    private Request currentRequest;
-
     public Rider() {
         openRequests = new ArrayList<Request>();
     }

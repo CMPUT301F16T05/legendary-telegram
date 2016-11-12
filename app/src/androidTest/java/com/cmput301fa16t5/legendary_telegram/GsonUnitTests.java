@@ -13,6 +13,10 @@ import static org.junit.Assert.*;
  */
 public class GsonUnitTests {
 
+    /**
+     * If the tests fail you must go into the device manager and delete
+     * testUser.sav and testLoad.sav from memory.
+     */
     @Test
     public void testIfExists() {
 
