@@ -48,13 +48,19 @@ public class ContactScreenActivity extends AppCompatActivity {
         emailTxt = (TextView) findViewById(R.id.emailTextView);
         commitButton = (Button) findViewById(R.id.commitButton);
 
-        infoTitle.setText("For Rider it displays Driver Info for Driver, Rider Info");
-        infoDetail.setText("The actual details");
-        phoneTxt.setText("The phone number. Clicking it should cause the phone to dial the number.");
-        emailTxt.setText("Email. Clicking it should... you get the idea.");
+        if (myController.riderOrDriver()) {
+            fillOutFields(myController.getEntries());
+            commitButton.setText(myController.setDriverSelectText());
 
-        commitButton.setText("Accepting a Driver as a Rider? Accepting a Rider as a Driver? Depends on context");
-        //@Yu Tang Lin
+        }
+
+//        infoTitle.setText("For Rider it displays Driver Info for Driver, Rider Info");
+//        infoDetail.setText("The actual details");
+//        phoneTxt.setText("The phone number. Clicking it should cause the phone to dial the number.");
+//        emailTxt.setText("Email. Clicking it should... you get the idea.");
+//
+//        commitButton.setText("Accepting a Driver as a Rider? Accepting a Rider as a Driver? Depends on context");
+//        //@Yu Tang Lin
         phoneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,5 +70,12 @@ public class ContactScreenActivity extends AppCompatActivity {
                 startActivity(callIntent);
             }
         });
+    }
+
+    private void fillOutFields(String[] entries){
+        infoTitle.setText(entries[0]);
+        infoDetail.setText(entries[1]);
+        phoneTxt.setText(entries[2]);
+        emailTxt.setText(entries[3]);
     }
 }

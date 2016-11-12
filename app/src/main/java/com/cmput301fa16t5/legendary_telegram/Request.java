@@ -171,4 +171,12 @@ public class Request {
     public LatLng getEndLocation() {
         return endLocation;
     }
+
+    public IdentificationCard getMyRider() {
+        return myRider;
+    }
+
+    public IdentificationCard getMyDriver() {
+        return myDriver;
+    }
 }
