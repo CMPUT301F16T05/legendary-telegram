@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * GsonController Unit Tests.
  * @author kgmills
  */
-public class GsonTests {
+public class GsonUnitTests {
 
     @Test
     public void testIfExists() {
