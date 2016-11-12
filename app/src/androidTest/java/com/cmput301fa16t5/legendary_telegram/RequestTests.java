@@ -43,7 +43,8 @@ public class RequestTests {
 
         request.acceptADriver(0);
 
-        // Check if myDriver = driver who is picked
+        // Check if myDriver = driver
+        // who is picked
         assertEquals(driver, request.getPotentialDrivers().get(0));
 
         // State changes to accepted a driver
