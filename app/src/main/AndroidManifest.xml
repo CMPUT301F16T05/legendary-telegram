@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainRequestActivity" />
-        <activity android:name=".MapActivity" />
         <activity android:name=".RequestStatusActivity" />
         <activity android:name=".ContactScreenActivity" />
         <activity android:name=".UserProfileActivity" />
