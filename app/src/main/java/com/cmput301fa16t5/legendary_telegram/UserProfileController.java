@@ -25,9 +25,13 @@ public class UserProfileController {
      * Checks to see if the String corresponds to an existing username (or is invalid, like "");
      * @param username The String to be checked.
      * @param context Needed for GSON
-     * @return True if we're good. If false, the username is invalid.
+     * @return True if username is invalid. False otherwise.
      */
-    public boolean validateName(String username, Context context){
+    public boolean invalidateName(String username, Context context){
+        if (username.matches("")) {
+            return true;
+        }
+
         if(centralCommand.checkUserName(username, context)){
             return true;
         }else{
