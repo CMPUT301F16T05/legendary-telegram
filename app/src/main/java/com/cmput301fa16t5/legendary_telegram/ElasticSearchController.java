@@ -46,7 +46,7 @@ public class ElasticSearchController {
 
         /**
          * Deletes a request from the ElasticSearch server
-         * @param search_params: a Vararg of requests
+         * @param search_params a Vararg of requests
          * @return sets the ID for the request to null and updates onServer boolean
          */
         @Override
@@ -90,7 +90,7 @@ public class ElasticSearchController {
 
         /**
          * Retrieves a request from the ElasticSearch server
-         * @param search_params: a Vararg of strings. Expects at least two elements,
+         * @param search_params a Vararg of strings. Expects at least two elements,
          *                     first element is expected to be an ElasticSearchQuery constant
          *                     ex "ID", "GEODISTANCE", "SOME OTHER THING THAT MATCHES THE NEW REQUEST FORMAT"
          *                     remaining arguements are the values you are searching for
@@ -171,7 +171,7 @@ public class ElasticSearchController {
     public static class AddRequestsTask extends AsyncTask<Request, Void, Boolean> {
         /**
          * Adds a request to the ElasticSearch server
-         * @param requests: a Vararg of requests
+         * @param requests a Vararg of requests
          * @return sets the generated ID for the request and updates onServer boolean
          */
         @Override
@@ -214,7 +214,7 @@ public class ElasticSearchController {
 
         /**
          * Updates a request already on the server. Does nothing if no ID can be found
-         * @param requests: a Vararg of requests
+         * @param requests a Vararg of requests
          * @return sets the generated ID for the request and updates onServer boolean
          */
         @Override

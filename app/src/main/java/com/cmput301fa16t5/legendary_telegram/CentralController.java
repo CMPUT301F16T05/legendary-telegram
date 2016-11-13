@@ -50,7 +50,7 @@ public class CentralController {
 
     /**
      * Getter for the current User.
-     * @return: Current instance of user.
+     * @return Current instance of user.
      */
     public User getCurrentUser() {
         return currentUser;
@@ -67,8 +67,8 @@ public class CentralController {
     /**
      * Checks if the current user can be a Driver (has filled out vehicle field)
      * and if so, sets them as it.
-     * @param context: Needed for GSON
-     * @return: True if they can be a Driver. False otherwise.
+     * @param context Needed for GSON
+     * @return True if they can be a Driver. False otherwise.
      */
     public boolean canBeDriver(Context context) {
         if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
@@ -92,7 +92,7 @@ public class CentralController {
 
     /**
      * Orders Gson to delete a User from disk.
-     * @param oldUser: User to be deleted.
+     * @param oldUser User to be deleted.
      * @param context Needed for Gson
      */
     public void deleteUser(String oldUser, Context context){
@@ -181,7 +181,7 @@ public class CentralController {
 
     /**
      * Wrapper for ElasticSearch that gets the Driver's Requests.
-     * @param near: Latlng coordinates that requests should be near.
+     * @param near Latlng coordinates that requests should be near.
      * @return An ArrayList of Requests.
      */
     public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
@@ -216,11 +216,11 @@ public class CentralController {
 
     /**
      * Creates a new user and saves it to disk.
-     * @param name: User name of new User.
-     * @param email: Email address.
-     * @param phone: Phone number.
-     * @param vehicle: Possible vehicle description.
-     * @param context: Needed for GSON.
+     * @param name User name of new User.
+     * @param email Email address.
+     * @param phone Phone number.
+     * @param vehicle Possible vehicle description.
+     * @param context Needed for GSON.
      */
     public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
         User newbie = new User(name, email, phone);
@@ -234,7 +234,7 @@ public class CentralController {
 
     /**
      * Gets Requests from User, depending on whether it is acting as Rider or Driver.
-     * @return: An ArrayList of Requests.
+     * @return An ArrayList of Requests.
      */
     public ArrayList<Request> getRequests() {
 
@@ -255,7 +255,7 @@ public class CentralController {
 
     /**
      * Gets the Identification Cards corresponding to the potential Drivers of a given Request.
-     * @return: An ArrayList of Identificationcards
+     * @return An ArrayList of Identificationcards
      */
     public ArrayList<IdentificationCard> getCards() {
         return currentUser.getMyRider().getCurrentRequest().getPotentialDrivers();
@@ -264,8 +264,8 @@ public class CentralController {
     /**
      * Called by MainRequest Activity/Controller when a User clicks on a Request
      * Sets that to be the current Request for Rider/Driver.
-     * @param index: Index of the request.
-     * @return: True if Driver, false if Rider.
+     * @param index Index of the request.
+     * @return True if Driver, false if Rider.
      */
     public boolean selectCurrentRequest(int index) {
         if (this.currentUser.askForMode()) {
@@ -282,8 +282,8 @@ public class CentralController {
 
     /**
      * Creates a new Request based on two LatLng coordinate sets.
-     * @param positionPair: ArrayList containing two coordinates.
-     * @param context: Needed for GSON.
+     * @param positionPair ArrayList containing two coordinates.
+     * @param context Needed for GSON.
      */
     public void createRequest(ArrayList<LatLng> positionPair, Context context) {
         // Rider creates srequest
@@ -297,8 +297,8 @@ public class CentralController {
 
     /**
      * Searches for Requests based on a LatLng coordinate pair. Assigns them to the Driver.
-     * @param positionPair: The LatLng coordinates.
-     * @param context: Needed for GSON.
+     * @param positionPair The LatLng coordinates.
+     * @param context Needed for GSON.
      */
     public void searchRequests(ArrayList<LatLng> positionPair, Context context) {
         // Driver searches for requests
@@ -312,7 +312,7 @@ public class CentralController {
 
     /**
      * Tells the User to generate A Driver card
-     * @return: An IdentificationCard using the Driver constructor.
+     * @return An IdentificationCard using the Driver constructor.
      */
     public IdentificationCard generateDriverCard() {
         return new IdentificationCard(currentUser.getUserName(), currentUser.getTelephone(),

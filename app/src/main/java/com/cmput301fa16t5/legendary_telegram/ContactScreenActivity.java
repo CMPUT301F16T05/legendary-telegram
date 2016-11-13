@@ -84,7 +84,7 @@ public class ContactScreenActivity extends AppCompatActivity {
 
     /**
      * Fills out the views with appropriate information.
-     * @param entries: String[] containing username, phone number, email and the request ID.
+     * @param entries String[] containing username, phone number, email and the request ID.
      */
     private void fillOutFields(String[] entries){
         infoTitle.setText(entries[0]);
