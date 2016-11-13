@@ -1,6 +1,8 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
@@ -36,10 +38,10 @@ public class UserProfileActivityTests_Login extends ActivityInstrumentationTestC
     public void testCheckUser(){
         solo.clickOnButton("New User");
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
-        //solo.clickOnButton("Check");
-        //solo.waitForText("User Name Already Exists.");
+        solo.clickOnButton("Check");
+        solo.waitForText("User Name Already Exists or is Invalid.");
 
-        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername");
+        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername_login");
         solo.clickOnButton("Check");
         solo.waitForText("Valid User Name.");
     }
@@ -47,14 +49,17 @@ public class UserProfileActivityTests_Login extends ActivityInstrumentationTestC
     public void testUpdateButton(){
         solo.clickOnButton("New User");
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername");
+        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername_login");
         solo.enterText((EditText) solo.getView(R.id.userEmail), "A@test.gmail.com");
         solo.enterText((EditText) solo.getView(R.id.userPhone), "1234680");
 
         solo.clickOnButton("Create New User");
         solo.waitForText("New User Created");
-        solo.goBack();
         solo.assertCurrentActivity("Should be log in activity", LogInActivity.class);
+
+        Context testContext = InstrumentationRegistry.getTargetContext();
+        assertTrue(testContext.deleteFile("TestUsername_login.sav"));
+
 
     }
 }

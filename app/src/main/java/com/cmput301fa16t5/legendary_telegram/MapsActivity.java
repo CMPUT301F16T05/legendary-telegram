@@ -91,7 +91,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         end = new LatLng(53.525037, -113.521324);
         // Learn from: https://developers.google.com/maps/documentation/android-api/marker
         // https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker
-        if (riderOrDriver.equals("fromRider")) {
+
+        /**
+         * Null in case of tests since there is nothing.
+         * Not fromRider means Driver.
+         */
+        if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            startMarker.setTitle("Start");
+        }
+
+        /**
+         * "fromRider" aka two points.
+         */
+        else {
             startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
             endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
 
@@ -99,9 +112,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
             startMarker.setTitle("Start");
             endMarker.setTitle("End");
-        } else {
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-            startMarker.setTitle("Start");
         }
         //zoom to start position:
         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
