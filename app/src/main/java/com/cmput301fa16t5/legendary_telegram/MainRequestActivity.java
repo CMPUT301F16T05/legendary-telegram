@@ -45,7 +45,6 @@ public class MainRequestActivity extends AppCompatActivity {
          * we pass a message so the UserProfileActivity will know
          * which activity is calling it
          */
-
         goToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +63,7 @@ public class MainRequestActivity extends AppCompatActivity {
         makeRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myController.setUserAsRider();
+                myController.setUserAsRider(getApplicationContext());
                 Intent mapintent = new Intent(MainRequestActivity.this, MapsActivity.class);
                 mapintent.putExtra("Map", "fromRider");
                 startActivity(mapintent);
@@ -94,6 +93,9 @@ public class MainRequestActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Updates the ArrayAdapter and has the onClickListener for it.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,6 +107,9 @@ public class MainRequestActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapt, View v, int position, long l) {
 
+                // Check if Rider or Driver.
+                // If Driver, Contact Screen.
+                // If Rider, Request Status screen.
                 if (myController.clickedARequest(position)) {
                     startActivity(new Intent(MainRequestActivity.this, ContactScreenActivity.class));
                 }

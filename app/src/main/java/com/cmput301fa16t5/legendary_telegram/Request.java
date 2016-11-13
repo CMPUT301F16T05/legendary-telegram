@@ -8,9 +8,15 @@ import io.searchbox.annotations.JestId;
 
 /**
  * Created by keith on 10/30/2016.
- * Request
+ * Request class.
+ * Contains fields for ID (given by ESearch),
+ * An IdentificationCard of the Rider who made it.
+ * IdentificationCards of the Drivers who accepted it.
+ * IdentificationCard of the Driver accepted by the Rider.
+ * LatLng coordinates and Strings for Searching.
+ * Calculates it's own fee estimate.
+ * A state, which determines what it will print out in .toString.
  */
-
 public class Request {
 
     //ID created by ElasticSearchControllerfield noting the ID that ElasticSearch gives it.
@@ -77,7 +83,7 @@ public class Request {
     }
 
     /**
-     * Should only ever be called by the Driver class
+     * Should only ever be called when acting as Driver.
      * @param newDriver: Card of the new Driver.
      */
     public void addADriver(IdentificationCard newDriver) {
@@ -87,7 +93,7 @@ public class Request {
     }
 
     /**
-     * Should only ever be called by a Rider
+     * Should only ever be called when acting as Rider.
      * @param index: Index of the Driver accepted.
      */
     public void acceptADriver(Integer index) {
@@ -97,9 +103,8 @@ public class Request {
     }
 
     /**
-     * Called by Driver to see if the committed Driver is in fact them.
-     * @param card
-     * @return
+     * Called by Driver actor to see if the committed Driver is in fact them.
+     * @param card Card to be compared.
      */
     public boolean checkCommittedDriver(IdentificationCard card) {
         if (this.myDriver == null) {
@@ -109,7 +114,7 @@ public class Request {
     }
 
     /**
-     * Should only ever be called by Driver.
+     * Should only ever be called by Driver actor.
      */
     public void commitToRequest() {
         this.state = RequestEnum.driverHasCommitted;
@@ -146,6 +151,10 @@ public class Request {
         return onServer;
     }
 
+    /**
+     * Called when Request initially put on Server.
+     * @param onServer Value to set OnServer variable.
+     */
     public void setOnServer(Boolean onServer) {
         if (state == RequestEnum.pendingUpload && onServer) {
             state = RequestEnum.openRequest;

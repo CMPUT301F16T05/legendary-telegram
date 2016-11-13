@@ -78,4 +78,12 @@ public class Driver extends RiderDriverParent {
         this.currentRequest.commitToRequest();
         this.currentRequest.setOnServer(false);
     }
+
+    /**
+     * Setter for current Request.
+     * @param index: Index of request to focus on.
+     */
+    public void setCurrentRequest(Integer index) {
+        this.currentRequest = openRequests.get(index);
+    }
 }

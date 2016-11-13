@@ -12,19 +12,33 @@ public class UserProfileController {
     private CentralController centralCommand;
     private User currentUser;
 
+    /**
+     * Constructor.
+     * Gets the current user.
+     */
     public UserProfileController() {
         centralCommand = CentralController.getInstance();
         currentUser = centralCommand.getCurrentUser();
     }
 
+    /**
+     * Checks to see if the String corresponds to an existing username (or is invalid, like "");
+     * @param username The String to be checked.
+     * @param context Needed for GSON
+     * @return True if we're good. If false, the username is invalid.
+     */
     public boolean validateName(String username, Context context){
-        if(centralCommand.checkUserName(username,context)){
+        if(centralCommand.checkUserName(username, context)){
             return true;
         }else{
             return false;
         }
     }
 
+    /**
+     * Gets the information needed to fill the views in the event that we are editing a user profile.
+     * @return A String[] containing the username, email, telephone and vehicle fields.
+     */
     public String[] getProfileData() {
         String[] data = new String[4];
 
@@ -65,6 +79,15 @@ public class UserProfileController {
         return true;
     }
 
+    /**
+     * Attempts to create a new user.
+     * @param name The new user's name.
+     * @param email Their email
+     * @param phone Their phone number
+     * @param vehicle Their vehicle description (optional)
+     * @param context Needed for GSON.
+     * @return True if the new user could be created. False if it couldn't.
+     */
     public boolean attemptNewUser(String name, String email, String phone, String vehicle, Context context) {
         if (centralCommand.checkUserName(name, context)) {
             return false;

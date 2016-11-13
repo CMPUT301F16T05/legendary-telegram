@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  *  What this class is:
  *  1) Allows a Rider to accept a Driver.
- *  2) Allows a Driver to commit to a Rider who has accepted them.
+ *  2) Allows a Driver to accept/commit to a request.
  *
  *  3) Describes the views for the Contact Screen, where,
  *  for example, a Rider can see the info of a potential Driver
@@ -48,19 +49,25 @@ public class ContactScreenActivity extends AppCompatActivity {
         emailTxt = (TextView) findViewById(R.id.emailTextView);
         commitButton = (Button) findViewById(R.id.commitButton);
 
-        if (myController.riderOrDriver()) {
-            fillOutFields(myController.getEntries());
-            commitButton.setText(myController.setDriverSelectText());
-
+        // In the case of a Rider we need the index of the Driver card they're viewing.
+        if (!myController.isDriverOrRider()) {
+            myController.getIndex(getIntent().getStringExtra("CardNum"));
         }
 
-//        infoTitle.setText("For Rider it displays Driver Info for Driver, Rider Info");
-//        infoDetail.setText("The actual details");
-//        phoneTxt.setText("The phone number. Clicking it should cause the phone to dial the number.");
-//        emailTxt.setText("Email. Clicking it should... you get the idea.");
-//
-//        commitButton.setText("Accepting a Driver as a Rider? Accepting a Rider as a Driver? Depends on context");
-//        //@Yu Tang Lin
+        fillOutFields(myController.getEntries());
+        String buttonText = myController.setButtonText();
+
+        if (buttonText == null) {
+            commitButton.setText("Already Has Committed Driver");
+            commitButton.setClickable(false);
+        }
+
+        else {
+            commitButton.setText(buttonText);
+        }
+
+
+        //@Yu Tang Lin
         phoneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,12 +77,28 @@ public class ContactScreenActivity extends AppCompatActivity {
                 startActivity(callIntent);
             }
         });
+
+        // Clicking the email field is handled by
+        // http://stackoverflow.com/questions/10464954/how-to-make-an-email-address-clickable
     }
 
+    /**
+     * Fills out the views with appropriate information.
+     * @param entries: String[] containing username, phone number, email and the request ID.
+     */
     private void fillOutFields(String[] entries){
         infoTitle.setText(entries[0]);
         infoDetail.setText(entries[1]);
         phoneTxt.setText(entries[2]);
         emailTxt.setText(entries[3]);
+    }
+
+    /**
+     * Calls controller to handle. Prints a message based on what it determines.
+     * @param v
+     */
+    public void commitButtonPress(View v) {
+        Toast.makeText(getApplicationContext(), myController.commitPress(getApplicationContext()), Toast.LENGTH_LONG).show();
+        finish();
     }
 }

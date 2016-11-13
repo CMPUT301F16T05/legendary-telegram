@@ -21,7 +21,7 @@ public class UserTests {
         User testUser = new User(null, null, null);
         testUser.setAsDriver();
 
-        assertFalse(testUser.askForMode());
+        assertTrue(testUser.askForMode());
 
         testUser.setAsRider();
         assertFalse(testUser.askForMode());

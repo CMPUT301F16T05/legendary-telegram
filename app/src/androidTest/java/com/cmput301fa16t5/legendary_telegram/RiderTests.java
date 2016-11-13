@@ -34,7 +34,7 @@ public class RiderTests {
         Request testRequest = testRider.getCurrentRequest();
 
         //Check the return value
-        assertEquals(testRequest.getId(), testRider.removeOrComplete());
+        assertEquals(testRequest, testRider.removeOrComplete());
 
         // Check if the request is saved into the OpenRequest
         assertFalse(testRider.getOpenRequests().contains(testRequest));

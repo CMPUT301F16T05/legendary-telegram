@@ -29,40 +29,80 @@ public class CentralController {
 
     private User currentUser = null;
 
+    /**
+     * Save current user instance to disk.
+     * @param context Needed for GSON
+     */
     public void saveCurrentUser(Context context) {
         if (getCurrentUser() != null) {
             GsonController.saveUserToDisk(getCurrentUser(), context);
         }
     }
 
+    /**
+     * Load a new User instance from disk.
+     * @param userName  Name of the new User instance to be loaded.
+     * @param context Needed for GSON
+     */
     public void loadNewUser(String userName, Context context) {
         setCurrentUser(GsonController.loadUserInfo(userName, context));
     }
 
+    /**
+     * Getter for the current User.
+     * @return: Current instance of user.
+     */
     public User getCurrentUser() {
         return currentUser;
     }
 
-    //set user as rider
-    public void setUserRider(){
+    /**
+     * Sets the current user to use it's Rider instance.
+     */
+    public void setUserRider(Context context){
         currentUser.setAsRider();
+        saveCurrentUser(context);
     }
 
-    //set user as driver
-    public void setUserDriver(){
+    /**
+     * Checks if the current user can be a Driver (has filled out vehicle field)
+     * and if so, sets them as it.
+     * @param context: Needed for GSON
+     * @return: True if they can be a Driver. False otherwise.
+     */
+    public boolean canBeDriver(Context context) {
+        if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
+            return false;
+        }
         currentUser.setAsDriver();
+        saveCurrentUser(context);
+        return true;
     }
 
-    //check if user name is valid
+    /**
+     * Uses the GSON controller to check if a given username is valid.
+     * I.E. Does that user exist on disk already.
+     * @param username Name of user to be checked.
+     * @param context Needed for Gson.
+     * @return True if user exists. False otherwise.
+     */
     public boolean checkUserName(String username, Context context){
         return GsonController.checkIfExists(username, context);
     }
 
-    //delete user from gson
+    /**
+     * Orders Gson to delete a User from disk.
+     * @param oldUser: User to be deleted.
+     * @param context Needed for Gson
+     */
     public void deleteUser(String oldUser, Context context){
         GsonController.deleteOldUserName(oldUser, context);
     }
 
+    /**
+     * Setter for current user.
+     * @param currentUser
+     */
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
@@ -139,6 +179,11 @@ public class CentralController {
         return gotRequest;
     }
 
+    /**
+     * Wrapper for ElasticSearch that gets the Driver's Requests.
+     * @param near: Latlng coordinates that requests should be near.
+     * @return An ArrayList of Requests.
+     */
     public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
         ArrayList<Request> gotRequest = new ArrayList<>();
         String parsedString = String.valueOf(near.latitude) + "," + String.valueOf(near.longitude);
@@ -169,6 +214,14 @@ public class CentralController {
         return gotRequest;
     }
 
+    /**
+     * Creates a new user and saves it to disk.
+     * @param name: User name of new User.
+     * @param email: Email address.
+     * @param phone: Phone number.
+     * @param vehicle: Possible vehicle description.
+     * @param context: Needed for GSON.
+     */
     public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
         User newbie = new User(name, email, phone);
 
@@ -179,8 +232,20 @@ public class CentralController {
         GsonController.saveUserToDisk(newbie, context);
     }
 
+    /**
+     * Gets Requests from User, depending on whether it is acting as Rider or Driver.
+     * @return: An ArrayList of Requests.
+     */
     public ArrayList<Request> getRequests() {
-        ArrayList<Request> myList = currentUser.getMyCurrentMode().openRequests;
+
+        ArrayList<Request> myList;
+        if (currentUser.askForMode()) {
+            myList = currentUser.getMyDriver().getOpenRequests();
+        }
+
+        else {
+            myList = currentUser.getMyRider().getOpenRequests();
+        }
 
         if (myList == null) {
             return new ArrayList<>();
@@ -188,13 +253,23 @@ public class CentralController {
         return myList;
     }
 
+    /**
+     * Gets the Identification Cards corresponding to the potential Drivers of a given Request.
+     * @return: An ArrayList of Identificationcards
+     */
     public ArrayList<IdentificationCard> getCards() {
-        return currentUser.getMyDriver().getCurrentRequest().getPotentialDrivers();
+        return currentUser.getMyRider().getCurrentRequest().getPotentialDrivers();
     }
 
+    /**
+     * Called by MainRequest Activity/Controller when a User clicks on a Request
+     * Sets that to be the current Request for Rider/Driver.
+     * @param index: Index of the request.
+     * @return: True if Driver, false if Rider.
+     */
     public boolean selectCurrentRequest(int index) {
         if (this.currentUser.askForMode()) {
-            this.currentUser.generateDriverCR(index);
+            this.currentUser.getMyDriver().setCurrentRequest(index);
             return true;
         }
 
@@ -204,32 +279,43 @@ public class CentralController {
         }
     }
 
-    public boolean canBeDriver(Context context) {
-        if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
-            return false;
-        }
-        currentUser.setAsDriver();
-        saveCurrentUser(context);
-        return true;
-    }
 
-    public void createRequest(ArrayList<LatLng> positionPair) {
+    /**
+     * Creates a new Request based on two LatLng coordinate sets.
+     * @param positionPair: ArrayList containing two coordinates.
+     * @param context: Needed for GSON.
+     */
+    public void createRequest(ArrayList<LatLng> positionPair, Context context) {
         // Rider creates srequest
         IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
         addNewRequest(rToUpload);
+        saveCurrentUser(context);
     }
 
-    public void searchRequests(ArrayList<LatLng> positionPair) {
+    /**
+     * Searches for Requests based on a LatLng coordinate pair. Assigns them to the Driver.
+     * @param positionPair: The LatLng coordinates.
+     * @param context: Needed for GSON.
+     */
+    public void searchRequests(ArrayList<LatLng> positionPair, Context context) {
         // Driver searches for requests
         // position is positionPair.get(0)
         ArrayList<Request> driverRequests =
                 getRequestsByGeoDistance(positionPair.get(0));
         currentUser.getMyDriver().setOpenRequests(driverRequests);
+        saveCurrentUser(context);
 
     }
 
-
+    /**
+     * Tells the User to generate A Driver card
+     * @return: An IdentificationCard using the Driver constructor.
+     */
+    public IdentificationCard generateDriverCard() {
+        return new IdentificationCard(currentUser.getUserName(), currentUser.getTelephone(),
+                currentUser.getEmail(), currentUser.getVehicle());
+    }
 }

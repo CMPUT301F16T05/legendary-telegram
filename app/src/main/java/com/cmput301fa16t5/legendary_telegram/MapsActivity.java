@@ -50,11 +50,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<LatLng> positionPair;
     private String riderOrDriver;
 
-
-
-
     // View has the controller
-    private MapController mapController = new MapController();
+    private MapController myController;
 
 
     @Override
@@ -67,6 +64,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
+        myController = new MapController();
         riderOrDriver = intent.getStringExtra("Map");
     }
 
@@ -161,17 +159,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("Start: ", start.toString());
                 }
 
-                // You can use positionPair now ...
+                myController.sendCoordinates(positionPair, getApplicationContext());
+
             }
         });
     }
-
-
-
-
-
-
-
-
-
 }

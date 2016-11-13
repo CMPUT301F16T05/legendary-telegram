@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
  * All methods are static; no objects needed, no constructor.
  * Contains:
  * A method to check if a file exists on disk.
+ * A method to delete a file from disk.
  * A method to load a User Object from disk.
  * A method to save a User Object to disk.
  * @author kgmills
@@ -34,7 +35,9 @@ public class GsonController {
      * @return True of the file exists. False otherwise.
      */
     public static boolean checkIfExists(String userName, Context context) {
-        if (userName.equals("") || userName == null) {
+        // http://stackoverflow.com/questions/6290531/check-if-edittext-is-empty
+        // At the last moment to ensure an empty EditText is wrong.
+        if (userName.matches("") || userName == null) {
             return false;
         }
 

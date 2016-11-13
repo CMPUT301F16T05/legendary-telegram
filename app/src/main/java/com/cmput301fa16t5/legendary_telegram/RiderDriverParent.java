@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * of using Java reflection in user
  * to determine if we're acting
  * as a Rider or Driver.
+ * Probably needs a lot of Refactoring between itself, Rider, Driver, and User.
  */
-
 public abstract class RiderDriverParent {
     protected ArrayList<Request> openRequests;
     protected Request currentRequest;

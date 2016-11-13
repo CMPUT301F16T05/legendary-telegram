@@ -87,8 +87,8 @@ public class UserProfileActivity extends AppCompatActivity {
         checkUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myController.validateName(nameEntered.getText().toString(), getApplicationContext())){
-                    Toast.makeText(getApplicationContext(), "User Name Already Exists.", Toast.LENGTH_SHORT).show();
+                if (!myController.validateName(nameEntered.getText().toString(), getApplicationContext())){
+                    Toast.makeText(getApplicationContext(), "User Name Already Exists or is Invalid.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Valid User Name.", Toast.LENGTH_SHORT).show();

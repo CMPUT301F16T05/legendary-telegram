@@ -25,6 +25,11 @@ public class RequestStatusActivity extends AppCompatActivity {
 
     private RequestStatusController myController;
 
+    /**
+     * Initialize views, set ArrayAdapter.
+     * This view shows the IdentificationCards.
+     * @param savedInstanceState: Because Android.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,9 @@ public class RequestStatusActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Update ArrayAdapter.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -56,8 +64,12 @@ public class RequestStatusActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Cancel a Request. Go back, since it's Cancelled.
+     * @param v
+     */
     public void cancelButtonPressed(View v) {
-        myController.cancel();
+        myController.cancel(getApplicationContext());
         finish();
     }
 }

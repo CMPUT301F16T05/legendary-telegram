@@ -4,10 +4,9 @@ package com.cmput301fa16t5.legendary_telegram;
  * Created by keith on 11/2/2016.
  * User class.
  * Holds name, phone number, email.
- * Talks with CentralController, a lot.
+ * Talks with CentralController, and other controllers, a lot.
  * Or should I say, is manipulated by, and manipulates what it has, based on what the user enters on the screen.
  */
-
 public class User {
 
     public String userName;
@@ -99,10 +98,5 @@ public class User {
 
     public RiderDriverParent getMyCurrentMode() {
         return myCurrentMode;
-    }
-
-    public void generateDriverCR(int index) {
-        this.getMyDriver().acceptARequest(index, new IdentificationCard(userName,
-                telephone, email, vehicle));
     }
 }
