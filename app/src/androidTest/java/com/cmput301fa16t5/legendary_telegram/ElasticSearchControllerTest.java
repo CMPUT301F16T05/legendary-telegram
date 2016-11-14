@@ -206,7 +206,6 @@ public class ElasticSearchControllerTest {
         assertTrue(near2.isOnServer());
         assertFalse(near2.getId() == null);
 
-        //TODO FIGURE OUT LATLNG TO STRING
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
             gotRequest = getRequestsTask.execute(ElasticSearchQueries.GEODISTANCE, "90,90").get();
@@ -221,7 +220,22 @@ public class ElasticSearchControllerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertEquals(2, gotRequest.size());
+
+        /* If this assertion fails the likely reason
+            is that the geo_point mapping was removed
+            from the server. To fix run the following
+            statement in a suitable rest client
+            PUT http://cmput301.softwareprocess.es:8080/fa16t5/request/_mapping
+            {
+                "request" : {
+                    "properties" : {
+                        "elasticEnd" : {"type" : "geo_point"},
+                        "elasticStart" : {"type" : "geo_point"}
+                    }
+                }
+            }
+         */
+        assertTrue(gotRequest.size() > 2);
         cleanUpRequests(far, near1, near2);
     }
 
