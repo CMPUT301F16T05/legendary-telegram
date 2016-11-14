@@ -156,8 +156,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                positionPair = new ArrayList<LatLng>();
                 if (riderOrDriver == "fromRider") {
-                    positionPair = new ArrayList<LatLng>();
                     positionPair.add(start);
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
