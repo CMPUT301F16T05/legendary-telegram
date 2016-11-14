@@ -19,7 +19,6 @@ import android.widget.TextView;
 public class RequestStatusActivity extends AppCompatActivity {
 
     private TextView title;
-    private Button cancelButton;
     private ListView requestsDriversLV;
     private ArrayAdapter<IdentificationCard> adapter;
 
@@ -38,7 +37,6 @@ public class RequestStatusActivity extends AppCompatActivity {
         myController = new RequestStatusController();
 
         title = (TextView) findViewById(R.id.specificRequestStatus);
-        cancelButton = (Button) findViewById(R.id.cancelReqButton);
         requestsDriversLV = (ListView) findViewById(R.id.RequestInfoLV);
 
         title.setText(myController.getRequestName());
