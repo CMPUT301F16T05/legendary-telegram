@@ -58,7 +58,7 @@ public class RiderTests {
 
         // Make sure after we call the selectDriver
         //CurrentRequest.myDriver = the picked driver
-        assertEquals(testRider.getCurrentRequest().getPotentialDrivers().get(0), driver1);
+        assertEquals(testRider.getCurrentRequest().getMyDriver(), driver1);
 
         //CurrentRequest's state changes
         assertEquals(testRider.getCurrentRequest().getState(), RequestEnum.acceptedADriver);

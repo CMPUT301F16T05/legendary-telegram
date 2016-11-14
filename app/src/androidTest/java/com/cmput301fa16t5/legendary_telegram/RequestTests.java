@@ -45,7 +45,7 @@ public class RequestTests {
 
         // Check if myDriver = driver
         // who is picked
-        assertEquals(driver, request.getPotentialDrivers().get(0));
+        assertEquals(driver, request.getMyDriver());
 
         // State changes to accepted a driver
         assertEquals(RequestEnum.acceptedADriver, request.getState());
