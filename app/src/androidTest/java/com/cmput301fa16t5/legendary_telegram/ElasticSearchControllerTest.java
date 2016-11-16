@@ -166,7 +166,6 @@ public class ElasticSearchControllerTest {
         cleanUpRequests(newRequest);
     }
 
-    //Extra bonus of testing multiple returns of each test
     @Test
     public void testGetRequestByGeoDistance(){
         Request far = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
@@ -235,8 +234,69 @@ public class ElasticSearchControllerTest {
                 }
             }
          */
-        assertTrue(gotRequest.size() > 2);
+        assertTrue(gotRequest.size() > 1);
         cleanUpRequests(far, near1, near2);
+    }
+
+    //Extra bonus of testing multiple returns of each test
+    @Test
+    public void testGetRequestByFee(){
+        Request free = new Request(null, new LatLng(0, 0), new LatLng(0, 0));
+        Request cheap = new Request(null, new LatLng(0, 0), new LatLng(0.0001, 0.0001));
+        Request expensive = new Request(null, new LatLng(0, 0), new LatLng(90, 90));
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        //Ensure everything is initialized correctly
+        assertFalse(free.isOnServer());
+        assertTrue(free.getId() == null);
+        assertFalse(cheap.isOnServer());
+        assertTrue(cheap.getId() == null);
+        assertFalse(expensive.isOnServer());
+        assertTrue(expensive.getId() == null);
+        assertTrue(gotRequest.isEmpty());
+
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            addRequestsTask.execute(free, cheap, expensive).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //The server wil grant an ID when added sucessfully
+        assertTrue(free.isOnServer());
+        assertFalse(free.getId() == null);
+        assertTrue(cheap.isOnServer());
+        assertFalse(cheap.getId() == null);
+        assertTrue(expensive.isOnServer());
+        assertFalse(expensive.getId() == null);
+
+//        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+//        try {
+//            gotRequest = getRequestsTask.execute(ElasticSearchQueries.FEE, ???).get();
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        //KISS, Keep It Simple Stupid
+//        try {
+//            TimeUnit.SECONDS.sleep(sleepTimer);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+
+        //TODO determine suitable test
+
+        //cleanUpRequests(free, cheap, expensive);
     }
 
     @Test
