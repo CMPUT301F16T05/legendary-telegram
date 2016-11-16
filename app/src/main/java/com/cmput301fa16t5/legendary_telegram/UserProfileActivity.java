@@ -69,8 +69,8 @@ public class UserProfileActivity extends AppCompatActivity {
             String[] fieldData = myController.getProfileData();
 
             nameEntered.setText(fieldData[0]);
-            phoneEntered.setText(fieldData[1]);
-            emailEntered.setText(fieldData[2]);
+            emailEntered.setText(fieldData[1]);
+            phoneEntered.setText(fieldData[2]);
             vehicleEntered.setText(fieldData[3]);
         }
 
