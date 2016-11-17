@@ -179,6 +179,26 @@ public class CentralController {
         return gotRequest;
     }
 
+    public ArrayList<Request> getRequestsByFeeBetween(double min, double max, Boolean usePerKM) {
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        String parsedString[] = new String[2];
+        if (usePerKM) {
+            parsedString[0] = ElasticSearchQueries.FEEPERKM;
+        } else {
+            parsedString[0] = ElasticSearchQueries.FEE;
+        }
+        parsedString[1] = String.valueOf(min);
+        parsedString[2] = String.valueOf(max);
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(parsedString).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return gotRequest;
+    }
+
     /**
      * Wrapper for ElasticSearch that gets the Driver's Requests.
      * @param near Latlng coordinates that requests should be near.

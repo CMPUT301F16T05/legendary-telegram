@@ -112,11 +112,6 @@ public class ElasticSearchController {
 
 
             for (int q=1; q<search_params.length; q++) {
-                // assume that search_parameters[0] is the only search term we are interested in using
-                //query = params;
-                //query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + params + "]}}}";
-                //query = "{\"query\":{\"ids\":{\"values\":[\"" + params + "\"]}}}";
-
                 switch (queryType) {
                     case ElasticSearchQueries.ID:
                         query = "{\"query\": {\"ids\" : {\"type\" : \"request\", \"values\" : [\"" + search_params[q] + "\"]}}}";
@@ -135,6 +130,36 @@ public class ElasticSearchController {
                                 "            }\n" +
                                 "        }\n" +
                                 "}";
+                        break;
+                    case ElasticSearchQueries.FEE:
+                        //yay for auto parsing
+                        query = "{\n" +
+                                "    \"query\": {\n" +
+                                "        \"range\" : {\n" +
+                                "            \"fee\" : {\n" +
+                                "                \"gte\" : "+search_params[q]+",\n" +
+                                "                \"lte\" : "+search_params[q+1]+"\n" +
+                                "            }\n" +
+                                "        }\n" +
+                                "    }\n" +
+                                "}";
+                        //Nesscessary beause of the way fee queries will be added in
+                        q = q+2;
+                        break;
+                    case ElasticSearchQueries.FEEPERKM:
+                        //yay for auto parsing
+                        query = "{\n" +
+                                "    \"query\": {\n" +
+                                "        \"range\" : {\n" +
+                                "            \"feeperkm\" : {\n" +
+                                "                \"gte\" : "+search_params[q]+",\n" +
+                                "                \"lte\" : "+search_params[q+1]+"\n" +
+                                "            }\n" +
+                                "        }\n" +
+                                "    }\n" +
+                                "}";
+                        //Nesscessary beause of the way fee queries will be added in
+                        q = q+2;
                         break;
                     default:
                         query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
