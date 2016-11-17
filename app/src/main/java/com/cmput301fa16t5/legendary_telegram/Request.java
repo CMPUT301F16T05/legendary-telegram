@@ -36,6 +36,7 @@ public class Request {
     private String elasticEnd;
 
     private Double fee;
+    private Double feePerKM;
     private RequestEnum state;
 
     //Used as an indicator for adding and deleting things from the elasticsearch server
@@ -79,6 +80,7 @@ public class Request {
 
         // $2.25 plus 80 cents on the kilometer
         this.fee = 2.25 + 0.8*(manhattanLat + manhattanLong);
+        this.feePerKM = this.fee / (manhattanLat + manhattanLong);
 
     }
 

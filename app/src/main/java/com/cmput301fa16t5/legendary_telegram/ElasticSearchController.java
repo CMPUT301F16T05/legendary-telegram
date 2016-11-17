@@ -143,8 +143,8 @@ public class ElasticSearchController {
                                 "        }\n" +
                                 "    }\n" +
                                 "}";
-                        //Nesscessary beause of the way fee queries will be added in
-                        q = q+2;
+                        //Needed because of the way fee queries will be added in
+                        q++;
                         break;
                     case ElasticSearchQueries.FEEPERKM:
                         //yay for auto parsing
@@ -158,8 +158,8 @@ public class ElasticSearchController {
                                 "        }\n" +
                                 "    }\n" +
                                 "}";
-                        //Nesscessary beause of the way fee queries will be added in
-                        q = q+2;
+                        //Needed because of the way fee queries will be added in
+                        q++;
                         break;
                     default:
                         query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
