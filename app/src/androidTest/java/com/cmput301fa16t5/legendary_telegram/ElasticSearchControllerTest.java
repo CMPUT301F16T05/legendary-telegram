@@ -278,25 +278,28 @@ public class ElasticSearchControllerTest {
         assertTrue(expensive.isOnServer());
         assertFalse(expensive.getId() == null);
 
-//        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
-//        try {
-//            gotRequest = getRequestsTask.execute(ElasticSearchQueries.FEE, ???).get();
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        //KISS, Keep It Simple Stupid
-//        try {
-//            TimeUnit.SECONDS.sleep(sleepTimer);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.FEE, "2.25", "2.30").get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        //TODO determine suitable test
-
-        //cleanUpRequests(free, cheap, expensive);
+        //If this assert fails its a sign that the server may need a cleaning
+        assertEquals(2, gotRequest.size());
+        assertTrue(free.getId().equals(gotRequest.get(0).getId())
+                || free.getId().equals(gotRequest.get(1).getId()));
+        assertTrue(cheap.getId().equals(gotRequest.get(0).getId())
+                || cheap.getId().equals(gotRequest.get(1).getId()));
+        cleanUpRequests(free, cheap, expensive);
     }
 
     @Test

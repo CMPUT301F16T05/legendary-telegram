@@ -179,7 +179,14 @@ public class CentralController {
         return gotRequest;
     }
 
-    public ArrayList<Request> getRequestsByFeeBetween(double min, double max, Boolean usePerKM) {
+    /**
+     * Wrapper for ElasticSearch get that focuses on the request fee
+     * @param min the lower bound of the fee to look between
+     * @param max the upper bound of the fee to look between
+     * @param usePerKM boolean that indicates which field, fee or feeperkm, to look at
+     * @return an ArrayList of requests that match the query
+     */
+    public ArrayList<Request> getRequestsByFee(double min, double max, Boolean usePerKM) {
         ArrayList<Request> gotRequest = new ArrayList<>();
         String parsedString[] = new String[2];
         if (usePerKM) {
