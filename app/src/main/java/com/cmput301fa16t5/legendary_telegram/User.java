@@ -25,7 +25,6 @@ public class User {
         this.vehicle = null; // can use to check if the user can be a driver
         this.myDriver = new Driver();
         this.myRider = new Rider();
-        this.myCurrentMode = null;
     }
 
     public void setAsRider() {

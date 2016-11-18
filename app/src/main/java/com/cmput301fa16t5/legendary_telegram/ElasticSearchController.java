@@ -78,11 +78,6 @@ public class ElasticSearchController {
 
             return Boolean.TRUE;
         }
-
-        @Override
-        protected void onPostExecute(Boolean result){
-            client.shutdownClient();
-        }
     }
 
     /**
@@ -190,11 +185,6 @@ public class ElasticSearchController {
             }
             return requests;
         }
-
-        @Override
-        protected void onPostExecute(ArrayList<Request> result){
-            client.shutdownClient();
-        }
     }
 
     /**
@@ -236,11 +226,6 @@ public class ElasticSearchController {
             }
 
             return Boolean.TRUE;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result){
-            client.shutdownClient();
         }
     }
 
@@ -286,11 +271,6 @@ public class ElasticSearchController {
             }
 
             return Boolean.TRUE;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result){
-            client.shutdownClient();
         }
     }
 

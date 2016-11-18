@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * as a Rider or Driver.
  * Probably needs a lot of Refactoring between itself, Rider, Driver, and User.
  */
-public abstract class RiderDriverParent {
+public class RiderDriverParent {
     protected ArrayList<Request> openRequests;
     protected Request currentRequest;
 
