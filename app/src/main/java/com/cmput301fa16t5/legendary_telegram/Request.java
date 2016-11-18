@@ -80,8 +80,11 @@ public class Request {
 
         // $2.25 plus 80 cents on the kilometer
         this.fee = 2.25 + 0.8*(manhattanLat + manhattanLong);
-        this.feePerKM = this.fee / (manhattanLat + manhattanLong);
-
+        if (manhattanLat+manhattanLong == 0) {
+            this.feePerKM = this.fee;
+        }else {
+            this.feePerKM = this.fee / (manhattanLat + manhattanLong);
+        }
     }
 
     /**
