@@ -33,6 +33,7 @@ public class ContactScreenActivity extends AppCompatActivity {
     private TextView phoneTxt;
     private TextView emailTxt;
     private Button commitButton;
+    private Button mapButton;
 
     private ContactScreenController myController;
 
@@ -48,6 +49,7 @@ public class ContactScreenActivity extends AppCompatActivity {
         phoneTxt = (TextView) findViewById(R.id.phoneTextView);
         emailTxt = (TextView) findViewById(R.id.emailTextView);
         commitButton = (Button) findViewById(R.id.commitButton);
+        mapButton = (Button)findViewById(R.id.map_button);
 
         // In the case of a Rider we need the index of the Driver card they're viewing.
         if (!myController.isDriverOrRider()) {
@@ -75,6 +77,15 @@ public class ContactScreenActivity extends AppCompatActivity {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:+" + phoneTxt.getText().toString().trim()));
                 startActivity(callIntent);
+            }
+        });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapintent = new Intent(ContactScreenActivity.this, MapsActivity.class);
+                mapintent.putExtra("Map_button", "fromContactScreen");
+                startActivity(mapintent);
             }
         });
 
