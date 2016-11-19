@@ -1,7 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
-
 /**
  * Created by keith on 11/2/2016.
  * See ContactScreenActivity.
@@ -93,16 +91,15 @@ public class ContactScreenController {
     /**
      * Called when the button is actually pressed. Since we're modifying the Request now, we
      * have to save the User.
-     * @param context Needed for GSON
      * @return String that will be Toasted.
      */
-    public String commitPress(Context context) {
+    public String commitPress() {
         if (isDriverOrRider()) {
             if (requestOfFocus.getState() == RequestEnum.acceptedADriver) {
                 if (centralCommand.getCurrentUser().getMyDriver().checkIfPicked()) {
                     requestOfFocus.commitToRequest();
                     centralCommand.updateRequest(requestOfFocus);
-                    centralCommand.saveCurrentUser(context);
+                    centralCommand.saveCurrentUser();
                     return "You've committed to this request. Get going!";
                 }
                 return "Rider has picked a different Driver";
@@ -111,7 +108,7 @@ public class ContactScreenController {
             else if (requestOfFocus.getState() != RequestEnum.driverHasCommitted) {
                 requestOfFocus.addADriver(centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
-                centralCommand.saveCurrentUser(context);
+                centralCommand.saveCurrentUser();
                 return "You've accepted this Request. Wait to see if you are selected.";
             }
 
@@ -121,7 +118,7 @@ public class ContactScreenController {
         else {
             requestOfFocus.acceptADriver(index);
             centralCommand.updateRequest(requestOfFocus);
-            centralCommand.saveCurrentUser(context);
+            centralCommand.saveCurrentUser();
             return "Driver Accepted.";
         }
     }

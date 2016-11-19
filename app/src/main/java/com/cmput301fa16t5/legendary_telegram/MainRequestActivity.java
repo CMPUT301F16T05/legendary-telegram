@@ -63,7 +63,7 @@ public class MainRequestActivity extends AppCompatActivity {
         makeRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myController.setUserAsRider(getApplicationContext());
+                myController.setUserAsRider();
                 Intent mapintent = new Intent(MainRequestActivity.this, MapsActivity.class);
                 mapintent.putExtra("Map", "fromRider");
                 startActivity(mapintent);
@@ -78,7 +78,7 @@ public class MainRequestActivity extends AppCompatActivity {
         findRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myController.setUserAsDriver(getApplicationContext())) {
+                if (myController.setUserAsDriver()) {
                     Intent mapintent2 = new Intent(MainRequestActivity.this, MapsActivity.class);
                     mapintent2.putExtra("Map", "fromDriver");
                     startActivity(mapintent2);

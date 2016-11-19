@@ -30,8 +30,8 @@ public class GsonController {
     /**
      * Checks if a file corresponding to a given username exists.
      * Used simply to check if a username is unique, locally.
-     * @param userName: The username as a string.
-     * @param context: Needed to get file list.
+     * @param userName The username as a string.
+     * @param context Needed to get file list.
      * @return True of the file exists. False otherwise.
      */
     public static boolean checkIfExists(String userName, Context context) {

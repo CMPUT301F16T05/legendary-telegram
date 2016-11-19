@@ -25,7 +25,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        myController = new LogInController();
+        myController = new LogInController(getApplicationContext());
 
         userName = (EditText) findViewById(R.id.userNameET);
     }

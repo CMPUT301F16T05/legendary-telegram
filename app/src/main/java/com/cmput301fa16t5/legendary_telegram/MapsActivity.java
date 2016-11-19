@@ -170,7 +170,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 myController.sendCoordinates(positionPair, getApplicationContext());
-
+                finish();
             }
         });
     }

@@ -1,6 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
 import android.widget.ArrayAdapter;
 
 /**
@@ -34,12 +33,11 @@ public class RequestStatusController {
 
     /**
      * Cancels Request. Tells ESearchController to delete. Saves to disk.
-     * @param context Needed for GSON
      */
-    public void cancel(Context context) {
+    public void cancel() {
         Request cancelledRequest = centralCommand.getCurrentUser().getMyRider().removeOrComplete();
         ElasticSearchController.DeleteRequestsTask delRequest = new ElasticSearchController.DeleteRequestsTask();
         delRequest.execute(cancelledRequest);
-        centralCommand.saveCurrentUser(context);
+        centralCommand.saveCurrentUser();
     }
 }

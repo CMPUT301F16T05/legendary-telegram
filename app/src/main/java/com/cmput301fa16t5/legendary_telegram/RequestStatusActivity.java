@@ -67,7 +67,7 @@ public class RequestStatusActivity extends AppCompatActivity {
      * @param v
      */
     public void cancelButtonPressed(View v) {
-        myController.cancel(getApplicationContext());
+        myController.cancel();
         finish();
     }
 }

@@ -27,9 +27,9 @@ public class MapController {
      */
     public void sendCoordinates(ArrayList<LatLng> positionPair, Context context) {
         if (positionPair.size() == 1) {
-            centralCommand.searchRequests(positionPair, context);
+            centralCommand.searchRequests(positionPair);
         } else {
-            centralCommand.createRequest(positionPair, context);
+            centralCommand.createRequest(positionPair);
         }
 
     }

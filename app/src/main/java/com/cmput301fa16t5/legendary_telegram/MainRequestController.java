@@ -18,19 +18,17 @@ public class MainRequestController {
 
     /**
      * Sets user as Driver and saves to disk.
-     * @param context Needed for GSON.
      * @return
      */
-    public boolean setUserAsDriver(Context context){
-        return centralCommand.canBeDriver(context);
+    public boolean setUserAsDriver(){
+        return centralCommand.canBeDriver();
     }
 
     /**
      * Sets user as Rider and saves to disk
-     * @param context Needed for Gson.
      */
-    public void setUserAsRider(Context context){
-        centralCommand.setUserRider(context);
+    public void setUserAsRider(){
+        centralCommand.setUserRider();
     }
 
     /**

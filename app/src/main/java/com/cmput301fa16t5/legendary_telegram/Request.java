@@ -3,6 +3,7 @@ package com.cmput301fa16t5.legendary_telegram;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.searchbox.annotations.JestId;
 
@@ -133,7 +134,7 @@ public class Request {
     @Override
     public String toString() {
 
-        String stringFee = "$" + String.format("%.2f", this.fee);
+        String stringFee = "$" + String.format(Locale.CANADA, "%.2f", this.fee);
         switch (this.state) {
 
             case openRequest:

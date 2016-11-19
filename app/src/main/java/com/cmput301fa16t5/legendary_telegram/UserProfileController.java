@@ -1,8 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
-import android.widget.EditText;
-
 /**
  * Created by keith on 11/2/2016.
  */
@@ -24,15 +21,14 @@ public class UserProfileController {
     /**
      * Checks to see if the String corresponds to an existing username (or is invalid, like "");
      * @param username The String to be checked.
-     * @param context Needed for GSON
      * @return True if username is invalid. False otherwise.
      */
-    public boolean invalidateName(String username, Context context){
+    public boolean invalidateName(String username){
         if (username.matches("")) {
             return true;
         }
 
-        if(centralCommand.checkUserName(username, context)){
+        if(centralCommand.checkUserName(username)){
             return true;
         }else{
             return false;
@@ -61,12 +57,11 @@ public class UserProfileController {
      * @param email String type email from Edit Text
      * @param phone String type phone from Edit Text
      * @param vehicle String type  from Edit Text
-     * @param context just needed here
      * @return false if username is changed, already exist or empty, else delete the old user gson file
      * and create a new one, and return true
      */
-    public boolean attemptEditUser(String name, String email, String phone, String vehicle, Context context) {
-        if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name, context) && name.equals("")) {
+    public boolean attemptEditUser(String name, String email, String phone, String vehicle) {
+        if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name) && name.equals("")) {
             return false;
         }
 
@@ -77,8 +72,8 @@ public class UserProfileController {
         currentUser.setTelephone(phone);
         currentUser.setVehicle(vehicle);
 
-        centralCommand.deleteUser(oldName, context);
-        centralCommand.saveCurrentUser(context);
+        centralCommand.deleteUser(oldName);
+        centralCommand.saveCurrentUser();
 
         return true;
     }
@@ -89,15 +84,14 @@ public class UserProfileController {
      * @param email Their email
      * @param phone Their phone number
      * @param vehicle Their vehicle description (optional)
-     * @param context Needed for GSON.
      * @return True if the new user could be created. False if it couldn't.
      */
-    public boolean attemptNewUser(String name, String email, String phone, String vehicle, Context context) {
-        if (centralCommand.checkUserName(name, context)) {
+    public boolean attemptNewUser(String name, String email, String phone, String vehicle) {
+        if (centralCommand.checkUserName(name)) {
             return false;
         }
 
-        centralCommand.createNewUser(name, email, phone, vehicle, context);
+        centralCommand.createNewUser(name, email, phone, vehicle);
         return true;
     }
 }

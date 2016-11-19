@@ -87,7 +87,7 @@ public class UserProfileActivity extends AppCompatActivity {
         checkUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myController.invalidateName(nameEntered.getText().toString(), getApplicationContext())){
+                if (myController.invalidateName(nameEntered.getText().toString())){
                     Toast.makeText(getApplicationContext(), "User Name Already Exists or is Invalid.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -108,8 +108,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     if (myController.attemptEditUser(nameEntered.getText().toString(),
                             emailEntered.getText().toString(),
                             phoneEntered.getText().toString(),
-                            vehicleEntered.getText().toString(),
-                            getApplicationContext())) {
+                            vehicleEntered.getText().toString())) {
                         Toast.makeText(getApplicationContext(), "User Settings Edited", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -118,8 +117,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     if (myController.attemptNewUser(nameEntered.getText().toString(),
                             emailEntered.getText().toString(),
                             phoneEntered.getText().toString(),
-                            vehicleEntered.getText().toString(),
-                            getApplicationContext())) {
+                            vehicleEntered.getText().toString())) {
                         Toast.makeText(getApplicationContext(), "New User Created", Toast.LENGTH_SHORT).show();
                         finish();
                     }

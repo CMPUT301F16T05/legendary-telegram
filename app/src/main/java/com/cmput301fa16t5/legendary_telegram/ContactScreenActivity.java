@@ -109,7 +109,7 @@ public class ContactScreenActivity extends AppCompatActivity {
      * @param v
      */
     public void commitButtonPress(View v) {
-        Toast.makeText(getApplicationContext(), myController.commitPress(getApplicationContext()), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), myController.commitPress(), Toast.LENGTH_LONG).show();
         finish();
     }
 }

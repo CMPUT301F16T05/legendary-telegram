@@ -11,8 +11,9 @@ public class LogInController {
 
     private CentralController centralCommand;
 
-    public LogInController() {
+    public LogInController(Context context) {
         centralCommand = CentralController.getInstance();
+        centralCommand.receiveAndSetContext(context);
     }
 
     /**
@@ -20,14 +21,13 @@ public class LogInController {
      * If so, it'll tell the singleton to save whatever it has and load the new user.
      * Else the Activity will be notified to post a toast.
      * @param userName: Username from activity class EditText
-     * @param context: Needed for Gson
      * @return True if valid user name. False if it does not exist.
      */
     public boolean validateUserName(String userName, Context context) {
 
         if (GsonController.checkIfExists(userName, context)) {
-            centralCommand.saveCurrentUser(context);
-            centralCommand.loadNewUser(userName, context);
+            centralCommand.saveCurrentUser();
+            centralCommand.loadNewUser(userName);
 
             return true;
         }

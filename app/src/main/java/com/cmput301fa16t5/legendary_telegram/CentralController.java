@@ -28,24 +28,30 @@ public class CentralController {
     }
 
     private User currentUser = null;
+    private ContextFactory myCFact;
 
     /**
-     * Save current user instance to disk.
-     * @param context Needed for GSON
+     * Initializes the ContextFactory and gives it the object.
+     * @param context Context object (typically) from LogInActivity
      */
-    public void saveCurrentUser(Context context) {
+    public void receiveAndSetContext(Context context) {
+        this.myCFact = new ContextFactory(context);
+    }
+    /**
+     * Save current user instance to disk.
+     */
+    public void saveCurrentUser() {
         if (getCurrentUser() != null) {
-            GsonController.saveUserToDisk(getCurrentUser(), context);
+            GsonController.saveUserToDisk(getCurrentUser(), myCFact.getGsonContext());
         }
     }
 
     /**
      * Load a new User instance from disk.
      * @param userName  Name of the new User instance to be loaded.
-     * @param context Needed for GSON
      */
-    public void loadNewUser(String userName, Context context) {
-        setCurrentUser(GsonController.loadUserInfo(userName, context));
+    public void loadNewUser(String userName) {
+        setCurrentUser(GsonController.loadUserInfo(userName, myCFact.getGsonContext()));
     }
 
     /**
@@ -59,23 +65,22 @@ public class CentralController {
     /**
      * Sets the current user to use it's Rider instance.
      */
-    public void setUserRider(Context context){
+    public void setUserRider(){
         currentUser.setAsRider();
-        saveCurrentUser(context);
+        saveCurrentUser();
     }
 
     /**
      * Checks if the current user can be a Driver (has filled out vehicle field)
      * and if so, sets them as it.
-     * @param context Needed for GSON
      * @return True if they can be a Driver. False otherwise.
      */
-    public boolean canBeDriver(Context context) {
+    public boolean canBeDriver() {
         if ((currentUser.getVehicle() == null) || (currentUser.getVehicle().equals(""))) {
             return false;
         }
         currentUser.setAsDriver();
-        saveCurrentUser(context);
+        saveCurrentUser();
         return true;
     }
 
@@ -83,20 +88,18 @@ public class CentralController {
      * Uses the GSON controller to check if a given username is valid.
      * I.E. Does that user exist on disk already.
      * @param username Name of user to be checked.
-     * @param context Needed for Gson.
      * @return True if user exists. False otherwise.
      */
-    public boolean checkUserName(String username, Context context){
-        return GsonController.checkIfExists(username, context);
+    public boolean checkUserName(String username){
+        return GsonController.checkIfExists(username, myCFact.getGsonContext());
     }
 
     /**
      * Orders Gson to delete a User from disk.
      * @param oldUser User to be deleted.
-     * @param context Needed for Gson
      */
-    public void deleteUser(String oldUser, Context context){
-        GsonController.deleteOldUserName(oldUser, context);
+    public void deleteUser(String oldUser){
+        GsonController.deleteOldUserName(oldUser, myCFact.getGsonContext());
     }
 
     /**
@@ -247,16 +250,15 @@ public class CentralController {
      * @param email Email address.
      * @param phone Phone number.
      * @param vehicle Possible vehicle description.
-     * @param context Needed for GSON.
      */
-    public void createNewUser(String name, String email, String phone, String vehicle, Context context) {
+    public void createNewUser(String name, String email, String phone, String vehicle) {
         User newbie = new User(name, email, phone);
 
         if ((vehicle != null) || (!vehicle.equals(""))) {
             newbie.setVehicle(vehicle);
         }
 
-        GsonController.saveUserToDisk(newbie, context);
+        GsonController.saveUserToDisk(newbie, myCFact.getGsonContext());
     }
 
     /**
@@ -310,30 +312,28 @@ public class CentralController {
     /**
      * Creates a new Request based on two LatLng coordinate sets.
      * @param positionPair ArrayList containing two coordinates.
-     * @param context Needed for GSON.
      */
-    public void createRequest(ArrayList<LatLng> positionPair, Context context) {
+    public void createRequest(ArrayList<LatLng> positionPair) {
         // Rider creates srequest
         IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
         addNewRequest(rToUpload);
-        saveCurrentUser(context);
+        saveCurrentUser();
     }
 
     /**
      * Searches for Requests based on a LatLng coordinate pair. Assigns them to the Driver.
      * @param positionPair The LatLng coordinates.
-     * @param context Needed for GSON.
      */
-    public void searchRequests(ArrayList<LatLng> positionPair, Context context) {
+    public void searchRequests(ArrayList<LatLng> positionPair) {
         // Driver searches for requests
         // position is positionPair.get(0)
         ArrayList<Request> driverRequests =
                 getRequestsByGeoDistance(positionPair.get(0));
         currentUser.getMyDriver().setOpenRequests(driverRequests);
-        saveCurrentUser(context);
+        saveCurrentUser();
 
     }
 
