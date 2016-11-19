@@ -3,10 +3,8 @@ package com.cmput301fa16t5.legendary_telegram;
 import java.util.ArrayList;
 
 /**
- * Created by keith on 11/2/2016.
- * Driver class.
- * User has one of these, calls upon it.
- * Does not have a User.
+ * Driver class. Accepts and Commits Requests. Asks if it has been picked.
+ * @author keith
  */
 public class Driver extends RiderDriverParent {
 
@@ -24,30 +22,16 @@ public class Driver extends RiderDriverParent {
      * Constructor does not include instantiation of ArrayList
      * Because the arraylist should be provided by Map+ESearch.
      */
-    public Driver() {    }
-
-    /**
-     * Getter for the open requests to be displayed.
-     * @return An ArrayList of Requests
-     */
-    public ArrayList<Request> getOpenRequests() {
-        return openRequests;
+    public Driver() {
+        super();
     }
 
     /**
      * Called by user when it gets a list from ESearch.
-     * @param openRequests
+     * @param openRequests Request ArrayList
      */
     public void setOpenRequests(ArrayList<Request> openRequests) {
         this.openRequests = openRequests;
-    }
-
-    /**
-     * Getter for current Request
-     * @return A request object
-     */
-    public Request getCurrentRequest() {
-        return currentRequest;
     }
 
     /**
@@ -77,13 +61,5 @@ public class Driver extends RiderDriverParent {
     public void commit() {
         this.currentRequest.commitToRequest();
         this.currentRequest.setOnServer(false);
-    }
-
-    /**
-     * Setter for current Request.
-     * @param index Index of request to focus on.
-     */
-    public void setCurrentRequest(Integer index) {
-        this.currentRequest = openRequests.get(index);
     }
 }

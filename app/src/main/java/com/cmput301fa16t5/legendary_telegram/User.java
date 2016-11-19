@@ -9,7 +9,7 @@ package com.cmput301fa16t5.legendary_telegram;
  */
 public class User {
 
-    public String userName;
+    private String userName;
     private String email;
     private String telephone;
     private String vehicle;
@@ -25,6 +25,7 @@ public class User {
         this.vehicle = null; // can use to check if the user can be a driver
         this.myDriver = new Driver();
         this.myRider = new Rider();
+        this.myCurrentMode = this.myRider;
     }
 
     public void setAsRider() {

@@ -12,7 +12,7 @@ import android.content.Context;
  * Instead, we have a class object that will hold onto our context, but is not a singleton itself.
  * @author kgmills
  */
-class ContextFactory {
+public class ContextFactory {
 
     /**
      * Typically passed at the beginning of the app.
