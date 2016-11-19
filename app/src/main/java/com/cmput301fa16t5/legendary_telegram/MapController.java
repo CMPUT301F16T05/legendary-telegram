@@ -23,16 +23,12 @@ public class MapController {
      * Sends the Central Controller coordinates depending on whether a new Request will be made
      * (Rider) or whether requests will be looked for (Driver).
      * @param positionPair: An ArrayList of Coordinates.
-     * @param context Needed for GSON, since the User is saved afterwords.
      */
-    public void sendCoordinates(ArrayList<LatLng> positionPair, Context context) {
+    public void sendCoordinates(ArrayList<LatLng> positionPair) {
         if (positionPair.size() == 1) {
             centralCommand.searchRequests(positionPair);
         } else {
             centralCommand.createRequest(positionPair);
         }
-
     }
-
-
 }

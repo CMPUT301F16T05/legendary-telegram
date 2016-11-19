@@ -22,7 +22,6 @@ public class MainRequestActivity extends AppCompatActivity {
     private Button findRequests;
     private Button makeRequests;
     private ListView relevantRequests;
-    private ArrayAdapter<Request> adapter;
 
     private MainRequestController myController;
 
@@ -38,6 +37,7 @@ public class MainRequestActivity extends AppCompatActivity {
         findRequests = (Button) findViewById(R.id.driverButton);
         makeRequests = (Button) findViewById(R.id.riderButton);
         relevantRequests = (ListView) findViewById(R.id.mainRequestLV);
+        myController.bugForUpdate();
 
         /**
          *@ Yu Tang Lin
@@ -99,9 +99,7 @@ public class MainRequestActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        this.adapter = myController.setRequestAdapter(this);
-        relevantRequests.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        relevantRequests.setAdapter(myController.setRequestAdapter(this));
 
         relevantRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

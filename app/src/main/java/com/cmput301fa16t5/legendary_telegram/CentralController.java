@@ -2,6 +2,7 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -29,6 +30,7 @@ public class CentralController {
 
     private User currentUser = null;
     private ContextFactory myCFact;
+    private ArrayObserver myObs = null;
 
     /**
      * Initializes the ContextFactory and gives it the object.
@@ -266,20 +268,7 @@ public class CentralController {
      * @return An ArrayList of Requests.
      */
     public ArrayList<Request> getRequests() {
-
-        ArrayList<Request> myList;
-        if (currentUser.askForMode()) {
-            myList = currentUser.getMyDriver().getOpenRequests();
-        }
-
-        else {
-            myList = currentUser.getMyRider().getOpenRequests();
-        }
-
-        if (myList == null) {
-            return new ArrayList<>();
-        }
-        return myList;
+        return this.currentUser.getMyCurrentMode().getOpenRequests();
     }
 
     /**
@@ -319,6 +308,8 @@ public class CentralController {
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
+        saveCurrentUser();
+        bugForUpdate();
         addNewRequest(rToUpload);
         saveCurrentUser();
     }
@@ -344,5 +335,24 @@ public class CentralController {
     public IdentificationCard generateDriverCard() {
         return new IdentificationCard(currentUser.getUserName(), currentUser.getTelephone(),
                 currentUser.getEmail(), currentUser.getVehicle());
+    }
+
+    /**
+     * Instantiate a new ArrayObserver (if not yet) and add an Adapter to it.
+     * @param adapt ArrayAdapter to be added.
+     */
+    public void addArrayAdapter(ArrayAdapter adapt) {
+        if (this.myObs == null) {
+            this.myObs = new ArrayObserver(this);
+        }
+
+        this.myObs.addAdapter(adapt);
+    }
+
+    public void bugForUpdate() {
+        if (this.myObs == null) {
+            this.myObs = new ArrayObserver(this);
+        }
+        this.myObs.onButtonPress();
     }
 }

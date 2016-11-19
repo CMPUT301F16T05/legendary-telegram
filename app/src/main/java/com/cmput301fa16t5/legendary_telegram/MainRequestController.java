@@ -1,6 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
 import android.widget.ArrayAdapter;
 
 /**
@@ -12,7 +11,6 @@ public class MainRequestController {
     private CentralController centralCommand;
 
     public MainRequestController() {
-
         centralCommand = CentralController.getInstance();
     }
 
@@ -37,7 +35,9 @@ public class MainRequestController {
      * @return: The set ArrayAdapter.
      */
     public ArrayAdapter<Request> setRequestAdapter(MainRequestActivity activity) {
-        return new ArrayAdapter(activity, R.layout.request_items, centralCommand.getRequests());
+        ArrayAdapter<Request> adapt = new ArrayAdapter<>(activity, R.layout.request_items, centralCommand.getRequests());
+        centralCommand.addArrayAdapter(adapt);
+        return adapt;
     }
 
     /**
@@ -47,5 +47,9 @@ public class MainRequestController {
      */
     public boolean clickedARequest(int position) {
         return centralCommand.selectCurrentRequest(position);
+    }
+
+    public void bugForUpdate() {
+        centralCommand.bugForUpdate();
     }
 }

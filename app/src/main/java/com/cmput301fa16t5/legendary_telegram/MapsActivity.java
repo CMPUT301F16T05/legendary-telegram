@@ -157,7 +157,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 positionPair = new ArrayList<LatLng>();
-                if (riderOrDriver == "fromRider") {
+                if (riderOrDriver.equals("fromRider")) {
                     positionPair.add(start);
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
@@ -169,7 +169,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("Start: ", start.toString());
                 }
 
-                myController.sendCoordinates(positionPair, getApplicationContext());
+                myController.sendCoordinates(positionPair);
                 finish();
             }
         });
