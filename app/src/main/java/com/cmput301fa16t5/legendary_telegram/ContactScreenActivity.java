@@ -84,7 +84,7 @@ public class ContactScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent mapintent = new Intent(ContactScreenActivity.this, MapsActivity.class);
-                mapintent.putExtra("Map_button", "fromContactScreen");
+                mapintent.putExtra("Map", "fromContactScreen");
                 startActivity(mapintent);
             }
         });
