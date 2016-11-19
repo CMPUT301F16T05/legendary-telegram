@@ -1,37 +1,78 @@
-<!-- original xml file
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    map:mapType="normal"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:id="@+id/activity_maps"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301fa16t5.legendary_telegram.MapsActivity" />
--->
-<!--
-code from: http://stackoverflow.com/questions/29999163/how-to-add-buttons-to-the-default-maps-project-in-android-studio
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:gravity="center">
 
-<fragment
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    tools:context=".MapsActivity" />
+    tools:context="com.cmput301fa16t5.legendary_telegram.MapsActivity">
 
-<Button
-    android:id="@+id/OkButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Ok" />
+    <TextView
+        android:text="Start: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView2" />
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2" />
+
+    <TextView
+        android:text="End: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/textView2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_below="@+id/editText2"
+        android:layout_toEndOf="@+id/textView3"
+        android:id="@+id/editText3"
+        android:layout_alignBottom="@+id/textView3" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView4"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/OkButton" />
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/OkButton"
+        tools:context=".MapsActivity" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/OkButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
+
 
