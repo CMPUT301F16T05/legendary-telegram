@@ -28,8 +28,11 @@ public class Request {
     private ArrayList<IdentificationCard> potentialDrivers;
     private IdentificationCard myDriver;
 
+    // Used for Google Map
     private LatLng startLocation;
     private LatLng endLocation;
+    private String startAddress;
+    private String endAddress;
 
     //LatLng encodes on the server in a way that the GeoDistance query
     //does like so they have to be parsed into a format that it does like
@@ -47,8 +50,12 @@ public class Request {
         this.id = null;
         this.myRider = me;
         this.myDriver = null;
-        this.startLocation = start;
-        this.endLocation = end;
+        // Used for Google Map ///////
+        this.startLocation = start; //
+        this.endLocation = end;     //
+        this.startAddress = "";     //
+        this.endAddress = "";       //
+        //////////////////////////////
         this.state = RequestEnum.pendingUpload;
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
@@ -194,6 +201,22 @@ public class Request {
 
     public LatLng getEndLocation() {
         return endLocation;
+    }
+
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
     }
 
     public IdentificationCard getMyRider() {
