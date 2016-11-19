@@ -27,6 +27,8 @@ public class RequestStatusActivity extends AppCompatActivity {
     /**
      * Initialize views, set ArrayAdapter.
      * This view shows the IdentificationCards.
+     * We initialize the ArrayAdapter in onCreate
+     * because it is linked to a specific ArrayList and does not change (unlike main request activity)
      * @param savedInstanceState: Because Android.
      */
     @Override
@@ -41,6 +43,9 @@ public class RequestStatusActivity extends AppCompatActivity {
 
         title.setText(myController.getRequestName());
 
+        this.adapter = myController.setRequestAdapter(this);
+        requestsDriversLV.setAdapter(adapter);
+
         requestsDriversLV.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapt, View v, int position, long l) {
@@ -52,22 +57,22 @@ public class RequestStatusActivity extends AppCompatActivity {
     }
 
     /**
-     * Update ArrayAdapter.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.adapter = myController.setRequestAdapter(this);
-        requestsDriversLV.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
      * Cancel a Request. Go back, since it's Cancelled.
      * @param v
      */
     public void cancelButtonPressed(View v) {
         myController.cancel();
         finish();
+    }
+
+    /**
+     * We want to remove the old adapter on destroy since next time we'll be
+     * calling a new onCreate with a new adapter and we don't want to fill
+     * the arraylist of ArrayObserver with a bunch of nulls/old adapters.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myController.removeAdapter(this.adapter);
     }
 }

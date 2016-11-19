@@ -28,7 +28,10 @@ public class RequestStatusController {
      * @return: Set ArrayAdapter.
      */
     public ArrayAdapter<IdentificationCard> setRequestAdapter(RequestStatusActivity activity) {
-        return new ArrayAdapter(activity, R.layout.card_items, centralCommand.getCards());
+        ArrayAdapter<IdentificationCard> adapt = new ArrayAdapter<>(activity, R.layout.card_items,
+                centralCommand.getCards());
+        centralCommand.addArrayAdapter(adapt);
+        return adapt;
     }
 
     /**
@@ -39,5 +42,9 @@ public class RequestStatusController {
         ElasticSearchController.DeleteRequestsTask delRequest = new ElasticSearchController.DeleteRequestsTask();
         delRequest.execute(cancelledRequest);
         centralCommand.saveCurrentUser();
+    }
+
+    public void removeAdapter(ArrayAdapter adapt) {
+        centralCommand.removeArrayAdapter(adapt);
     }
 }

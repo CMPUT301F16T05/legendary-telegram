@@ -45,10 +45,16 @@ public class ArrayObserver {
     public void removeAdapter(ArrayAdapter adapt) {
         if (this.myAdapters.contains(adapt)) {
             this.myAdapters.remove(adapt);
-            update();
         }
     }
 
+    /**
+     * This function should be called typically when activities change.
+     * Bascially, the bulk of it's functionality and subfunctions have not be written yet
+     * It's goal is to query ElasticSearch for updates to the openRequest lists of Rider and
+     * Driver, then parse them. If there is a change, I.E. a Request now has an additional
+     * Driver, or a Request's state has changed, it will update the relevant ArrayAdapters.
+     */
     public void onButtonPress() {
         // A bunch of stuff about ElasticSearch and what not.
         // like "if stuff from ESearch is new"

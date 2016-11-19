@@ -22,6 +22,7 @@ public class MainRequestActivity extends AppCompatActivity {
     private Button findRequests;
     private Button makeRequests;
     private ListView relevantRequests;
+    private ArrayAdapter<Request> requestArrayAdapter;
 
     private MainRequestController myController;
 
@@ -37,7 +38,6 @@ public class MainRequestActivity extends AppCompatActivity {
         findRequests = (Button) findViewById(R.id.driverButton);
         makeRequests = (Button) findViewById(R.id.riderButton);
         relevantRequests = (ListView) findViewById(R.id.mainRequestLV);
-        myController.bugForUpdate();
 
         /**
          *@ Yu Tang Lin
@@ -99,7 +99,8 @@ public class MainRequestActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        relevantRequests.setAdapter(myController.setRequestAdapter(this));
+        this.requestArrayAdapter = myController.setRequestAdapter(this);
+        relevantRequests.setAdapter(requestArrayAdapter);
 
         relevantRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,5 +118,16 @@ public class MainRequestActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * We remove the Adapter onPause because depending on button click, we may change from a Rider
+     * to a Driver, or the other way around. In both cases, the ArrayAdapter will have a different
+     * set of Requests to display, and is re-created in onResume for that purpose.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myController.removeAdapter(requestArrayAdapter);
     }
 }

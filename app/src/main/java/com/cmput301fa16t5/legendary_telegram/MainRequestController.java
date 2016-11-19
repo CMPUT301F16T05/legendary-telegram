@@ -49,7 +49,7 @@ public class MainRequestController {
         return centralCommand.selectCurrentRequest(position);
     }
 
-    public void bugForUpdate() {
-        centralCommand.bugForUpdate();
+    public void removeAdapter(ArrayAdapter<Request> adapt) {
+        centralCommand.removeArrayAdapter(adapt);
     }
 }

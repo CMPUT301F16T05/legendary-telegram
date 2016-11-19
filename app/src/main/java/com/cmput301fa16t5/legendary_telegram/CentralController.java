@@ -308,8 +308,6 @@ public class CentralController {
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
-        saveCurrentUser();
-        bugForUpdate();
         addNewRequest(rToUpload);
         saveCurrentUser();
     }
@@ -325,7 +323,6 @@ public class CentralController {
                 getRequestsByGeoDistance(positionPair.get(0));
         currentUser.getMyDriver().setOpenRequests(driverRequests);
         saveCurrentUser();
-
     }
 
     /**
@@ -345,14 +342,10 @@ public class CentralController {
         if (this.myObs == null) {
             this.myObs = new ArrayObserver(this);
         }
-
         this.myObs.addAdapter(adapt);
     }
 
-    public void bugForUpdate() {
-        if (this.myObs == null) {
-            this.myObs = new ArrayObserver(this);
-        }
-        this.myObs.onButtonPress();
+    public void removeArrayAdapter(ArrayAdapter adapt) {
+        this.myObs.removeAdapter(adapt);
     }
 }
