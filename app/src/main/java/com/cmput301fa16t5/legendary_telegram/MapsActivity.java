@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +47,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng end;
     private Marker startMarker;
     private Marker endMarker;
+
     private Button okButton;
+    private Button searchButton;
+    private EditText startEditText;
+    private EditText endEditText;
+
     private ArrayList<LatLng> positionPair;
     private String riderOrDriver;
 
@@ -82,6 +88,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         okButton = (Button) findViewById(R.id.OkButton);
+        searchButton = (Button) findViewById(R.id.SearchButton);
+        startEditText = (EditText) findViewById(R.id.StartEditText);
+        endEditText = (EditText) findViewById(R.id.EndEditText);
 
         // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
         // Show the zoom button on the map
@@ -171,6 +180,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 myController.sendCoordinates(positionPair);
                 finish();
+            }
+        });
+
+        // Click search Button
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do something after it is clicked
             }
         });
     }
