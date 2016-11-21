@@ -46,6 +46,7 @@ public class Request {
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
 
+
     public Request(IdentificationCard me, LatLng start, LatLng end) {
         this.id = null;
         this.myRider = me;
@@ -56,10 +57,13 @@ public class Request {
         this.startAddress = "";     //
         this.endAddress = "";       //
         //////////////////////////////
-        this.state = RequestEnum.pendingUpload;
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
-        this.onServer = false;
+
+        // We start assuming ESearch is going to work and switch to false/pending upload
+        // in the event that our initial upload fails.
+        this.onServer = true;
+        this.state = RequestEnum.openRequest;
 
         //parse the server friendly locations
         this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
@@ -131,6 +135,7 @@ public class Request {
      */
     public void commitToRequest() {
         this.state = RequestEnum.driverHasCommitted;
+        this.setOnServer(false);
     }
 
     /**
@@ -169,8 +174,8 @@ public class Request {
      * @param onServer Value to set OnServer variable.
      */
     public void setOnServer(Boolean onServer) {
-        if (state == RequestEnum.pendingUpload && onServer) {
-            state = RequestEnum.openRequest;
+        if (state == RequestEnum.openRequest && !onServer) {
+            state = RequestEnum.pendingUpload;
         }
         this.onServer = onServer;
     }

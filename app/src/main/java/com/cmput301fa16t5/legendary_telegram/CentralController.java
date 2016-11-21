@@ -363,7 +363,7 @@ public class CentralController {
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
-        addNewRequest(rToUpload);
+        rToUpload.setOnServer(addNewRequest(rToUpload));
         saveCurrentUser();
     }
 
