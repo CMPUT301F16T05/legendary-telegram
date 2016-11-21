@@ -22,15 +22,8 @@ public class ContactScreenController {
     public ContactScreenController() {
 
         centralCommand = CentralController.getInstance();
-        if (centralCommand.getCurrentUser().askForMode()) {
-            isDriverOrRider = true;
-            this.requestOfFocus = centralCommand.getCurrentUser().getMyDriver().getCurrentRequest();
-        }
-
-        else {
-            isDriverOrRider = false;
-            this.requestOfFocus = centralCommand.getCurrentUser().getMyRider().getCurrentRequest();
-        }
+        this.isDriverOrRider = centralCommand.getCurrentUser().askForMode();
+        this.requestOfFocus = centralCommand.getCurrentUser().getMyCurrentMode().getCurrentRequest();
     }
 
     /**

@@ -1,9 +1,11 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * Created by keith on 11/2/2016.
+ * User Profile Controller.
+ * Does all the parsing of information from User Activity to see if it's correct.
+ * If it is, uses CentralController to proceed further with data edits.
+ * @author keith
  */
-
 public class UserProfileController {
 
     private CentralController centralCommand;
