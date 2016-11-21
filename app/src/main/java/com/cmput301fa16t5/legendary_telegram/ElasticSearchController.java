@@ -47,11 +47,15 @@ public class ElasticSearchController {
         /**
          * Deletes a request from the ElasticSearch server
          * @param search_params a Vararg of requests
-         * @return sets the ID for the request to null and updates onServer boolean
+         * @return Boolean indicating whether there was an error.
+         * Also sets the ID for the request to null and updates onServer boolean
          */
         @Override
         protected Boolean doInBackground(Request... search_params) {
             verifySettings();
+
+            //Initialized to true but will return false if an error occurs
+            Boolean isGood = Boolean.TRUE;
 
             for (Request request: search_params) {
                 Delete delete = new Delete.Builder(request.getId())
@@ -67,16 +71,18 @@ public class ElasticSearchController {
                         Log.i("Success", "Deletion yay");
                     }
                     else {
+                        isGood = Boolean.FALSE;
                         Log.i("Error", "Elastic search was not able to delete the request.");
                     }
                 }
                 catch (Exception e) {
+                    isGood = Boolean.FALSE;
                     Log.i("Uhoh", "We failed to delete a request fromt elastic search!");
                     e.printStackTrace();
                 }
             }
 
-            return Boolean.TRUE;
+            return isGood;
         }
     }
 
@@ -125,7 +131,7 @@ public class ElasticSearchController {
                         query = "{\n" +
                                 "        \"filter\" : {\n" +
                                 "            \"geo_distance\" : {\n" +
-                                "                \"distance\" : \"100km\",\n" +
+                                "                \"distance\" : \"20km\",\n" +
                                 "                \"elasticEnd\" : \""+search_params[q]+"\"\n" +
                                 "            }\n" +
                                 "        }\n" +
@@ -197,11 +203,16 @@ public class ElasticSearchController {
         /**
          * Adds a request to the ElasticSearch server
          * @param requests a Vararg of requests
-         * @return sets the generated ID for the request and updates onServer boolean
+         * @return Boolean indicating whether the add was successful.
+         * Also sets the generated ID for the request and updates onServer boolean
          */
         @Override
         protected Boolean doInBackground(Request... requests) {
             verifySettings();
+
+            //Initialized to true but will return false if an error occurs
+            Boolean isGood = Boolean.TRUE;
+
             for (Request request: requests) {
                 //request.setOnServer(Boolean.TRUE);
                 Index index = new Index.Builder(request)
@@ -216,16 +227,18 @@ public class ElasticSearchController {
                     }
                     else {
                         request.setOnServer(Boolean.FALSE);
+                        isGood = Boolean.FALSE;
                         Log.i("Error", "Elastic search was not able to add the request.");
                     }
                 }
                 catch (Exception e) {
+                    isGood = Boolean.FALSE;
                     Log.i("Uhoh", "We failed to add a request to elastic search!");
                     e.printStackTrace();
                 }
             }
 
-            return Boolean.TRUE;
+            return isGood;
         }
     }
 
@@ -240,12 +253,17 @@ public class ElasticSearchController {
         /**
          * Updates a request already on the server. Does nothing if no ID can be found
          * @param requests a Vararg of requests
-         * @return sets the generated ID for the request and updates onServer boolean
+         * @return Boolean indicating whether the update was successful.
+         * Also sets the generated ID for the request and updates onServer boolean
          */
         @Override
         protected Boolean doInBackground(Request... requests) {
 
             verifySettings();
+
+            //Initialized to true but will return false if an error occurs
+            Boolean isGood = Boolean.TRUE;
+
             for (Request request: requests) {
                 if (request.getId() == null) {
                     Log.i("Error", "Cannot update a request unless it has been added first");
@@ -260,17 +278,19 @@ public class ElasticSearchController {
                         if (result.isSucceeded()) {
                             request.setOnServer(Boolean.TRUE);
                         } else {
+                            isGood = Boolean.FALSE;
                             request.setOnServer(Boolean.FALSE);
                             Log.i("Error", "Elastic search was not able to add the request.");
                         }
                     } catch (Exception e) {
+                        isGood = Boolean.FALSE;
                         Log.i("Uhoh", "We failed to add a request to elastic search!");
                         e.printStackTrace();
                     }
                 }
             }
 
-            return Boolean.TRUE;
+            return isGood;
         }
     }
 

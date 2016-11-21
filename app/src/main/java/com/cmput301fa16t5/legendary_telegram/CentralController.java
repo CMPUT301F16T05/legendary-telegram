@@ -116,46 +116,101 @@ public class CentralController {
      * Wrapper for the add task of the ElasticSearchController
      * Any additional logic involved should be handled outside of this function
      * @param requests a vararg of requests to add to the server
+     * @return Boolean indicating whether the request was successfully added
      */
-    public void addNewRequest(Request... requests){
+    public Boolean addNewRequest(Request... requests){
+        //Assume failure until proven otherwise
+        Boolean isGood = null;
+
         for (Request r : requests){
+
             //Should only add if request is not on server, no ID in other words
             if (r.getId() == null){
                 //Start the task and place it on the server
                 ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
                 try{
-                    addRequestsTask.execute(r);
+                    isGood = addRequestsTask.execute(r).get();
                 }
                 catch (Exception e) {
+                    isGood = Boolean.FALSE;
                     e.printStackTrace();
                 }
             }else{
+                isGood = Boolean.FALSE;
                 Log.i("ESCErr","Tried to add something already on the server. Delete first or call update instead");
             }
         }
+
+        if (isGood == null){
+            Log.d("ESCErr", "Major error occurred in addRequests wrapper");
+            isGood = Boolean.FALSE;
+        }
+        return isGood;
     }
 
     /**
      * Wrapper for the update task of the ElasticSearchController
      * Any additional logic involved should be handled outside of this function
      * @param requests a vararg of requests to update on the server
+     * @return Boolean indicating whether the request was successfully updated
      */
-    public void updateRequest(Request... requests){
+    public Boolean updateRequest(Request... requests){
+
+        Boolean isGood = null;
+
         for (Request r : requests){
             //Should only update if request is on server, has an ID in other words
             if (r.getId() != null){
                 //Start the task and place it on the server
                 ElasticSearchController.UpdateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
                 try{
-                    updateRequestsTask.execute(r);
+                    isGood = updateRequestsTask.execute(r).get();
                 }
                 catch (Exception e) {
+                    isGood = Boolean.FALSE;
                     e.printStackTrace();
                 }
             }else{
+                isGood = Boolean.FALSE;
                 Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
         }
+
+        if (isGood == null){
+            Log.d("ESCErr", "Major error occurred in updateRequests wrapper");
+            isGood = Boolean.FALSE;
+        }
+        return isGood;
+    }
+
+    public Boolean deleteRequests(Request... requests){
+
+        Boolean isGood = null;
+
+        for (Request r : requests){
+            //Should only delete if request is on server, has an ID in other words
+            if (r.getId() != null){
+                //Start the task and remove it from the server
+                ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask();
+                try{
+                    isGood = deleteRequestsTask.execute(r).get();
+                }
+                catch (Exception e) {
+                    isGood = Boolean.FALSE;
+                    e.printStackTrace();
+                }
+            }else{
+                isGood = Boolean.FALSE;
+                Log.i("ESCErr","Tried to delete something that wasn't on the server");
+            }
+        }
+
+        if (isGood == null){
+            Log.d("ESCErr", "Major error occurred in deleteRequests wrapper");
+            isGood = Boolean.FALSE;
+        }
+
+        return isGood;
     }
 
     /**

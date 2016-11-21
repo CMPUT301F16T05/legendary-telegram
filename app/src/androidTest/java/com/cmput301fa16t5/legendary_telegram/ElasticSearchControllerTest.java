@@ -44,6 +44,7 @@ public class ElasticSearchControllerTest {
     public void testAddRequest(){
         //Specific details are not important for this test
         Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
+        Boolean isGood = Boolean.FALSE;
 
         //Make sure that we're dealing with a newly made, offline request
         assertFalse(newRequest.isOnServer());
@@ -52,7 +53,7 @@ public class ElasticSearchControllerTest {
         //Start the task and place it on the server
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
         try{
-            addRequestsTask.execute(newRequest).get();
+            isGood = addRequestsTask.execute(newRequest).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -60,8 +61,8 @@ public class ElasticSearchControllerTest {
 
         //The server wil grant an ID when added sucessfully
         assertTrue(newRequest.isOnServer());
-        Log.i("DEBUG", "Added " + newRequest.getId());
         assertFalse(newRequest.getId() == null);
+        assertTrue(isGood);
         cleanUpRequests();
     }
 
@@ -70,6 +71,7 @@ public class ElasticSearchControllerTest {
         //Specific details are not important for this test
         Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
         ArrayList<Request> gotRequest = new ArrayList();
+        Boolean isGood = Boolean.FALSE;
 
         //Make sure that we're dealing with a newly made, offline request
         assertFalse(newRequest.isOnServer());
@@ -78,7 +80,7 @@ public class ElasticSearchControllerTest {
         //Start the task and place it on the server
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
         try{
-            addRequestsTask.execute(newRequest).get();
+            isGood = addRequestsTask.execute(newRequest).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -86,14 +88,15 @@ public class ElasticSearchControllerTest {
 
         //The server wil grant an ID when added sucessfully
         assertTrue(newRequest.isOnServer());
-        Log.i("DEBUG", "Added " + newRequest.getId());
         assertFalse(newRequest.getId() == null);
+        assertTrue(isGood);
 
         //Change a value and call an update so the change is reflected on the server
         newRequest.commitToRequest();
+        isGood = Boolean.FALSE;
         ElasticSearchController.UpdateRequestsTask updateRequestsTask = new ElasticSearchController.UpdateRequestsTask();
         try{
-            updateRequestsTask.execute(newRequest).get();
+            isGood = updateRequestsTask.execute(newRequest).get();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -104,6 +107,8 @@ public class ElasticSearchControllerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        assertTrue(isGood);
 
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
@@ -307,6 +312,7 @@ public class ElasticSearchControllerTest {
         //Specific details are not important for this test
         Request newRequest = new Request(null, new LatLng(0, 0), new LatLng(1, 1));
         ArrayList<Request> gotRequest = new ArrayList<>();
+        Boolean isGood = Boolean.FALSE;
 
         //Make sure that we're dealing with a newly made, offline request
         assertFalse(newRequest.isOnServer());
@@ -316,13 +322,14 @@ public class ElasticSearchControllerTest {
         //Add the request we will be removing
         ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
         try {
-            addRequestsTask.execute(newRequest).get();
+            isGood = addRequestsTask.execute(newRequest).get();
         }catch (Exception e) {
             e.printStackTrace();
         }
         assertTrue(newRequest.isOnServer());
+        assertFalse(newRequest.getId() == null);
+        assertTrue(isGood);
 
-        //KISS, Keep It Simple Stupid
         try {
             TimeUnit.SECONDS.sleep(sleepTimer);
         } catch (InterruptedException e) {
@@ -337,8 +344,6 @@ public class ElasticSearchControllerTest {
         catch (Exception e) {
             e.printStackTrace();
         }
-        assertFalse(gotRequest.isEmpty());
-        assertEquals(newRequest.getId(), gotRequest.get(0).getId());
 
         //KISS, Keep It Simple Stupid
         try {
@@ -347,9 +352,19 @@ public class ElasticSearchControllerTest {
             e.printStackTrace();
         }
 
+        assertFalse(gotRequest.isEmpty());
+        assertEquals(newRequest.getId(), gotRequest.get(0).getId());
+
         //Delete the request
+        isGood = Boolean.FALSE;
         ElasticSearchController.DeleteRequestsTask deleteRequestsTask = new ElasticSearchController.DeleteRequestsTask();
-        deleteRequestsTask.execute(newRequest);
+        try{
+            isGood = deleteRequestsTask.execute(newRequest).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //KISS, Keep It Simple Stupid
         try {
             TimeUnit.SECONDS.sleep(sleepTimer);
@@ -357,6 +372,7 @@ public class ElasticSearchControllerTest {
             e.printStackTrace();
         }
         assertTrue(newRequest.getId() == null);
+        assertTrue(isGood);
 
         //Now try and retrieve the newly deleted request. No result is expected.
         ElasticSearchController.GetRequests getRequestsTask2 = new ElasticSearchController.GetRequests();
