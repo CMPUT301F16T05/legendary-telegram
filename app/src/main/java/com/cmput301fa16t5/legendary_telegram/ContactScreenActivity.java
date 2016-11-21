@@ -76,6 +76,7 @@ public class ContactScreenActivity extends AppCompatActivity {
                 //http://stackoverflow.com/questions/5403308/make-a-phone-call-click-on-a-button//
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:+" + phoneTxt.getText().toString().trim()));
+                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(callIntent);
             }
         });
@@ -91,6 +92,17 @@ public class ContactScreenActivity extends AppCompatActivity {
 
         // Clicking the email field is handled by
         // http://stackoverflow.com/questions/10464954/how-to-make-an-email-address-clickable
+        // http://stackoverflow.com/questions/9689732/email-intent-email-chooser
+        emailTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",
+                        emailTxt.getText().toString(), null));
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Legendary Telegram " +
+                        "Request ID: " + infoTitle.getText().toString());
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
     }
 
     /**
