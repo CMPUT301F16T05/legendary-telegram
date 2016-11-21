@@ -7,72 +7,75 @@
 
     tools:context="com.cmput301fa16t5.legendary_telegram.MapsActivity">
 
-    <TextView
-        android:text="Start: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView2" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2" />
-
-    <TextView
-        android:text="End: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:layout_below="@+id/editText2"
-        android:layout_toEndOf="@+id/textView3"
-        android:id="@+id/editText3"
-        android:layout_alignBottom="@+id/textView3" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView4"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/OkButton" />
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
+        tools:context=".MapsActivity"
+        android:layout_above="@+id/SearchButton"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="End: "
+        android:textSize="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/EndTextView"
+        android:layout_alignBaseline="@+id/EndEditText"
+        android:layout_alignBottom="@+id/EndEditText"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/EndEditText" />
+
+    <TextView
+        android:text="Start: "
+        android:textSize="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/StartTextView"
+        android:layout_alignBaseline="@+id/StartEditText"
+        android:layout_alignBottom="@+id/StartEditText"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
+        android:id="@+id/StartEditText"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/OkButton"
-        tools:context=".MapsActivity" />
+        android:layout_toEndOf="@+id/StartTextView"
+        android:hint="Enter Start Location" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
+        android:id="@+id/EndEditText"
+        android:layout_below="@+id/StartEditText"
+        android:layout_alignStart="@+id/StartEditText"
+        android:layout_alignParentEnd="true"
+        android:hint="Enter Destination" />
+
+    <Button
+        android:text="Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:id="@+id/OkButton"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
 
 
