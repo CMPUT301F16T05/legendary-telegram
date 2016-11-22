@@ -78,12 +78,12 @@ public class ArrayObserver {
     public void onButtonPress() {
 
         // We only bother if the Rider/Driver lists have any content in them.
-        if (centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
+        if (!centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
             ArrayObserver.NotificationUpdate riderUpdate = new ArrayObserver.NotificationUpdate();
             riderUpdate.execute(centralCommand.getCurrentUser().getMyRider());
         }
 
-        if (centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
+        if (!centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
             ArrayObserver.NotificationUpdate driverUpdate = new ArrayObserver.NotificationUpdate();
             driverUpdate.execute(centralCommand.getCurrentUser().getMyDriver());
         }

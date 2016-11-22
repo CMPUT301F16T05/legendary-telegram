@@ -93,7 +93,6 @@ public class ContactScreenController {
                     requestOfFocus.commitToRequest();
                     centralCommand.updateRequest(requestOfFocus);
                     centralCommand.saveCurrentUser();
-                    centralCommand.pingTheServer();
                     return "You've committed to this request. Get going!";
                 }
                 return "Rider has picked a different Driver";
@@ -103,7 +102,6 @@ public class ContactScreenController {
                 requestOfFocus.addADriver(centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
-                centralCommand.pingTheServer();
                 return "You've accepted this Request. Wait to see if you are selected.";
             }
 
@@ -114,7 +112,6 @@ public class ContactScreenController {
             requestOfFocus.acceptADriver(index);
             centralCommand.updateRequest(requestOfFocus);
             centralCommand.saveCurrentUser();
-            centralCommand.pingTheServer();
             return "Driver Accepted.";
         }
     }

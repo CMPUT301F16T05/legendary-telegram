@@ -37,6 +37,7 @@ public class MainRequestController {
     public ArrayAdapter<Request> setRequestAdapter(MainRequestActivity activity) {
         ArrayAdapter<Request> adapt = new ArrayAdapter<>(activity, R.layout.request_items, centralCommand.getRequests());
         centralCommand.addArrayAdapter(adapt);
+        centralCommand.pingTheServer();
         return adapt;
     }
 
@@ -46,7 +47,6 @@ public class MainRequestController {
      * @return True if request was clicked as Driver. False if Rider.
      */
     public boolean clickedARequest(int position) {
-        centralCommand.pingTheServer();
         return centralCommand.selectCurrentRequest(position);
     }
 
