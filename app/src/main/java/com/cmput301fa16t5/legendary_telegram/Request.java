@@ -79,6 +79,11 @@ public class Request {
      * to get from Lat/Long to kilometers
      */
     public void computeEstimate() {
+
+        if ((startLocation == null) || (endLocation == null)) {
+            return;
+        }
+
         Double latDegToKM = (111132.92 - 559.82*Math.cos(2*startLocation.latitude)
             + 1.175*Math.cos(4*startLocation.latitude) - 0.0023*Math.cos(6*startLocation.latitude)) /
                 1000;
@@ -104,9 +109,11 @@ public class Request {
      * @param newDriver: Card of the new Driver.
      */
     public void addADriver(IdentificationCard newDriver) {
-        this.potentialDrivers.add(newDriver);
-        this.state = RequestEnum.hasADriver;
-        this.setOnServer(false);
+        if (state.equals(RequestEnum.openRequest) || state.equals(RequestEnum.hasADriver)) {
+            this.potentialDrivers.add(newDriver);
+            this.state = RequestEnum.hasADriver;
+            this.setOnServer(false);
+        }
     }
 
     /**
@@ -127,7 +134,7 @@ public class Request {
         if (this.myDriver == null) {
             return false;
         }
-        return this.myDriver.isThisMe(card);
+        return this.myDriver.equals(card);
     }
 
     /**
@@ -178,6 +185,53 @@ public class Request {
             state = RequestEnum.pendingUpload;
         }
         this.onServer = onServer;
+    }
+
+    /**
+     * Overriding Equals
+     * Confirms if the object is a request, and if it is, passes it to
+     * equalsReq for further processing
+     * @param object Object to be passed in.
+     * @return True if a Request with matching parameters
+     */
+    @Override
+    public boolean equals(Object object) {
+
+        if (!object.getClass().equals(Request.class)) {
+            return false;
+        }
+
+        return equalsReq((Request)object);
+
+    }
+
+    /**
+     * Secondary method to .equals. Does a lot of the heavy comparisons now that the object
+     * passed in has been confirmed to be a request.
+     * @param request Request to be compared.
+     * @return True if a lot of the parameters (not the doubles) match, false if one fails.
+     */
+    private boolean equalsReq(Request request) {
+
+        if (this.potentialDrivers.size() != request.potentialDrivers.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < this.potentialDrivers.size(); i++) {
+            if (!this.potentialDrivers.get(i).equals(request.potentialDrivers.get(i))) {
+                return false;
+            }
+        }
+
+        return (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
+                && ((this.myDriver.equals(request.getMyDriver()))) &&
+                (this.startLocation.equals(request.getStartLocation())) &&
+                (this.endLocation.equals(request.getEndLocation())) &&
+                (this.getStartAddress().equals(request.getStartAddress())) &&
+                (this.getEndAddress().equals(request.getEndAddress())) &&
+                (this.elasticStart.equals(request.getElasticStart())) &&
+                (this.elasticEnd.equals(request.getElasticEnd())) &&
+                (this.state.equals(request.getState()));
     }
 
     public Double getFee() {

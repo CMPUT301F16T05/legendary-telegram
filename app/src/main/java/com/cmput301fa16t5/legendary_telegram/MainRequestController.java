@@ -46,6 +46,7 @@ public class MainRequestController {
      * @return True if request was clicked as Driver. False if Rider.
      */
     public boolean clickedARequest(int position) {
+        centralCommand.pingTheServer();
         return centralCommand.selectCurrentRequest(position);
     }
 

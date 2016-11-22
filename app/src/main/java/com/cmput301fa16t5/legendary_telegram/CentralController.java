@@ -3,6 +3,7 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ public class CentralController {
         return ourInstance;
     }
     private CentralController() {
+        this.myObs = new ArrayObserver(this);
     }
 
     private User currentUser = null;
@@ -236,6 +238,15 @@ public class CentralController {
             e.printStackTrace();
         }
 
+        /**
+         * This is Keith.
+         * I added in this.
+         * To see if we really got nothing.
+         * Or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            gotRequest.add(new Request(null, null, null));
+        }
         return gotRequest;
     }
 
@@ -341,15 +352,8 @@ public class CentralController {
      * @return True if Driver, false if Rider.
      */
     public boolean selectCurrentRequest(int index) {
-        if (this.currentUser.askForMode()) {
-            this.currentUser.getMyDriver().setCurrentRequest(index);
-            return true;
-        }
-
-        else {
-            this.currentUser.getMyRider().setCurrentRequest(index);
-            return false;
-        }
+        this.currentUser.getMyCurrentMode().setCurrentRequest(index);
+        return this.currentUser.askForMode();
     }
 
 
@@ -394,13 +398,27 @@ public class CentralController {
      * @param adapt ArrayAdapter to be added.
      */
     public void addArrayAdapter(ArrayAdapter adapt) {
-        if (this.myObs == null) {
-            this.myObs = new ArrayObserver(this);
-        }
         this.myObs.addAdapter(adapt);
     }
 
     public void removeArrayAdapter(ArrayAdapter adapt) {
         this.myObs.removeAdapter(adapt);
     }
+
+    /**
+     * Makes a toast based on changes occuring in the program independantly of the
+     * user activities (mostly updates for requests coming in)
+     * @param message Message to be toasted.
+     */
+    public void nonActivityToast(String message) {
+        Toast.makeText(myCFact.getGsonContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Ping the server for updates
+     */
+    public void pingTheServer() {
+        this.myObs.onButtonPress();
+    }
+
 }

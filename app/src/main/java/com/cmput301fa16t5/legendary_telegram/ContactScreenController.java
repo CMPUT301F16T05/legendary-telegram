@@ -67,11 +67,11 @@ public class ContactScreenController {
      */
     public String setButtonText() {
         if (isDriverOrRider()) {
-            if (requestOfFocus.getState() == RequestEnum.acceptedADriver) {
+            if (requestOfFocus.getState().equals(RequestEnum.acceptedADriver)) {
                 return "Attempt to Commit";
             }
 
-            else if (requestOfFocus.getState() != RequestEnum.driverHasCommitted) {
+            else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
                 return "Accept Request";
             }
 
@@ -88,20 +88,22 @@ public class ContactScreenController {
      */
     public String commitPress() {
         if (isDriverOrRider()) {
-            if (requestOfFocus.getState() == RequestEnum.acceptedADriver) {
+            if (requestOfFocus.getState().equals(RequestEnum.acceptedADriver)) {
                 if (centralCommand.getCurrentUser().getMyDriver().checkIfPicked()) {
                     requestOfFocus.commitToRequest();
                     centralCommand.updateRequest(requestOfFocus);
                     centralCommand.saveCurrentUser();
+                    centralCommand.pingTheServer();
                     return "You've committed to this request. Get going!";
                 }
                 return "Rider has picked a different Driver";
             }
 
-            else if (requestOfFocus.getState() != RequestEnum.driverHasCommitted) {
+            else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
                 requestOfFocus.addADriver(centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
+                centralCommand.pingTheServer();
                 return "You've accepted this Request. Wait to see if you are selected.";
             }
 
@@ -112,6 +114,7 @@ public class ContactScreenController {
             requestOfFocus.acceptADriver(index);
             centralCommand.updateRequest(requestOfFocus);
             centralCommand.saveCurrentUser();
+            centralCommand.pingTheServer();
             return "Driver Accepted.";
         }
     }

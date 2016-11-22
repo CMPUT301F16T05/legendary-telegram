@@ -42,6 +42,7 @@ public class RequestStatusController {
         ElasticSearchController.DeleteRequestsTask delRequest = new ElasticSearchController.DeleteRequestsTask();
         delRequest.execute(cancelledRequest);
         centralCommand.saveCurrentUser();
+        centralCommand.pingTheServer();
     }
 
     public void removeAdapter(ArrayAdapter adapt) {

@@ -28,14 +28,6 @@ public class Driver extends RiderDriverParent {
     }
 
     /**
-     * Called by user when it gets a list from ESearch.
-     * @param openRequests Request ArrayList
-     */
-    public void setOpenRequests(ArrayList<Request> openRequests) {
-        this.openRequests = openRequests;
-    }
-
-    /**
      * Called when a User clicks on a Request object, as a Driver,
      * that they would like to accept.
      * @param index The index in an ArrayAdapter
@@ -45,7 +37,6 @@ public class Driver extends RiderDriverParent {
         this.cardToRequest = me;
         this.currentRequest = this.openRequests.get(index);
         this.currentRequest.addADriver(this.cardToRequest);
-        this.currentRequest.setOnServer(false);
     }
 
     /**

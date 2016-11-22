@@ -51,7 +51,7 @@ public class IdentificationCard {
      * @param card: Another card to be compared.
      * @return True if a match, false otherwise.
      */
-    public boolean isThisMe(IdentificationCard card) {
+    public boolean equals(IdentificationCard card) {
         return ((this.name.equals(card.getName())) &&
                 this.phone.equals(card.getPhone()) &&
                 this.email.equals(card.getEmail()));
