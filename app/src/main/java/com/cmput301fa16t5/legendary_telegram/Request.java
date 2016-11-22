@@ -153,6 +153,10 @@ public class Request {
     @Override
     public String toString() {
 
+        if (this.state == null) {
+            return "A Request with a null state...";
+        }
+
         String stringFee = "$" + String.format(Locale.CANADA, "%.2f", this.fee);
         switch (this.state) {
 
@@ -167,6 +171,7 @@ public class Request {
 
             case driverHasCommitted:
                 return this.id + "\n" + stringFee + "\n" + myDriver.getName() + " has committed.";
+
         }
         return "A Request with no state!";
     }
