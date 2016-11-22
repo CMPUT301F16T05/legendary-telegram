@@ -4,8 +4,6 @@ package com.cmput301fa16t5.legendary_telegram;
  * Enum describing the states of Request
  *
  * Request is initially made set to openRequest.
- * If the initial post to ElasticSearch fails,
- * it will be set to pendingUpload.
  *
  * hasADriver is the state it takes when it is accepting Drivers.
  *
@@ -19,7 +17,6 @@ package com.cmput301fa16t5.legendary_telegram;
  */
 
 public enum RequestEnum {
-    pendingUpload,
     openRequest,
     hasADriver,
     acceptedADriver,

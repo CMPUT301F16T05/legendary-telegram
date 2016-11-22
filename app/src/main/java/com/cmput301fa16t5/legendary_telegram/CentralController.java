@@ -144,6 +144,7 @@ public class CentralController {
             }
         }
 
+        saveCurrentUser();
         if (isGood == null){
             Log.d("ESCErr", "Major error occurred in addRequests wrapper");
             isGood = Boolean.FALSE;
@@ -177,6 +178,7 @@ public class CentralController {
                 isGood = Boolean.FALSE;
                 Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
+            r.setOnServer(isGood);
         }
 
         if (isGood == null){
@@ -369,13 +371,12 @@ public class CentralController {
      * @param positionPair ArrayList containing two coordinates.
      */
     public void createRequest(ArrayList<LatLng> positionPair) {
-        // Rider creates srequest
         IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
-        rToUpload.setOnServer(addNewRequest(rToUpload));
         saveCurrentUser();
+        rToUpload.setOnServer(addNewRequest(rToUpload));
     }
 
     /**

@@ -79,23 +79,15 @@ public class ArrayObserver {
 
         // We only bother if the Rider/Driver lists have any content in them.
         if (!centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
-//            ArrayObserver.NotificationUpdate riderUpdate = new ArrayObserver.NotificationUpdate();
-//            riderUpdate.execute(centralCommand.getCurrentUser().getMyRider());
             doItSaysPalpatine(centralCommand.getCurrentUser().getMyRider());
         }
 
         if (!centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
-//            ArrayObserver.NotificationUpdate driverUpdate = new ArrayObserver.NotificationUpdate();
-//            driverUpdate.execute(centralCommand.getCurrentUser().getMyDriver());
             doItSaysPalpatine(centralCommand.getCurrentUser().getMyDriver());
         }
     }
 
-    /**
-     * Takes in a RiderDriverParent and updates them, performing all the calculations in it's
-     * doInBackground function.
-     */
-//    private class NotificationUpdate extends AsyncTask<RiderDriverParent, Void, Void> {
+
 
         /**
          * Checks if any of the existing requests in a RiderDriverParent's ArrayList are
@@ -108,89 +100,26 @@ public class ArrayObserver {
          *   The RiderDriverParent (Rider or Driver) with a list to update
          * @return Nothing.
          */
-//        @Override
-//        protected Void doInBackground(RiderDriverParent... rdp) {
-//
-//            RiderDriverParent myOperand = rdp[0];
-//            ArrayList<Request> requests = myOperand.getOpenRequests();
-//
-//            // Check if any existing requests in the list are not on the server in their updated
-//            // forms ans rectify.
-//            for (Request r: requests) {
-//                if (!r.isOnServer()) {
-//                    r.setOnServer(centralCommand.updateRequest(r));
-//                }
-//            }
-//
-//            // If we couldn't put a request not on the server on the server, just stop. Internet or
-//            // Hindle's computer isn't working :P
-//            for (Request r: requests) {
-//                if (!r.isOnServer()) {
-//                    return null;
-//                }
-//            }
-//
-//            // Get the updated Requests.
-//            //ArrayList<Request> newList = centralCommand.getRequestsByID(myOperand.getIDArray());
-//            String[] idList = myOperand.getIDArray();
-//            ArrayList<Request> newList = new ArrayList<>();
-//
-//            ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
-//            for (String ID: idList) {
-//                try{
-//                    Request gotRequest = getRequestsTask.execute(ElasticSearchQueries.ID, idList[i]);
-//                }
-//            }
-//
-//            // We didn't get anything. Stop.
-//            if ((newList.size() == 1) && (newList.get(0).getMyRider() == null)) {
-//                return null;
-//            }
-//
-//            // The size is different. Clearly at least one of them has been deleted (and therefore
-//            // changed). So we must update.
-//            else if (newList.size() < requests.size()) {
-//                myOperand.setOpenRequests(newList);
-//                sendUpdateNotification(myOperand);
-//            }
-//
-//            // The size is the same. Are they updated with new info? Or the same as the instances
-//            // currently in store. We must check. If one is different, it's enough to issue a
-//            // notification
-//            else {
-//                for (int i = 0; i < requests.size(); i++) {
-//                    if (!requests.get(i).equals(newList.get(i))) {
-//                        myOperand.setOpenRequests(newList);
-//                        sendUpdateNotification(myOperand);
-//                        return null;
-//                    }
-//                }
-//            }
-//
-//            return null;
-//        }
-//
-//
     public void doItSaysPalpatine(RiderDriverParent myOperand) {
 
         //RiderDriverParent myOperand = rdp[0];
         ArrayList<Request> requests = myOperand.getOpenRequests();
 
-//        // Check if any existing requests in the list are not on the server in their updated
-//        // forms ans rectify.
-//        for (Request r : requests) {
-//            if (!r.isOnServer()) {
-//                r.setOnServer(centralCommand.updateRequest(r));
-//            }
-//        }
-//
-//        // If we couldn't put a request not on the server on the server, just stop. Internet or
-//        // Hindle's computer isn't working :P
-//        for (Request r : requests) {
-//            if (!r.isOnServer()) {
-//                return;
-//            }
-//        }
+        // Check if any existing requests in the list are not on the server in their updated
+        // forms ans rectify.
+        for (Request r : requests) {
+            if (!r.isOnServer()) {
+                r.setOnServer(centralCommand.updateRequest(r));
+            }
+        }
+
+        // If we couldn't put a request not on the server on the server, just stop. Internet or
+        // Hindle's computer isn't working :P
+        for (Request r : requests) {
+            if (!r.isOnServer()) {
+                return;
+            }
+        }
 
         // Get the updated Requests.
         //ArrayList<Request> newList = centralCommand.getRequestsByID(myOperand.getIDArray());
@@ -230,6 +159,5 @@ public class ArrayObserver {
                 }
             }
         }
-        return;
     }
 }

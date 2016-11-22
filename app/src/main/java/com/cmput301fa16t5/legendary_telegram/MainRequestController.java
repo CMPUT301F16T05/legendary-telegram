@@ -12,6 +12,7 @@ public class MainRequestController {
 
     public MainRequestController() {
         centralCommand = CentralController.getInstance();
+        centralCommand.pingTheServer();
     }
 
     /**
@@ -19,6 +20,7 @@ public class MainRequestController {
      * @return
      */
     public boolean setUserAsDriver(){
+        centralCommand.pingTheServer();
         return centralCommand.canBeDriver();
     }
 
@@ -26,6 +28,7 @@ public class MainRequestController {
      * Sets user as Rider and saves to disk
      */
     public void setUserAsRider(){
+        centralCommand.pingTheServer();
         centralCommand.setUserRider();
     }
 
@@ -37,7 +40,6 @@ public class MainRequestController {
     public ArrayAdapter<Request> setRequestAdapter(MainRequestActivity activity) {
         ArrayAdapter<Request> adapt = new ArrayAdapter<>(activity, R.layout.request_items, centralCommand.getRequests());
         centralCommand.addArrayAdapter(adapt);
-        centralCommand.pingTheServer();
         return adapt;
     }
 

@@ -63,7 +63,7 @@ public class Request {
         // We start assuming ESearch is going to work and switch to false/pending upload
         // in the event that our initial upload fails.
         this.onServer = false;
-        this.state = RequestEnum.pendingUpload;
+        this.state = RequestEnum.openRequest;
 
         //parse the server friendly locations
         this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
@@ -168,8 +168,7 @@ public class Request {
             case driverHasCommitted:
                 return this.id + "\n" + stringFee + "\n" + myDriver.getName() + " has committed.";
         }
-        // The default to pendingUpload.
-        return "New Request Pending Upload" + "\n" + stringFee;
+        return "A Request with no state!";
     }
 
     public Boolean isOnServer() {
@@ -177,14 +176,11 @@ public class Request {
     }
 
     /**
-     * Called when Request initially put on Server.
-     * @param onServer Value to set OnServer variable.
+     * Called when Request is put on/updates server
+     * @param newOnServer Value to set OnServer variable.
      */
-    public void setOnServer(Boolean onServer) {
-        if (state == RequestEnum.pendingUpload && onServer) {
-            state = RequestEnum.openRequest;
-        }
-        this.onServer = onServer;
+    public void setOnServer(Boolean newOnServer) {
+        this.onServer = newOnServer;
     }
 
     /**

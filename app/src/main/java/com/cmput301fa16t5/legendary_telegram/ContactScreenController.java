@@ -5,6 +5,7 @@ package com.cmput301fa16t5.legendary_telegram;
  * See ContactScreenActivity.
  *
  * The guts of said activity, like where a function is called to initiate a phone call, go here.
+ * This class, more than others, needs serious refactoring.
  */
 
 public class ContactScreenController {
@@ -78,6 +79,10 @@ public class ContactScreenController {
             return null;
         }
 
+        else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
+            return "Complete Request";
+        }
+
         return "Accept Driver";
     }
 
@@ -99,13 +104,21 @@ public class ContactScreenController {
             }
 
             else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
-                requestOfFocus.addADriver(centralCommand.generateDriverCard());
+                centralCommand.getCurrentUser().getMyDriver().acceptARequest(index, centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
                 return "You've accepted this Request. Wait to see if you are selected.";
             }
 
             return "Rider has committed Driver already.";
+        }
+
+        else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
+
+            centralCommand.deleteRequests(centralCommand.getCurrentUser().getMyRider().
+                    removeOrComplete());
+            centralCommand.saveCurrentUser();
+            return "Request Completed. Pay the man.";
         }
 
         else {
