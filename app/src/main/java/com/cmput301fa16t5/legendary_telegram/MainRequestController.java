@@ -12,6 +12,7 @@ public class MainRequestController {
 
     public MainRequestController() {
         centralCommand = CentralController.getInstance();
+        centralCommand.pingTheServer();
     }
 
     /**
@@ -19,6 +20,7 @@ public class MainRequestController {
      * @return
      */
     public boolean setUserAsDriver(){
+        centralCommand.pingTheServer();
         return centralCommand.canBeDriver();
     }
 
@@ -26,6 +28,7 @@ public class MainRequestController {
      * Sets user as Rider and saves to disk
      */
     public void setUserAsRider(){
+        centralCommand.pingTheServer();
         centralCommand.setUserRider();
     }
 

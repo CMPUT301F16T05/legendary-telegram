@@ -3,11 +3,13 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by keith on 11/2/2016.
@@ -26,6 +28,7 @@ public class CentralController {
         return ourInstance;
     }
     private CentralController() {
+        this.myObs = new ArrayObserver(this);
     }
 
     private User currentUser = null;
@@ -141,6 +144,7 @@ public class CentralController {
             }
         }
 
+        saveCurrentUser();
         if (isGood == null){
             Log.d("ESCErr", "Major error occurred in addRequests wrapper");
             isGood = Boolean.FALSE;
@@ -174,6 +178,7 @@ public class CentralController {
                 isGood = Boolean.FALSE;
                 Log.i("ESCErr","Tried to update something that wasn't on the server");
             }
+            r.setOnServer(isGood);
         }
 
         if (isGood == null){
@@ -236,6 +241,21 @@ public class CentralController {
             e.printStackTrace();
         }
 
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * This is Keith.
+         * I added in this.
+         * To see if we really got nothing.
+         * Or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            gotRequest.add(new Request(null, null, null));
+        }
         return gotRequest;
     }
 
@@ -341,15 +361,8 @@ public class CentralController {
      * @return True if Driver, false if Rider.
      */
     public boolean selectCurrentRequest(int index) {
-        if (this.currentUser.askForMode()) {
-            this.currentUser.getMyDriver().setCurrentRequest(index);
-            return true;
-        }
-
-        else {
-            this.currentUser.getMyRider().setCurrentRequest(index);
-            return false;
-        }
+        this.currentUser.getMyCurrentMode().setCurrentRequest(index);
+        return this.currentUser.askForMode();
     }
 
 
@@ -358,13 +371,12 @@ public class CentralController {
      * @param positionPair ArrayList containing two coordinates.
      */
     public void createRequest(ArrayList<LatLng> positionPair) {
-        // Rider creates srequest
         IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
                 positionPair.get(0), positionPair.get(1));
-        addNewRequest(rToUpload);
         saveCurrentUser();
+        rToUpload.setOnServer(addNewRequest(rToUpload));
     }
 
     /**
@@ -394,13 +406,27 @@ public class CentralController {
      * @param adapt ArrayAdapter to be added.
      */
     public void addArrayAdapter(ArrayAdapter adapt) {
-        if (this.myObs == null) {
-            this.myObs = new ArrayObserver(this);
-        }
         this.myObs.addAdapter(adapt);
     }
 
     public void removeArrayAdapter(ArrayAdapter adapt) {
         this.myObs.removeAdapter(adapt);
     }
+
+    /**
+     * Makes a toast based on changes occuring in the program independantly of the
+     * user activities (mostly updates for requests coming in)
+     * @param message Message to be toasted.
+     */
+    public void nonActivityToast(String message) {
+        Toast.makeText(myCFact.getGsonContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Ping the server for updates
+     */
+    public void pingTheServer() {
+        this.myObs.onButtonPress();
+    }
+
 }

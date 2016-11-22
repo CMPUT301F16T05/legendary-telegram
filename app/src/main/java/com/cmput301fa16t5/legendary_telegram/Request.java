@@ -46,6 +46,7 @@ public class Request {
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
 
+
     public Request(IdentificationCard me, LatLng start, LatLng end) {
         this.id = null;
         this.myRider = me;
@@ -56,10 +57,13 @@ public class Request {
         this.startAddress = "";     //
         this.endAddress = "";       //
         //////////////////////////////
-        this.state = RequestEnum.pendingUpload;
         this.potentialDrivers = new ArrayList<IdentificationCard>();
         this.computeEstimate();
+
+        // We start assuming ESearch is going to work and switch to false/pending upload
+        // in the event that our initial upload fails.
         this.onServer = false;
+        this.state = RequestEnum.openRequest;
 
         //parse the server friendly locations
         this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
@@ -75,6 +79,11 @@ public class Request {
      * to get from Lat/Long to kilometers
      */
     public void computeEstimate() {
+
+        if ((startLocation == null) || (endLocation == null)) {
+            return;
+        }
+
         Double latDegToKM = (111132.92 - 559.82*Math.cos(2*startLocation.latitude)
             + 1.175*Math.cos(4*startLocation.latitude) - 0.0023*Math.cos(6*startLocation.latitude)) /
                 1000;
@@ -100,9 +109,11 @@ public class Request {
      * @param newDriver: Card of the new Driver.
      */
     public void addADriver(IdentificationCard newDriver) {
-        this.potentialDrivers.add(newDriver);
-        this.state = RequestEnum.hasADriver;
-        this.setOnServer(false);
+        if (state.equals(RequestEnum.openRequest) || state.equals(RequestEnum.hasADriver)) {
+            this.potentialDrivers.add(newDriver);
+            this.state = RequestEnum.hasADriver;
+            this.setOnServer(false);
+        }
     }
 
     /**
@@ -123,7 +134,7 @@ public class Request {
         if (this.myDriver == null) {
             return false;
         }
-        return this.myDriver.isThisMe(card);
+        return this.myDriver.equals(card);
     }
 
     /**
@@ -131,6 +142,7 @@ public class Request {
      */
     public void commitToRequest() {
         this.state = RequestEnum.driverHasCommitted;
+        this.setOnServer(false);
     }
 
     /**
@@ -140,6 +152,10 @@ public class Request {
      */
     @Override
     public String toString() {
+
+        if (this.state == null) {
+            return "A Request with a null state...";
+        }
 
         String stringFee = "$" + String.format(Locale.CANADA, "%.2f", this.fee);
         switch (this.state) {
@@ -155,9 +171,9 @@ public class Request {
 
             case driverHasCommitted:
                 return this.id + "\n" + stringFee + "\n" + myDriver.getName() + " has committed.";
+
         }
-        // The default to pendingUpload.
-        return "New Request Pending Upload" + "\n" + stringFee;
+        return "A Request with no state!";
     }
 
     public Boolean isOnServer() {
@@ -165,15 +181,36 @@ public class Request {
     }
 
     /**
-     * Called when Request initially put on Server.
-     * @param onServer Value to set OnServer variable.
+     * Called when Request is put on/updates server
+     * @param newOnServer Value to set OnServer variable.
      */
-    public void setOnServer(Boolean onServer) {
-        if (state == RequestEnum.pendingUpload && onServer) {
-            state = RequestEnum.openRequest;
-        }
-        this.onServer = onServer;
+    public void setOnServer(Boolean newOnServer) {
+        this.onServer = newOnServer;
     }
+
+    /**
+     * Confirms if the object is a request, and if it is, passes it to
+     * equalsReq for further processing
+     * @param request Request to be passed in.
+     * @return True if a Request with matching parameters
+     */
+    public boolean equals(Request request) {
+
+        if (this.potentialDrivers.size() != request.potentialDrivers.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < this.potentialDrivers.size(); i++) {
+            if (!this.potentialDrivers.get(i).equals(request.potentialDrivers.get(i))) {
+                return false;
+            }
+        }
+
+        return (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
+                && (this.state.equals(request.getState()));
+
+    }
+
 
     public Double getFee() {
         return fee;

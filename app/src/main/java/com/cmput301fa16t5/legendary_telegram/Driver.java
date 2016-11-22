@@ -19,19 +19,12 @@ public class Driver extends RiderDriverParent {
     private IdentificationCard cardToRequest;
 
     /**
-     * Constructor does not include instantiation of ArrayList
-     * Because the arraylist should be provided by Map+ESearch.
+     * Even though we'll be getting ArrayLists from ESearch,
+     * we include one because we need it to avoid a NullPointerException in MainRequestActivity.
      */
     public Driver() {
         super();
-    }
-
-    /**
-     * Called by user when it gets a list from ESearch.
-     * @param openRequests Request ArrayList
-     */
-    public void setOpenRequests(ArrayList<Request> openRequests) {
-        this.openRequests = openRequests;
+        openRequests = new ArrayList<>();
     }
 
     /**
@@ -44,7 +37,6 @@ public class Driver extends RiderDriverParent {
         this.cardToRequest = me;
         this.currentRequest = this.openRequests.get(index);
         this.currentRequest.addADriver(this.cardToRequest);
-        this.currentRequest.setOnServer(false);
     }
 
     /**

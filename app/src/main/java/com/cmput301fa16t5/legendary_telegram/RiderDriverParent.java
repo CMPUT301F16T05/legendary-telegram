@@ -40,4 +40,26 @@ public class RiderDriverParent {
     public ArrayList<Request> getOpenRequests() {
         return openRequests;
     }
+
+    /**
+     * Called by user when it gets a list from ESearch.
+     * @param openRequests Request ArrayList
+     */
+    public void setOpenRequests(ArrayList<Request> openRequests) {
+        this.openRequests = openRequests;
+    }
+
+    /**
+     * Gets the IDs of all Open Requests.
+     * Used by ArrayObserver for ElasticSearch update downloads.
+     * @return A String[] containing the IDs of all requests.
+     */
+    public String[] getIDArray() {
+        String[] myIDs = new String[this.openRequests.size()];
+
+        for (int i = 0; i < this.openRequests.size(); i++) {
+            myIDs[i] = this.openRequests.get(i).getId();
+        }
+        return myIDs;
+    }
 }

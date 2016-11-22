@@ -5,6 +5,7 @@ package com.cmput301fa16t5.legendary_telegram;
  * See ContactScreenActivity.
  *
  * The guts of said activity, like where a function is called to initiate a phone call, go here.
+ * This class, more than others, needs serious refactoring.
  */
 
 public class ContactScreenController {
@@ -67,15 +68,19 @@ public class ContactScreenController {
      */
     public String setButtonText() {
         if (isDriverOrRider()) {
-            if (requestOfFocus.getState() == RequestEnum.acceptedADriver) {
+            if (requestOfFocus.getState().equals(RequestEnum.acceptedADriver)) {
                 return "Attempt to Commit";
             }
 
-            else if (requestOfFocus.getState() != RequestEnum.driverHasCommitted) {
+            else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
                 return "Accept Request";
             }
 
             return null;
+        }
+
+        else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
+            return "Complete Request";
         }
 
         return "Accept Driver";
@@ -88,7 +93,7 @@ public class ContactScreenController {
      */
     public String commitPress() {
         if (isDriverOrRider()) {
-            if (requestOfFocus.getState() == RequestEnum.acceptedADriver) {
+            if (requestOfFocus.getState().equals(RequestEnum.acceptedADriver)) {
                 if (centralCommand.getCurrentUser().getMyDriver().checkIfPicked()) {
                     requestOfFocus.commitToRequest();
                     centralCommand.updateRequest(requestOfFocus);
@@ -98,14 +103,22 @@ public class ContactScreenController {
                 return "Rider has picked a different Driver";
             }
 
-            else if (requestOfFocus.getState() != RequestEnum.driverHasCommitted) {
-                requestOfFocus.addADriver(centralCommand.generateDriverCard());
+            else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
+                centralCommand.getCurrentUser().getMyDriver().acceptARequest(index, centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
                 return "You've accepted this Request. Wait to see if you are selected.";
             }
 
             return "Rider has committed Driver already.";
+        }
+
+        else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
+
+            centralCommand.deleteRequests(centralCommand.getCurrentUser().getMyRider().
+                    removeOrComplete());
+            centralCommand.saveCurrentUser();
+            return "Request Completed. Pay the man.";
         }
 
         else {

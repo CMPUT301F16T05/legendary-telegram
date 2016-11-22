@@ -12,7 +12,7 @@ public class Rider extends RiderDriverParent {
 
     public Rider() {
         super();
-        openRequests = new ArrayList<Request>();
+        openRequests = new ArrayList<>();
     }
 
     /**
