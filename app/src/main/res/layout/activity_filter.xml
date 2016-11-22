@@ -9,49 +9,114 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmput301fa16t5.legendary_telegram.FilterActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter And Search"
+        android:id="@+id/filter_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Location:"
-        android:id="@+id/locationTV"
+        android:id="@+id/location"
         android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keyword:"
+        android:id="@+id/keywordTV"
+        android:layout_below="@+id/location"
         android:layout_alignParentStart="true"
         android:textSize="25dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Price:"
-        android:id="@+id/priceTV"
-        android:textSize="25dp"
-        android:layout_below="@+id/locationTV"
+        android:text="Max Distance(km):"
+        android:id="@+id/max_distance"
+        android:layout_below="@+id/keywordTV"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="28dp" />
+        android:textSize="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min Distance(km):"
+        android:id="@+id/min_distance"
+        android:layout_below="@+id/max_distance"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Max Price:"
+        android:id="@+id/max_price"
+        android:layout_below="@+id/min_distance"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min Price:"
+        android:id="@+id/min_price"
+        android:layout_below="@+id/max_price"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/locationET"
-        android:layout_alignBottom="@+id/locationTV"
+        android:layout_alignBottom="@+id/location"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/locationTV" />
+        android:layout_toEndOf="@+id/location" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/priceET"
-        android:layout_alignBottom="@+id/priceTV"
+        android:id="@+id/keywordET"
+        android:layout_alignBottom="@+id/keywordTV"
         android:layout_alignEnd="@+id/locationET"
-        android:layout_toEndOf="@+id/priceTV" />
+        android:layout_toEndOf="@+id/location" />
 
-    <Button
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Filter &amp; Search"
-        android:id="@+id/filter_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/priceET" />
+        android:id="@+id/max_distanceET"
+        android:layout_above="@+id/min_distance"
+        android:layout_alignEnd="@+id/keywordET"
+        android:layout_toEndOf="@+id/max_distance" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/min_distanceET"
+        android:layout_alignBottom="@+id/min_distance"
+        android:layout_alignEnd="@+id/max_distanceET"
+        android:layout_toEndOf="@+id/min_distance" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/max_priceET"
+        android:layout_alignBottom="@+id/max_price"
+        android:layout_alignEnd="@+id/min_distanceET"
+        android:layout_toEndOf="@+id/max_price" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/min_priceET"
+        android:layout_alignBottom="@+id/min_price"
+        android:layout_alignEnd="@+id/max_priceET"
+        android:layout_toEndOf="@+id/min_price" />
+
+
 </RelativeLayout>
