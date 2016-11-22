@@ -161,6 +161,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        // Click search Button
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do something after it is clicked
+                String startAddress = startEditText.getText().toString();
+                String endAddress = endEditText.getText().toString();
+
+            }
+        });
+
         // Click ok button to return start and end points
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,14 +191,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 myController.sendCoordinates(positionPair);
                 finish();
-            }
-        });
-
-        // Click search Button
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Do something after it is clicked
             }
         });
     }
