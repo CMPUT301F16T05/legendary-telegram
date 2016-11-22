@@ -31,4 +31,11 @@ public class MapController {
             centralCommand.createRequest(positionPair);
         }
     }
+
+    public String createURl(String startAddress, String endAddress) {
+        // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=" + startAddress
+                + "&destination=" + endAddress // + "&mode=driving" (Default mode is driving)
+                + "&key=" + R.string.google_maps_key;
+    }
 }
