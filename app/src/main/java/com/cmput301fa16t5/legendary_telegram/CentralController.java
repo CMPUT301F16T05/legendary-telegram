@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by keith on 11/2/2016.
@@ -235,6 +236,12 @@ public class CentralController {
             gotRequest = getRequestsTask.execute(newSearchItems).get();
         }
         catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

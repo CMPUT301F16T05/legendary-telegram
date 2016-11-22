@@ -62,8 +62,8 @@ public class Request {
 
         // We start assuming ESearch is going to work and switch to false/pending upload
         // in the event that our initial upload fails.
-        this.onServer = true;
-        this.state = RequestEnum.openRequest;
+        this.onServer = false;
+        this.state = RequestEnum.pendingUpload;
 
         //parse the server friendly locations
         this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
@@ -181,8 +181,8 @@ public class Request {
      * @param onServer Value to set OnServer variable.
      */
     public void setOnServer(Boolean onServer) {
-        if (state == RequestEnum.openRequest && !onServer) {
-            state = RequestEnum.pendingUpload;
+        if (state == RequestEnum.pendingUpload && onServer) {
+            state = RequestEnum.openRequest;
         }
         this.onServer = onServer;
     }
