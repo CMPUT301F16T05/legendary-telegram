@@ -63,7 +63,7 @@ public class ElasticSearchControllerTest {
         assertTrue(newRequest.isOnServer());
         assertFalse(newRequest.getId() == null);
         assertTrue(isGood);
-        cleanUpRequests();
+        cleanUpRequests(newRequest);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ElasticSearchControllerTest {
         assertFalse(gotRequest.isEmpty());
         assertEquals(RequestEnum.driverHasCommitted, gotRequest.get(0).getState());
 
-        cleanUpRequests();
+        cleanUpRequests(newRequest);
     }
 
     @Test
@@ -286,6 +286,74 @@ public class ElasticSearchControllerTest {
         assertFalse(lettuce.getId() == null);
         assertTrue(corn.isOnServer());
         assertFalse(corn.getId() == null);
+
+        //"potato" test, expectation 1
+        ElasticSearchController.GetRequests getRequestsTaskPotato = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTaskPotato.execute(ElasticSearchQueries.KEYWORD, "potato").get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse(gotRequest.isEmpty());
+        assertEquals(1, gotRequest.size());
+
+        gotRequest.clear();
+        assertTrue(gotRequest.isEmpty());
+
+        //"please" test, expect 2
+        ElasticSearchController.GetRequests getRequestsTaskPlease = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTaskPlease.execute(ElasticSearchQueries.KEYWORD, "please").get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse(gotRequest.isEmpty());
+        assertEquals(2, gotRequest.size());
+
+        gotRequest.clear();
+        assertTrue(gotRequest.isEmpty());
+
+        //"fruit test", expect nothing
+        gotRequest.clear();
+        ElasticSearchController.GetRequests getRequestsTaskFruit = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTaskFruit.execute(ElasticSearchQueries.KEYWORD, "fruit").get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //KISS, Keep It Simple Stupid
+        try {
+            TimeUnit.SECONDS.sleep(sleepTimer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(gotRequest.isEmpty());
+
+        gotRequest.clear();
+        assertTrue(gotRequest.isEmpty());
+
+        cleanUpRequests(potato, lettuce, corn);
     }
 
     //Extra bonus of testing multiple returns of each test

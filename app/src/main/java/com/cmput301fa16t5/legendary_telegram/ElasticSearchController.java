@@ -168,7 +168,7 @@ public class ElasticSearchController {
                         q++;
                         break;
                     case ElasticSearchQueries.KEYWORD:
-                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"description\": \"" +
+                        query = "{\"from\": 0, \"size\": 10, \"query\": {\"match\": {\"description\": \"" +
                                 search_params[q] + "\"}}}";
                         break;
                     default:
