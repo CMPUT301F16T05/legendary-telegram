@@ -50,6 +50,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Button okButton;
     private Button searchButton;
+    private Button filterButton;
     private EditText startEditText;
     private EditText endEditText;
 
@@ -89,6 +90,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         okButton = (Button) findViewById(R.id.OkButton);
         searchButton = (Button) findViewById(R.id.SearchButton);
+        filterButton = (Button) findViewById(R.id.FilterButton);
         startEditText = (EditText) findViewById(R.id.StartEditText);
         endEditText = (EditText) findViewById(R.id.EndEditText);
 
@@ -182,8 +184,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
                     Log.d("End: ", end.toString());
+<<<<<<< Updated upstream
 //                    myController.sendCoordinates(positionPair);
 //                    finish();
+=======
+<<<<<<< HEAD
+                    //myController.sendCoordinates(positionPair);
+                    //finish();
+=======
+//                    myController.sendCoordinates(positionPair);
+//                    finish();
+>>>>>>> origin/master
+>>>>>>> Stashed changes
                 }
                 else {
                     positionPair = new ArrayList<LatLng>();
@@ -191,14 +203,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("Start: ", start.toString());
 
 
+<<<<<<< HEAD
+
+=======
                     //go to filter activity
 //                    Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
 //                    startActivity(filter_intent);
+<<<<<<< Updated upstream
+=======
+>>>>>>> origin/master
+>>>>>>> Stashed changes
                 }
 
                 myController.sendCoordinates(positionPair);
                 finish();
             }
         });
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do something about the filter
+                //go to filter activity
+                Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
+                startActivity(filter_intent);
+            }
+        });
+
     }
 }
