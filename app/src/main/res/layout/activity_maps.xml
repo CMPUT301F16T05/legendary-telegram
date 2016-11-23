@@ -13,32 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:context=".MapsActivity"
-        android:layout_above="@+id/SearchButton"
+        android:layout_above="@+id/OkButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/EndEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:background="@drawable/back"
-        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
-        android:id="@+id/StartEditText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/StartTextView"
-        android:hint=" Enter Start Location" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:background="@drawable/back"
-        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
-        android:id="@+id/EndEditText"
-        android:layout_below="@+id/StartEditText"
-        android:layout_alignStart="@+id/StartEditText"
-        android:layout_alignParentEnd="true"
-        android:hint=" Enter Destination" />
 
     <Button
         android:text="Ok"
@@ -50,16 +28,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/SearchButton" />
-
-    <Button
-        android:text="Search"
-        android:background="#4285f4"
-        android:textColor="#ffffff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/SearchButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
 
     <TextView
         android:text="End: "
@@ -85,6 +53,49 @@
         android:layout_alignBaseline="@+id/StartEditText"
         android:layout_alignBottom="@+id/StartEditText"
         android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/back"
+        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
+        android:id="@+id/StartEditText"
+        android:hint=" Enter Start Location"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/SearchButton"
+        android:layout_toEndOf="@+id/StartTextView" />
+
+    <Button
+        android:text="Search"
+        android:background="#4285f4"
+        android:textColor="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchButton"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/map"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/back"
+        android:inputType="text|textAutoCorrect|textAutoComplete|textPostalAddress"
+        android:id="@+id/EndEditText"
+        android:hint=" Enter Destination"
+        android:layout_below="@+id/StartEditText"
+        android:layout_alignStart="@+id/StartEditText"
+        android:layout_toStartOf="@+id/SearchButton" />
+
+    <Button
+        android:text="Filter"
+        android:background="@android:color/holo_purple"
+        android:textColor="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/FilterButton" />
 </RelativeLayout>
 
 
