@@ -11,6 +11,7 @@ public final class ElasticSearchQueries {
     public static final String GEODISTANCE = "GEODISTANCE QUERY";
     public static final String FEE = "fee";
     public static final String FEEPERKM = "perkm";
+    public static final String KEYWORD = "keyword";
 
     private ElasticSearchQueries() { }
 }

@@ -243,6 +243,51 @@ public class ElasticSearchControllerTest {
         cleanUpRequests(far, near1, near2);
     }
 
+    @Test
+    public void testGetRequestByKeyword(){
+        //Should not be case or location sensitive
+        //Should match whole string
+        //expectations:
+        //Looking for "potato" will return only potato
+        //Looking for "please" will return lettuce and corn
+        //Looking for "fruit" will return nothing
+        String potatoStr = "I want to get a potato";
+        String lettuceStr = "Please lettuce go buy something";
+        String cornStr = "I need to acquire corn, please. Oh and I need more potatoes as well";
+        Request potato = new Request(null, new LatLng(0, 0), new LatLng(0, 0), potatoStr);
+        Request lettuce = new Request(null, new LatLng(0, 0), new LatLng(0, 0), lettuceStr);
+        Request corn = new Request(null, new LatLng(0, 0), new LatLng(0, 0), cornStr);
+
+        ArrayList<Request> gotRequest = new ArrayList<>();
+        Boolean isGood = Boolean.FALSE;
+
+        //Ensure everything is initialized correctly
+        assertFalse(potato.isOnServer());
+        assertTrue(potato.getId() == null);
+        assertFalse(lettuce.isOnServer());
+        assertTrue(lettuce.getId() == null);
+        assertFalse(corn.isOnServer());
+        assertTrue(corn.getId() == null);
+        assertTrue(gotRequest.isEmpty());
+
+        ElasticSearchController.AddRequestsTask addRequestsTask = new ElasticSearchController.AddRequestsTask();
+        try{
+            isGood = addRequestsTask.execute(potato, lettuce, corn).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //The server wil grant an ID when added sucessfully
+        assertTrue(isGood);
+        assertTrue(potato.isOnServer());
+        assertFalse(potato.getId() == null);
+        assertTrue(lettuce.isOnServer());
+        assertFalse(lettuce.getId() == null);
+        assertTrue(corn.isOnServer());
+        assertFalse(corn.getId() == null);
+    }
+
     //Extra bonus of testing multiple returns of each test
     @Test
     public void testGetRequestByFee(){
