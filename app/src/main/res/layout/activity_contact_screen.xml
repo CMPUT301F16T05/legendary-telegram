@@ -66,4 +66,15 @@
         android:id="@+id/map_button"
         android:layout_above="@+id/commitButton"
         android:layout_centerHorizontal="true" />
+
+    <com.google.android.gms.maps.MapFragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailTextView"
+        android:id="@+id/contactMap"
+        android:layout_above="@+id/map_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

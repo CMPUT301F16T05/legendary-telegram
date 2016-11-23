@@ -9,6 +9,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 /**
  *  What this class is:
  *  1) Allows a Rider to accept a Driver.
@@ -26,8 +33,9 @@ import android.widget.Toast;
  *  to call or the addresses to email. It doesn't actually invoke the function call
  *  to call that number or make an email, that is left to ContactScreenController.
  */
-public class ContactScreenActivity extends AppCompatActivity {
+public class ContactScreenActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private GoogleMap mMap;
     private TextView infoTitle;
     private TextView infoDetail;
     private TextView phoneTxt;
@@ -41,6 +49,11 @@ public class ContactScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         myController = new ContactScreenController();
 
@@ -104,6 +117,16 @@ public class ContactScreenActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+
 
     /**
      * Fills out the views with appropriate information.
