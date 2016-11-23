@@ -184,35 +184,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
                     Log.d("End: ", end.toString());
-<<<<<<< Updated upstream
-//                    myController.sendCoordinates(positionPair);
-//                    finish();
-=======
-<<<<<<< HEAD
-                    //myController.sendCoordinates(positionPair);
-                    //finish();
-=======
-//                    myController.sendCoordinates(positionPair);
-//                    finish();
->>>>>>> origin/master
->>>>>>> Stashed changes
+
                 }
                 else {
                     positionPair = new ArrayList<LatLng>();
                     positionPair.add(start);
                     Log.d("Start: ", start.toString());
-
-
-<<<<<<< HEAD
-
-=======
-                    //go to filter activity
-//                    Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
-//                    startActivity(filter_intent);
-<<<<<<< Updated upstream
-=======
->>>>>>> origin/master
->>>>>>> Stashed changes
+                    
                 }
 
                 myController.sendCoordinates(positionPair);
