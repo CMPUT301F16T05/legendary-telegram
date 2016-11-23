@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -50,9 +51,9 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_screen);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        // Obtain the MapFragment and get notified when the map is ready to be used.
+        // Code from: http://stackoverflow.com/questions/36832035/nullpointerexception-at-mapfragment-getmapasync
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.ContactMap);
         mapFragment.getMapAsync(this);
 
         myController = new ContactScreenController();
