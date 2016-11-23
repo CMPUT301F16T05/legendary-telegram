@@ -149,7 +149,7 @@ public class ElasticSearchController {
                                 "        }\n" +
                                 "    }\n" +
                                 "}";
-                        //Needed because of the way fee queries will be added in
+                        //Increment needed because of the way fee queries will be added in
                         q++;
                         break;
                     case ElasticSearchQueries.FEEPERKM:
@@ -164,11 +164,16 @@ public class ElasticSearchController {
                                 "        }\n" +
                                 "    }\n" +
                                 "}";
-                        //Needed because of the way fee queries will be added in
+                        //Increment needed because of the way fee queries will be added in
                         q++;
                         break;
+                    case ElasticSearchQueries.KEYWORD:
+                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"description\": \"" +
+                                search_params[q] + "\"}}}";
+                        break;
                     default:
-                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" + queryType + "\": \"" + search_params[q] + "\"}}}";
+                        query = "{\"from\": 0, \"size\": 100, \"query\": {\"match\": {\"" +
+                                queryType + "\": \"" + search_params[q] + "\"}}}";
                         break;
                 }
 
