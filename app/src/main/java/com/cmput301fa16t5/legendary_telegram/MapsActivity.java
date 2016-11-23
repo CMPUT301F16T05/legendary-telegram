@@ -182,8 +182,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     positionPair.add(end);
                     Log.d("Start: ", start.toString());
                     Log.d("End: ", end.toString());
-                    myController.sendCoordinates(positionPair);
-                    finish();
+//                    myController.sendCoordinates(positionPair);
+//                    finish();
                 }
                 else {
                     positionPair = new ArrayList<LatLng>();
@@ -192,12 +192,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     //go to filter activity
-                    Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
-                    startActivity(filter_intent);
+//                    Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
+//                    startActivity(filter_intent);
                 }
 
-                //myController.sendCoordinates(positionPair);
-                //finish();
+                myController.sendCoordinates(positionPair);
+                finish();
             }
         });
     }
