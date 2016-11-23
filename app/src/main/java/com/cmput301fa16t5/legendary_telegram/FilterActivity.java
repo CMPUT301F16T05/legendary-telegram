@@ -8,7 +8,6 @@ import android.widget.EditText;
 public class FilterActivity extends AppCompatActivity {
 
     private EditText location_ET;
-    private EditText keyword_ET;
     private EditText max_distance_ET;
     private EditText min_distance_ET;
     private EditText max_price_ET;
@@ -22,14 +21,15 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
 
         location_ET = (EditText)findViewById(R.id.locationET);
-        keyword_ET = (EditText)findViewById(R.id.keywordET);
         max_distance_ET= (EditText)findViewById(R.id.max_distanceET);
         min_distance_ET = (EditText)findViewById(R.id.min_distanceET);
         max_price_ET = (EditText)findViewById(R.id.max_priceET);
         min_price_ET = (EditText)findViewById(R.id.min_priceET);
         filter_B = (Button)findViewById(R.id.filter_button);
 
+        String location = getIntent().getStringExtra("Location");
 
+        location_ET.setText(location);
 
     }
 }

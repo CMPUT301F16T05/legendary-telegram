@@ -28,20 +28,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Keyword:"
-        android:id="@+id/keywordTV"
-        android:layout_below="@+id/location"
-        android:layout_alignParentStart="true"
-        android:textSize="25dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Max Distance(km):"
         android:id="@+id/max_distance"
-        android:layout_below="@+id/keywordTV"
         android:layout_alignParentStart="true"
-        android:textSize="25dp"/>
+        android:textSize="25dp"
+        android:layout_below="@+id/location" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,18 +72,10 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/keywordET"
-        android:layout_alignBottom="@+id/keywordTV"
-        android:layout_alignEnd="@+id/locationET"
-        android:layout_toEndOf="@+id/location" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/max_distanceET"
         android:layout_above="@+id/min_distance"
-        android:layout_alignEnd="@+id/keywordET"
-        android:layout_toEndOf="@+id/max_distance" />
+        android:layout_toEndOf="@+id/max_distance"
+        android:layout_alignEnd="@+id/locationET" />
 
     <EditText
         android:layout_width="wrap_content"

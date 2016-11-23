@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.protocol.RequestUserAgentHC4;
+
 import java.util.ArrayList;
 
 /**
@@ -60,6 +62,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // View has the controller
     private MapController myController;
 
+    private Boolean backFromFilter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = getIntent();
         myController = new MapController();
         riderOrDriver = intent.getStringExtra("Map");
+        backFromFilter = false;
     }
 
 
@@ -203,10 +208,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 // Do something about the filter
                 //go to filter activity
+                String location_cordinate = new String();
+                backFromFilter = true;
                 Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
+                filter_intent.putExtra("Location", location_cordinate);
                 startActivity(filter_intent);
             }
         });
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (backFromFilter){
+            finish();
+        }
     }
 }
