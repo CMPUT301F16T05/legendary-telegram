@@ -10,16 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmput301fa16t5.legendary_telegram.UserProfileActivity">
 
-    <TextView
-        android:text="@string/NameET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/nameSettings"
-        android:layout_alignBottom="@+id/userNameSettings"
-        android:layout_toStartOf="@+id/userNameSettings" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,37 +17,19 @@
         android:ems="10"
         android:id="@+id/userNameSettings"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/emailSettings" />
+        android:layout_toEndOf="@+id/emailSettings"
+        android:layout_alignStart="@+id/userEmail" />
 
     <Button
         android:text="@string/checkIfExists"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/checkUsrName"
-        android:layout_alignBottom="@+id/userNameSettings"
-        android:layout_toEndOf="@+id/userNameSettings" />
-
-    <TextView
-        android:text="@string/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:id="@+id/emailSettings"
-        android:layout_alignBottom="@+id/userEmail"
-        android:layout_toStartOf="@+id/userPhone"
-        android:layout_alignTop="@+id/userEmail" />
-
-    <TextView
-        android:text="@string/phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:id="@+id/phoneSettings"
-        android:layout_alignBottom="@+id/userPhone"
-        android:layout_toStartOf="@+id/userEmail"
-        android:layout_alignTop="@+id/userPhone" />
+        android:layout_toEndOf="@+id/userNameSettings"
+        android:layout_above="@+id/userEmail"
+        style="@android:style/Widget.DeviceDefault.Button.Toggle" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -67,7 +39,8 @@
         android:id="@+id/userEmail"
         android:layout_below="@+id/userNameSettings"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/nameSettings" />
+        android:layout_toEndOf="@+id/emailSettings"
+        android:layout_alignStart="@+id/userPhone" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -80,15 +53,6 @@
         android:layout_toEndOf="@+id/vehicleSetting" />
 
 
-    <TextView
-        android:text="@string/vehicle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/vehicleSetting"
-        android:layout_below="@+id/phoneSettings"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/userVehicle" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,10 +64,50 @@
         android:layout_toEndOf="@+id/vehicleSetting" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/userSettingsMain"
-        android:layout_centerVertical="true"
+        android:hint="SAVE"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="@string/NameET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameSettings"
+        android:layout_alignBaseline="@+id/checkUsrName"
+        android:layout_alignBottom="@+id/checkUsrName"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/userNameSettings" />
+
+    <TextView
+        android:text="@string/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/emailSettings"
+        android:layout_alignBaseline="@+id/userEmail"
+        android:layout_alignBottom="@+id/userEmail"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/userPhone" />
+
+    <TextView
+        android:text="@string/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/phoneSettings"
+        android:layout_alignBaseline="@+id/userPhone"
+        android:layout_alignBottom="@+id/userPhone"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/vehicle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vehicleSetting"
+        android:layout_alignBaseline="@+id/userVehicle"
+        android:layout_alignBottom="@+id/userVehicle"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

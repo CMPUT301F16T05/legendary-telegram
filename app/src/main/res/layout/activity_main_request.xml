@@ -10,48 +10,52 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmput301fa16t5.legendary_telegram.MainRequestActivity">
 
-    <TextView
-        android:text="@string/mainReqScrTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/mainRequestTitle"
-        android:layout_toStartOf="@+id/settingsButton"
-        android:layout_alignBottom="@+id/settingsButton"
-        android:textAppearance="@android:style/TextAppearance.Large" />
-
-    <Button
-        android:text="@string/goToSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/settingsButton" />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/riderButton"
-        android:layout_below="@+id/mainRequestTitle"
-        android:id="@+id/mainRequestLV" />
-
-    <Button
-        android:text="@string/makeRequests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/riderButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/driverButton" />
+        android:id="@+id/mainRequestLV"
+        android:layout_below="@+id/settingsButton" />
 
     <Button
         android:text="@string/findRequests"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#4285f4"
+        android:textColor="#ffffff"
         android:id="@+id/driverButton"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_width="150dp" />
+
+    <Button
+        android:text="@string/makeRequests"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="#8ac337"
+        android:textColor="#ffffff"
+        android:id="@+id/riderButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:text="@string/mainReqScrTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainRequestTitle"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_alignBaseline="@+id/settingsButton"
+        android:layout_alignBottom="@+id/settingsButton"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/goToSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/settingsButton"
+        style="@android:style/Widget.Button.Transparent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/mainRequestTitle" />
 
 </RelativeLayout>
