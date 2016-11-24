@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 /**
  * Created by idrea on 2016/11/5.
+ * Tests to the User Class, not user stories in general.
  */
 
 public class UserTests {

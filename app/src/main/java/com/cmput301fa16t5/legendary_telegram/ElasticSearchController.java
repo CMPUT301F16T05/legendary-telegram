@@ -132,7 +132,7 @@ public class ElasticSearchController {
                                 "        \"filter\" : {\n" +
                                 "            \"geo_distance\" : {\n" +
                                 "                \"distance\" : \"2km\",\n" +
-                                "                \"elasticEnd\" : \""+search_params[q]+"\"\n" +
+                                "                \"elasticStart\" : \""+search_params[q]+"\"\n" +
                                 "            }\n" +
                                 "        }\n" +
                                 "}";
