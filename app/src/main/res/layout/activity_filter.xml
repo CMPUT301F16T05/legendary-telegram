@@ -9,12 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmput301fa16t5.legendary_telegram.FilterActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter And Search"
+        android:id="@+id/filter_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Location:"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/location"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -23,8 +28,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Max Distance(km):"
         android:id="@+id/max_distance"
         android:layout_alignParentStart="true"
@@ -34,8 +37,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Min Distance(km):"
         android:id="@+id/min_distance"
         android:layout_below="@+id/max_distance"
@@ -45,8 +46,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Max Price:"
         android:id="@+id/max_price"
         android:layout_below="@+id/min_distance"
@@ -56,8 +55,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Min Price:"
         android:id="@+id/min_price"
         android:layout_below="@+id/max_price"
@@ -103,16 +100,6 @@
         android:layout_alignBottom="@+id/min_price"
         android:layout_alignEnd="@+id/max_priceET"
         android:layout_toEndOf="@+id/min_price" />
-
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:background="#4285f4"
-        android:textColor="#ffffff"
-        android:text="Filter And Search"
-        android:id="@+id/filter_button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

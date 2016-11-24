@@ -18,6 +18,17 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/EndEditText" />
 
+    <Button
+        android:text="Ok"
+        android:background="#8ac337"
+        android:textColor="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OkButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/SearchButton" />
+
     <TextView
         android:text="End: "
         android:textSize="20dp"
@@ -85,16 +96,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/FilterButton" />
-
-    <Button
-        android:text="Ok"
-        android:background="#8ac337"
-        android:textColor="#ffffff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/OkButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
 
 
