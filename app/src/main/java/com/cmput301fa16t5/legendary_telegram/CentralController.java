@@ -351,7 +351,12 @@ public class CentralController {
      * @return An ArrayList of Identificationcards
      */
     public ArrayList<IdentificationCard> getCards() {
-        return currentUser.getMyRider().getCurrentRequest().getPotentialDrivers();
+        try {
+            return currentUser.getMyRider().getCurrentRequest().getPotentialDrivers();
+        }
+        catch (NullPointerException e) {
+            return new ArrayList<>();
+        }
     }
 
     /**

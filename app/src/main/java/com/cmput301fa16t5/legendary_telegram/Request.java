@@ -126,8 +126,8 @@ public class Request {
                 93.5*Math.cos(3*startLocation.longitude) + 0.118*Math.cos(5*startLocation.longitude))
                 / 1000;
 
-        double manhattanLat = Math.abs(startLocation.latitude-endLocation.latitude) * latDegToKM;
-        double manhattanLong = Math.abs(startLocation.longitude-endLocation.longitude) * longDegToKM;
+        double manhattanLat = Math.abs((startLocation.latitude-endLocation.latitude) * latDegToKM);
+        double manhattanLong = Math.abs((startLocation.longitude-endLocation.longitude) * longDegToKM);
 
         // $2.25 plus 80 cents on the kilometer
         this.fee = 2.25 + 0.8*(manhattanLat + manhattanLong);

@@ -19,7 +19,13 @@ public class RequestStatusController {
      * @return A string containing the ID.
      */
     public String getRequestName() {
-        return centralCommand.getCurrentUser().getMyRider().getCurrentRequest().getId();
+        try {
+            return centralCommand.getCurrentUser().getMyRider().getCurrentRequest().getId();
+        }
+        catch (NullPointerException e) {
+            centralCommand.pingTheServer();
+            return "Request Failed to Load. Restart App.";
+        }
     }
 
     /**
