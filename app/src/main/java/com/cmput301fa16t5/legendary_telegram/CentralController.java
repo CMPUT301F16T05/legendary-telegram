@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by keith on 11/2/2016.
- *
- * THIS CLASS IS A SINGLETON
+ * This class implements the Singleton pattern.
  * Only one exists in the system at any given time.
  * Does most of the work with GsonController and ESearchController.
  * Talks to the User class which controllers the Rider and Driver behaviour.

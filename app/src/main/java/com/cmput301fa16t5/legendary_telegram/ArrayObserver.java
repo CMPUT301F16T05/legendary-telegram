@@ -1,21 +1,26 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Purpose of this class is to hold the Requests of Rider and Driver and sync them with
  * the views in the activites while biting ElasticSearch's heel and asking "any new stuff"
- * @author keith
+ *
+ * This class implements... I guess you could argue the Observer Pattern, even though
+ * typically it only holds one view at a given time.
+ * @author kgmills
  */
 public class ArrayObserver {
 
     private CentralController centralCommand;
     private ArrayList<ArrayAdapter> myAdapters;
 
+    /**
+     * Constructor
+     * @param myC For establishing a connection to the Singleton
+     */
     public ArrayObserver(CentralController myC) {
         this.myAdapters = new ArrayList<>();
         this.centralCommand = myC;
@@ -69,7 +74,8 @@ public class ArrayObserver {
     }
 
     /**
-     * This function should be called typically when activities change.
+     * This function is called when MainRequestActivity runs it's onCreate and whenever
+     * the user goes to the Maps Activity.
      * It's goal is to query ElasticSearch for updates to the openRequest lists of Rider and
      * Driver, then parse them. If there is a change, I.E. a Request now has an additional
      * Driver, or a Request's state has changed, it will update the relevant ArrayAdapters,
@@ -93,11 +99,10 @@ public class ArrayObserver {
          * Checks if any of the existing requests in a RiderDriverParent's ArrayList are
          * not on the server. Attempts to rectify that situation if so. If it cannot put requests on
          * the server, it gives up (couldn't push 1, why bother trying to pull 10?)
-         * <p>
          * Then if it can, it will try to get the updated Requests. It then compares the old and the
          * new. If the new is updated, it notifies the user and replaces the old list with the new.
          *
-         *   The RiderDriverParent (Rider or Driver) with a list to update
+         * @param myOperand RiderDriverParent (Rider or Driver) with a list to update
          * @return Nothing.
          */
     public void doItSaysPalpatine(RiderDriverParent myOperand) {

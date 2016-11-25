@@ -88,11 +88,11 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (myController.invalidateName(nameEntered.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "User Name Already Exists or is Invalid.", Toast.LENGTH_SHORT).show();
+                    toastFromEnum(UserProfileEnum.badNameMemory);
                 }
 
                 else {
-                    Toast.makeText(getApplicationContext(), "Valid User Name.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Valid User Name", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,29 +104,59 @@ public class UserProfileActivity extends AppCompatActivity {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                UserProfileEnum buttonEnum;
                 if (key_string.equals("fromMainRequest")) {
-                    if (myController.attemptEditUser(nameEntered.getText().toString(),
+                    buttonEnum = myController.attemptEditUser(nameEntered.getText().toString(),
                             emailEntered.getText().toString(),
                             phoneEntered.getText().toString(),
-                            vehicleEntered.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "User Settings Edited", Toast.LENGTH_SHORT).show();
-                    }
+                            vehicleEntered.getText().toString());
                 }
 
-                else if (key_string.equals("fromRegister")){
-                    if (myController.attemptNewUser(nameEntered.getText().toString(),
+                else {
+                    buttonEnum = myController.attemptNewUser(nameEntered.getText().toString(),
                             emailEntered.getText().toString(),
                             phoneEntered.getText().toString(),
-                            vehicleEntered.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "New User Created", Toast.LENGTH_SHORT).show();
+                            vehicleEntered.getText().toString());
+
+                    if (buttonEnum.equals(UserProfileEnum.allValid)) {
+                        toastFromEnum(buttonEnum);
                         finish();
                     }
                 }
 
-                else {
-                    Toast.makeText(getApplicationContext(), "User Name Already Exists", Toast.LENGTH_SHORT).show();
-                }
+                toastFromEnum(buttonEnum);
             }
         });
+    }
+
+    /**
+     * Toasts a message based on Enum passed in.
+     * @param returnEnum Emum determining the process status of fields entered.
+     */
+    private void toastFromEnum(UserProfileEnum returnEnum) {
+        String message;
+
+        if (returnEnum.equals(UserProfileEnum.badNameMemory)) {
+            message = "User Name Already Exists or is Invalid";
+        }
+
+        else if (returnEnum.equals(UserProfileEnum.badNameStyle)) {
+            message = "User Name contains bad characters (E.g. *, .)";
+        }
+
+        else if (returnEnum.equals(UserProfileEnum.badEmail)) {
+            message = "User Name must contain one '@' and one '.'";
+        }
+
+        else if (returnEnum.equals(UserProfileEnum.badPhone)) {
+            message = "User name must only contain numbers and dashes";
+        }
+
+        else {
+                message = "Valid Entries. Operation Executed.";
+        }
+
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

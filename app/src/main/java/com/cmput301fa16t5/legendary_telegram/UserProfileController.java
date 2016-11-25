@@ -4,7 +4,7 @@ package com.cmput301fa16t5.legendary_telegram;
  * User Profile Controller.
  * Does all the parsing of information from User Activity to see if it's correct.
  * If it is, uses CentralController to proceed further with data edits.
- * @author keith
+ * @author kgmills
  */
 public class UserProfileController {
 
@@ -59,14 +59,18 @@ public class UserProfileController {
      * @param email String type email from Edit Text
      * @param phone String type phone from Edit Text
      * @param vehicle String type  from Edit Text
-     * @return false if username is changed, already exist or empty, else delete the old user gson file
-     * and create a new one, and return true
+     * @return Enum describing if the input was good or bad.
      */
-    public boolean attemptEditUser(String name, String email, String phone, String vehicle) {
+    public UserProfileEnum attemptEditUser(String name, String email, String phone, String vehicle) {
         if (!name.equals(currentUser.getUserName()) && centralCommand.checkUserName(name) && name.equals("")) {
-            return false;
+            return UserProfileEnum.badNameMemory;
         }
 
+        UserProfileEnum theEnum= checkUserInput(name, email, phone);
+
+        if (!theEnum.equals(UserProfileEnum.allValid)) {
+            return theEnum;
+        }
         String oldName = currentUser.getUserName();
 
         currentUser.setUserName(name);
@@ -77,7 +81,7 @@ public class UserProfileController {
         centralCommand.deleteUser(oldName);
         centralCommand.saveCurrentUser();
 
-        return true;
+        return theEnum;
     }
 
     /**
@@ -86,14 +90,56 @@ public class UserProfileController {
      * @param email Their email
      * @param phone Their phone number
      * @param vehicle Their vehicle description (optional)
-     * @return True if the new user could be created. False if it couldn't.
+     * @return Enum describing if the attempt was good or bad.
      */
-    public boolean attemptNewUser(String name, String email, String phone, String vehicle) {
+    public UserProfileEnum attemptNewUser(String name, String email, String phone, String vehicle) {
         if (centralCommand.checkUserName(name)) {
-            return false;
+            return UserProfileEnum.badNameMemory;
+        }
+
+        UserProfileEnum theEnum= checkUserInput(name, email, phone);
+
+        if (!theEnum.equals(UserProfileEnum.allValid)) {
+            return theEnum;
         }
 
         centralCommand.createNewUser(name, email, phone, vehicle);
-        return true;
+        return theEnum;
+    }
+
+    /**
+     * This function checks the Username, Email, and Phone fields for proper syntax.
+     * It does not check the Username to see if it's already taken, that has been handled before
+     * this function would be called.
+     * We do not check the vehicle field for brand, year, etc. The user can put WHATEVER they
+     * want there, the queation is, will what they put appeal to potential Riders?
+     * @param name The string entered to the Username
+     * @param email The string entered to the Email
+     * @param phone The string entered to the phone field.
+     * @return An Enum describing the validity or problem with the inputs.
+     */
+    private UserProfileEnum checkUserInput(String name, String email, String phone) {
+
+        try{
+            Integer.parseInt(phone.replaceAll("-", ""));
+        }
+
+        catch (NumberFormatException e) {
+            return UserProfileEnum.badPhone;
+        }
+
+        if ((!email.contains("@") && (!email.contains(".")))) {
+            return UserProfileEnum.badEmail;
+        }
+
+        // There are probably others...
+        String[] badFileCharacters = {"|", "\"", "/", ".", "?", ">", "<", "+", "=", ":", "*"};
+        for (String s: badFileCharacters) {
+            if (name.contains(s)) {
+                return UserProfileEnum.badNameStyle;
+            }
+        }
+
+        return UserProfileEnum.allValid;
     }
 }

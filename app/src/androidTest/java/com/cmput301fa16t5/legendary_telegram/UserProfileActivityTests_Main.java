@@ -36,7 +36,7 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.userPhone), "1234680");
 
         solo.clickOnButton("Create New User");
-        solo.waitForText("New User Created");
+        solo.waitForText("Valid Entries. Operation Executed.");
         solo.assertCurrentActivity("Should be log in activity", LogInActivity.class);
 
         solo.enterText((EditText) solo.getView(R.id.userNameET), "TestUsername_main");
@@ -46,14 +46,11 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
 
         solo.clickOnButton("Check");
-        solo.waitForText("User Name Already Exists or is Invalid.");
+        solo.waitForText("User Name Already Exists or is Invalid");
 
         solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername1");
         solo.clickOnButton("Check");
         solo.waitForText("Valid User Name.");
-
-        Context testContext = InstrumentationRegistry.getTargetContext();
-        assertTrue(testContext.deleteFile("TestUsername_main.sav"));
     }
 
     public void testUpdateButton(){
@@ -64,7 +61,7 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.userPhone), "1234680");
 
         solo.clickOnButton("Create New User");
-        solo.waitForText("New User Created");
+        solo.waitForText("Valid Entries. Operation Executed.");
         solo.assertCurrentActivity("Should be log in activity", LogInActivity.class);
 
         solo.enterText((EditText) solo.getView(R.id.userNameET), "TestUsername_main");
@@ -77,10 +74,14 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.userPhone), "11234680");
 
         solo.clickOnButton("Edit User Profile");
-        solo.waitForText("User Settings Edited");
+        solo.waitForText("Valid Entries. Operation Executed.");
         solo.goBack();
         solo.assertCurrentActivity("Should be main request activity", MainRequestActivity.class);
+    }
+
+    public void tearDown() throws Exception {
         Context testContext = InstrumentationRegistry.getTargetContext();
-        assertTrue(testContext.deleteFile("TestUsername_main.sav"));
+        testContext.deleteFile("TestUsername_main.sav");
+        testContext.deleteFile("TestUsername_main.sav");
     }
 }

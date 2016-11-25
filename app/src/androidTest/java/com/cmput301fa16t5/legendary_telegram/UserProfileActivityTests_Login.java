@@ -39,11 +39,11 @@ public class UserProfileActivityTests_Login extends ActivityInstrumentationTestC
         solo.clickOnButton("New User");
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
         solo.clickOnButton("Check");
-        solo.waitForText("User Name Already Exists or is Invalid.");
+        solo.waitForText("User Name Already Exists or is Invalid");
 
         solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestUsername_login");
         solo.clickOnButton("Check");
-        solo.waitForText("Valid User Name.");
+        solo.waitForText("Valid Entries. Operation Executed.");
     }
 
     public void testUpdateButton(){
@@ -54,12 +54,12 @@ public class UserProfileActivityTests_Login extends ActivityInstrumentationTestC
         solo.enterText((EditText) solo.getView(R.id.userPhone), "1234680");
 
         solo.clickOnButton("Create New User");
-        solo.waitForText("New User Created");
+        solo.waitForText("Valid Entries. Operation Executed.");
         solo.assertCurrentActivity("Should be log in activity", LogInActivity.class);
+    }
 
+    public void tearDown() throws Exception {
         Context testContext = InstrumentationRegistry.getTargetContext();
-        assertTrue(testContext.deleteFile("TestUsername_login.sav"));
-
-
+        testContext.deleteFile("TestUsername_login.sav");
     }
 }
