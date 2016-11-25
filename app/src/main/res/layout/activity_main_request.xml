@@ -53,5 +53,4 @@
         android:id="@+id/driverButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
-
 </RelativeLayout>
