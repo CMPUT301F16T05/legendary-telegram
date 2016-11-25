@@ -43,7 +43,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".FilterActivity"></activity>
+        <activity android:name=".FilterActivity" />
+        <activity
+            android:name=".DescriptionActivity"
+            android:label="@string/title_activity_description"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

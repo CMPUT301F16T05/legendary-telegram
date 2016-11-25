@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -248,12 +249,38 @@ public class CentralController {
         }
 
         /**
-         * This is Keith.
-         * I added in this.
-         * To see if we really got nothing.
-         * Or if all our requests were just deleted.
+         * Check if nothing was found
+         * or if all our requests were just deleted.
          */
         if (gotRequest.isEmpty()) {
+            Log.d("ESCErr", "No request found with matching IDs: " + Arrays.toString(searchItems));
+            gotRequest.add(new Request(null, null, null));
+        }
+        return gotRequest;
+    }
+
+    /**
+     * Wrapper for ElasticSearch get that focusses on the request keyword
+     * @param keyword the string you wish to find in the request description
+     * @return Arraylist of requests that contain the string in their description
+     */
+    public ArrayList<Request> getRequestsByKeyword(String keyword){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.KEYWORD, keyword).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Check if nothing was found
+         * or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            Log.d("ESCErr", "No request found with keyword \"" + keyword + "\"");
             gotRequest.add(new Request(null, null, null));
         }
         return gotRequest;
@@ -264,7 +291,7 @@ public class CentralController {
      * @param min the lower bound of the fee to look between
      * @param max the upper bound of the fee to look between
      * @param usePerKM boolean that indicates which field, fee or feeperkm, to look at
-     * @return an ArrayList of requests that match the query
+     * @return an ArrayList of requests that fit between the fee range given
      */
     public ArrayList<Request> getRequestsByFee(double min, double max, Boolean usePerKM) {
         ArrayList<Request> gotRequest = new ArrayList<>();
@@ -283,13 +310,22 @@ public class CentralController {
         catch (Exception e) {
             e.printStackTrace();
         }
+
+        /**
+         * Check if nothing was found
+         * or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            Log.d("ESCErr", "No request found between " + parsedString[1] + " and " + parsedString[2]);
+            gotRequest.add(new Request(null, null, null));
+        }
         return gotRequest;
     }
 
     /**
-     * Wrapper for ElasticSearch that gets the Driver's Requests.
-     * @param near Latlng coordinates that requests should be near.
-     * @return An ArrayList of Requests.
+     * Wrapper for ElasticSearch that gets requests within a certain distance of a LatLng pair
+     * @param near LatLng coordinates that requests should be near.
+     * @return An ArrayList of Requests that are within a certain distance of the LatLng pair
      */
     public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
         ArrayList<Request> gotRequest = new ArrayList<>();
@@ -301,12 +337,21 @@ public class CentralController {
         catch (Exception e) {
             e.printStackTrace();
         }
+
+        /**
+         * Check if nothing was found
+         * or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            Log.d("ESCErr", "No request found near the LatLng " + near.toString());
+            gotRequest.add(new Request(null, null, null));
+        }
         return gotRequest;
     }
 
     /**
      * Wrapper for ElasticSearch get that grabs the first few requests
-     * @return an ArrayList of requests that match the query
+     * @return an ArrayList of the latest 15 requests
      */
     public ArrayList<Request> getRequestsAll() {
         ArrayList<Request> gotRequest = new ArrayList<>();
@@ -318,6 +363,14 @@ public class CentralController {
             e.printStackTrace();
         }
 
+        /**
+         * Check if nothing was found
+         * or if all our requests were just deleted.
+         */
+        if (gotRequest.isEmpty()) {
+            Log.d("ESCErr", "No request found on server");
+            gotRequest.add(new Request(null, null, null));
+        }
         return gotRequest;
     }
 
