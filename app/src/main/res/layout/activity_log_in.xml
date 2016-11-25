@@ -8,37 +8,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cmput301fa16t5.legendary_telegram.LogInActivity">
+    tools:context="com.cmput301fa16t5.legendary_telegram.LogInActivity"
+    android:background="@drawable/cab">
 
     <Button
         android:id="@+id/newUserLogin"
         android:text="@string/NewUsr"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:background="#8ac337"
+        android:textColor="#ffffff"
         android:onClick="newUserClick"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="95dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/loginButton"
-        android:text="@string/logIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="loginClick"
-        android:layout_alignBottom="@+id/userNameET"
-        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/userNameET"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="@string/userNameET"
+        android:background="@android:color/white"
+        android:textColor="#EEEEEE"
         android:ems="10"
-        android:layout_above="@+id/newUserLogin"
+        android:layout_marginBottom="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/loginButton"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/loginButton" />
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:text="@string/logIn"
+        android:background="#4285f4"
+        android:textColor="#ffffff"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:onClick="loginClick"
+        android:layout_width="250dp"
+        android:layout_above="@+id/newUserLogin"
+        android:layout_alignStart="@+id/newUserLogin" />
 
 
 </RelativeLayout>
