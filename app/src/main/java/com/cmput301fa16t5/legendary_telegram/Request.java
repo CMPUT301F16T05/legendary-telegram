@@ -49,40 +49,16 @@ public class Request {
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
 
-
-    public Request(IdentificationCard me, LatLng start, LatLng end) {
-        this.id = null;
-        this.myRider = me;
-        this.myDriver = null;
-
-        //Initialize to empty string if no descrition is provided
-        this.description = "";
-
-        // Used for Google Map ///////
-        this.startLocation = start; //
-        this.endLocation = end;     //
-        this.startAddress = "";     //
-        this.endAddress = "";       //
-        //////////////////////////////
-        this.potentialDrivers = new ArrayList<IdentificationCard>();
-        this.computeEstimate();
-
-        // We start assuming ESearch is going to work and switch to false/pending upload
-        // in the event that our initial upload fails.
-        this.onServer = false;
-        this.state = RequestEnum.openRequest;
-
-        //parse the server friendly locations
-        this.elasticStart = String.valueOf(start.latitude) + "," + String.valueOf(start.longitude);
-        this.elasticEnd = String.valueOf(end.latitude) + "," + String.valueOf(end.longitude);
+    public Request(IdentificationCard me, LatLng start, LatLng end){
+        this(me, start, end, "");
     }
 
-    //Overload the initialization to match the optional nature of description
     public Request(IdentificationCard me, LatLng start, LatLng end, String description) {
         this.id = null;
         this.myRider = me;
         this.myDriver = null;
 
+        //Initialize to empty string if no descrition is provided
         this.description = description;
 
         // Used for Google Map ///////

@@ -383,6 +383,20 @@ public class CentralController {
     }
 
     /**
+     * Creates a new Request based on two LatLng coordinate sets.
+     * @param positionPair ArrayList containing two coordinates.
+     * @param description Optional string that can be attached to a request
+     */
+    public void createRequest(ArrayList<LatLng> positionPair, String description) {
+        IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
+                currentUser.getTelephone(), currentUser.getEmail());
+        Request rToUpload = currentUser.getMyRider().createNewRequest(me,
+                positionPair.get(0), positionPair.get(1), description);
+        saveCurrentUser();
+        rToUpload.setOnServer(addNewRequest(rToUpload));
+    }
+
+    /**
      * Searches for Requests based on a LatLng coordinate pair. Assigns them to the Driver.
      * @param positionPair The LatLng coordinates.
      */

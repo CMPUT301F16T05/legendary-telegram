@@ -24,11 +24,11 @@ public class MapController {
      * (Rider) or whether requests will be looked for (Driver).
      * @param positionPair: An ArrayList of Coordinates.
      */
-    public void sendCoordinates(ArrayList<LatLng> positionPair) {
+    public void sendCoordinates(ArrayList<LatLng> positionPair, String description) {
         if (positionPair.size() == 1) {
             centralCommand.searchRequests(positionPair);
         } else {
-            centralCommand.createRequest(positionPair);
+            centralCommand.createRequest(positionPair, description);
         }
     }
 

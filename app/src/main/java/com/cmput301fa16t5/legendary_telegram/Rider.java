@@ -29,6 +29,20 @@ public class Rider extends RiderDriverParent {
     }
 
     /**
+     * Creates new Request with an optional description field.
+     * @param me: IdentificationCard for Requests creator.
+     * @param start: Start coordinates.
+     * @param end: End coordinates.
+     * @param description: Description provided for the request
+     * @return A new Request with a filled in description
+     */
+    public Request createNewRequest(IdentificationCard me, LatLng start, LatLng end, String description) {
+        Request newR = new Request(me, start, end, description);
+        openRequests.add(newR);
+        return newR;
+    }
+
+    /**
      * Selects a Driver to accept based on the list of accepted Drivers of the Current Request.
      * @param index Index of the accepted driver.
      */

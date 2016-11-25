@@ -2,6 +2,7 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +66,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MapController myController;
 
     private Boolean backFromFilter;
+    private String description;
 
 
     @Override
@@ -78,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         myController = new MapController();
         riderOrDriver = intent.getStringExtra("Map");
         backFromFilter = false;
+        description = "";
     }
 
 
@@ -128,6 +133,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
             startMarker.setTitle("Start");
             endMarker.setTitle("End");
+
+            filterButton.setText("Description");
         }
         //zoom to start position:
         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
@@ -198,7 +205,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     
                 }
 
-                myController.sendCoordinates(positionPair);
+                myController.sendCoordinates(positionPair, description);
                 finish();
             }
         });
@@ -206,13 +213,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Do something about the filter
-                //go to filter activity
-                String location_cordinate = new String();
-                backFromFilter = true;
-                Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
-                filter_intent.putExtra("Location", location_cordinate);
-                startActivity(filter_intent);
+                //Reworking to also provide the description input for riders
+                if ((riderOrDriver == null) || (riderOrDriver.equals("fromRider"))) {
+                    AlertDialog.Builder descBox = new AlertDialog.Builder(MapsActivity.this);
+                    descBox.setTitle("Please enter your description");
+
+                    final EditText editDesc = new EditText(MapsActivity.this);
+                    editDesc.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    descBox.setView(editDesc);
+
+                    descBox.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            description = editDesc.getText().toString();
+                            Log.d("TEST", "Got the string " + description);
+                        }
+                    });
+                    descBox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            description = "";
+                            dialog.cancel();
+                        }
+                    });
+
+                    descBox.show();
+                }else {
+                    // Do something about the filter
+                    //go to filter activity
+                    String location_cordinate = new String();
+                    backFromFilter = true;
+                    Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
+                    filter_intent.putExtra("Location", location_cordinate);
+                    startActivity(filter_intent);
+                }
             }
         });
 
