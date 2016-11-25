@@ -303,6 +303,26 @@ public class CentralController {
     }
 
     /**
+     * Wrapper for ElasticSearch get that focusses on the request keyword
+     * @param keyword the string you wish to find in the request description
+     * @return Arraylist of requests that contain the string in their description
+     */
+    public ArrayList<Request> getRequestsByKeyword(String keyword){
+        ArrayList<Request> gotRequest = new ArrayList<>();
+
+        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
+        try {
+            gotRequest = getRequestsTask.execute(ElasticSearchQueries.KEYWORD, keyword).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return gotRequest;
+    }
+
+
+    /**
      * Wrapper for ElasticSearch get that grabs the first few requests
      * @return an ArrayList of requests that match the query
      */
