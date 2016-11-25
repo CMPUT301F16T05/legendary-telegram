@@ -2,6 +2,7 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
@@ -150,6 +151,14 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
      * In short, I didn't make an App that passed/failed depending on the setup of someone else's
      * Emulator/Phone.
      *
+     *                  *******US 08.01/02/03/04.01*******
+     * These User Stories are handled by several pieces of App code. Check the source classes,
+     * ArrayObserver,
+     * Request,
+     * MapsActivity,
+     * MapController for details.
+     *
+     * Also see the description of testCancel for further information.
      *
      */
     public void testRiderDriverMain() {
@@ -252,6 +261,15 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
     /**
      * Demonstration of a Request being made and cancelled.
      * US 01.04.01
+     *
+     * Turn off your internet connection and run this test, to see that it fulfills
+     * US 08.02.01 and US 08.03.01
+     *
+     * Please keep in mind that unless the app has been given a chance to run with Wifi for a bit
+     * and download the necessary Map files, you will not see the map.
+     *
+     * Also see the test below, testOffline
+     *
      */
     public void testCancel() {
         CentralController myController = CentralController.getInstance();
@@ -295,11 +313,127 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
 
     }
 
+    /**
+     * https://mindfiremobiletesting.wordpress.com/2013/10/17/android-robotium-make-wi-fi-and-mobile-data-network-enable-disable-programatically/
+     *
+     * Ensures functionality of
+     * US 08.01.01
+     * US 08.02.01
+     * US 08.03.01
+     * US 08.04.01
+     *
+     * Please follow the comments in the Code.
+     */
+    public void testOffline() {
+
+        WifiManager wifiman=(WifiManager)solo.getCurrentActivity().getSystemService(Context.WIFI_SERVICE);
+
+        CentralController myController = CentralController.getInstance();
+        solo.clickOnButton("New User");
+        solo.assertCurrentActivity("User Profile Activity", UserProfileActivity.class);
+
+        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestOffline");
+        solo.enterText((EditText) solo.getView(R.id.userEmail), "null@ggmail.com");
+        solo.enterText((EditText) solo.getView(R.id.userPhone), "000000000");
+        solo.enterText((EditText) solo.getView(R.id.userVehicle), "An old beater");
+        solo.clickOnButton("Create New User");
+        solo.assertCurrentActivity("Log In Screen", LogInActivity.class);
+
+        solo.enterText((EditText) solo.getView(R.id.userNameET), "TestOffline");
+        solo.clickOnButton("Login");
+        solo.assertCurrentActivity("Should be Main Request", MainRequestActivity.class);
+
+        // Wifi disabled here.
+        solo.setWiFiData(false);
+        solo.setMobileData(false);
+        wifiman.setWifiEnabled(false);
+        solo.clickOnButton("Make A Request");
+
+        // NOTE HOW YOU STILL SEE THE MAP
+        // Assuming you've ran the App before with Wifi.
+        solo.assertCurrentActivity("Should be Maps", MapsActivity.class);
+
+        // Toronto
+        LatLng start = new LatLng(43.65317, -79.3827);
+
+        // Uranium City, Sask.
+        LatLng end = new LatLng(59.57, -108.6);
+
+        ArrayList<LatLng> injection = new ArrayList<>();
+        injection.add(start);
+        injection.add(end);
+
+        myController.createRequest(injection);
+
+        String id = myController.getCurrentUser().getMyCurrentMode().getIDArray()[0];
+
+        solo.sleep(4000);
+        solo.goBack();
+        solo.assertCurrentActivity("Main Request Activity", MainRequestActivity.class);
+
+        // Note how the Request says "Null". Means it hasn't been uploaded and hasn't had
+        // a chance to get an ID yet.
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+
+        myController.searchRequests(injection);
+
+        solo.goBack();
+        solo.assertCurrentActivity("MainRequest", MainRequestActivity.class);
+
+        // Note how there is nothing here right now.
+        solo.setWiFiData(true);
+        solo.setMobileData(true);
+        wifiman.setWifiEnabled(true);
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+
+        myController.searchRequests(injection);
+
+        solo.goBack();
+        solo.assertCurrentActivity("MainRequest", MainRequestActivity.class);
+
+        // Disable Wifi again.
+        solo.setWiFiData(false);
+        solo.setMobileData(false);
+        wifiman.setWifiEnabled(false);
+        solo.clickOnText(id);
+        solo.assertCurrentActivity("Contact Screen", ContactScreenActivity.class);
+        solo.clickOnButton("Accept Request");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnButton("Make A Request");
+        solo.goBack();
+
+        // Note how the update has not appeared for the Request.
+        solo.setWiFiData(true);
+        solo.setMobileData(true);
+        wifiman.setWifiEnabled(true);
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.goBack();
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        // Note how now the Request is updated.
+        solo.clickOnButton("Make A Request");
+        solo.goBack();
+
+        solo.clickOnText(id);
+        solo.assertCurrentActivity("Request Status Screen", RequestStatusActivity.class);
+        solo.clickOnButton("Cancel");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+        solo.goBack();
+        solo.assertCurrentActivity("Log In Screen", LogInActivity.class);
+
+
+    }
+
     public void tearDown() throws Exception {
         Context testContext = InstrumentationRegistry.getTargetContext();
         testContext.deleteFile("Cthulhu_Driver.sav");
         testContext.deleteFile("TestRiderDriver.sav");
         testContext.deleteFile("TestCancel.sav");
+        testContext.deleteFile("TestOffline.sav");
 
     }
 
