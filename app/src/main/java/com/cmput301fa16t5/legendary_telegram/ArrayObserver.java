@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Purpose of this class is to hold the Requests of Rider and Driver and sync them with
- * the views in the activites while biting ElasticSearch's heel and asking "any new stuff"
+ * the views in the activities while biting ElasticSearch's heel and asking "any new stuff"
  *
  * This class implements... I guess you could argue the Observer Pattern, even though
  * typically it only holds one view at a given time.
@@ -14,8 +14,8 @@ import java.util.ArrayList;
  */
 public class ArrayObserver {
 
-    private CentralController centralCommand;
-    private ArrayList<ArrayAdapter> myAdapters;
+    private final CentralController centralCommand;
+    private final ArrayList<ArrayAdapter> myAdapters;
 
     /**
      * Constructor
@@ -57,8 +57,10 @@ public class ArrayObserver {
     /**
      * US 01.03.01
      * As a rider, I want to be notified if my request is accepted.
+     * @param rdp: RiderDriverParent. In actuality either a Rider or Driver
+     *           Class is determined and toast send out depending on it.
      */
-    public void sendUpdateNotification(RiderDriverParent rdp) {
+    private void sendUpdateNotification(RiderDriverParent rdp) {
         String message = "Requests Updated for Role: ";
         if (rdp.getClass().equals(Driver.class)) {
             message = message + "Driver";
@@ -84,12 +86,17 @@ public class ArrayObserver {
     public void onButtonPress() {
 
         // We only bother if the Rider/Driver lists have any content in them.
-        if (!centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
-            parseAndRefreshRequests(centralCommand.getCurrentUser().getMyRider());
-        }
+        try {
+            if (!centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
+                parseAndRefreshRequests(centralCommand.getCurrentUser().getMyRider());
+            }
 
-        if (!centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
-            parseAndRefreshRequests(centralCommand.getCurrentUser().getMyDriver());
+            if (!centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
+                parseAndRefreshRequests(centralCommand.getCurrentUser().getMyDriver());
+            }
+        }
+        catch (NullPointerException e) {
+            // Just don't do anything.
         }
     }
 
@@ -104,7 +111,7 @@ public class ArrayObserver {
          *
          * @param myOperand RiderDriverParent (Rider or Driver) with a list to update
          */
-    public void parseAndRefreshRequests(RiderDriverParent myOperand) {
+    private void parseAndRefreshRequests(RiderDriverParent myOperand) {
 
         //RiderDriverParent myOperand = rdp[0];
         ArrayList<Request> requests = myOperand.getOpenRequests();

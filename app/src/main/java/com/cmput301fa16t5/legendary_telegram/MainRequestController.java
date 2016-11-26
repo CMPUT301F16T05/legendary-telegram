@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
  */
 public class MainRequestController {
 
-    private CentralController centralCommand;
+    private final CentralController centralCommand;
 
     public MainRequestController() {
         centralCommand = CentralController.getInstance();
@@ -17,7 +17,7 @@ public class MainRequestController {
 
     /**
      * Sets user as Driver and saves to disk.
-     * @return
+     * @return True if the User can be a Driver, false otherwise
      */
     public boolean setUserAsDriver(){
         centralCommand.pingTheServer();
@@ -35,7 +35,7 @@ public class MainRequestController {
     /**
      * Sets the ArrayAdapter to show the appropriate requests.
      * @param activity: Needed to set command.
-     * @return: The set ArrayAdapter.
+     * @return The set ArrayAdapter
      */
     public ArrayAdapter<Request> setRequestAdapter(MainRequestActivity activity) {
         ArrayAdapter<Request> adapt = new ArrayAdapter<>(activity, R.layout.request_items, centralCommand.getRequests());

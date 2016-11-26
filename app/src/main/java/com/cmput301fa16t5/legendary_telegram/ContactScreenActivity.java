@@ -13,7 +13,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -46,6 +45,10 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
 
     private ContactScreenController myController;
 
+    /**
+     * OnCreate Initializes views and Controller setup, and fills in button texts and fields.
+     * @param savedInstanceState Because Android
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +145,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
 
     /**
      * Calls controller to handle. Prints a message based on what it determines.
-     * @param v
+     * @param v Android
      */
     public void commitButtonPress(View v) {
         Toast.makeText(getApplicationContext(), myController.commitPress(), Toast.LENGTH_LONG).show();

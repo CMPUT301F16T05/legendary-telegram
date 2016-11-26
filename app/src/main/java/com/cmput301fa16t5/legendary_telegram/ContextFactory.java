@@ -35,7 +35,7 @@ public class ContextFactory {
      * Explanatory setter
      * @param gsonContext Context to be held.
      */
-    public void setGsonContext(Context gsonContext) {
+    private void setGsonContext(Context gsonContext) {
         this.gsonContext = gsonContext;
     }
 }

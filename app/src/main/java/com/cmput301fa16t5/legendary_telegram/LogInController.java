@@ -9,7 +9,7 @@ import android.content.Context;
  */
 public class LogInController {
 
-    private CentralController centralCommand;
+    private final CentralController centralCommand;
 
     public LogInController(Context context) {
         centralCommand = CentralController.getInstance();

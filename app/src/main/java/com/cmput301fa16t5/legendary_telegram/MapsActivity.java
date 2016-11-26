@@ -1,16 +1,10 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -20,16 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -38,13 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
-import org.apache.http.protocol.RequestUserAgentHC4;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -238,7 +223,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                positionPair = new ArrayList<LatLng>();
+                positionPair = new ArrayList<>();
                 if (riderOrDriver.equals("fromRider")) {
                     positionPair.add(start);
                     positionPair.add(end);
@@ -247,7 +232,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 }
                 else {
-                    positionPair = new ArrayList<LatLng>();
+                    positionPair = new ArrayList<>();
                     positionPair.add(start);
                     Log.d("Start: ", start.toString());
                     

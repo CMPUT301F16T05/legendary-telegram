@@ -1,7 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import java.util.ArrayList;
-
 /**
  * Driver class. Accepts and Commits Requests. Asks if it has been picked.
  * @author keith

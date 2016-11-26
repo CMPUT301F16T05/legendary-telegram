@@ -24,27 +24,27 @@ public class Request {
     @JestId
     private String id;
 
-    private IdentificationCard myRider;
-    private ArrayList<IdentificationCard> potentialDrivers;
+    private final IdentificationCard myRider;
+    private final ArrayList<IdentificationCard> potentialDrivers;
     private IdentificationCard myDriver;
 
     // Used for Google Map
-    private LatLng startLocation;
-    private LatLng endLocation;
+    private final LatLng startLocation;
+    private final LatLng endLocation;
     private String startAddress;
     private String endAddress;
 
     //LatLng encodes on the server in a way that the GeoDistance query
     //does like so they have to be parsed into a format that it does like
-    private String elasticStart;
-    private String elasticEnd;
+    private final String elasticStart;
+    private final String elasticEnd;
 
     private Double fee;
     private Double feePerKM;
     private RequestEnum state;
 
     //Optional field used for keyword filters
-    private String description;
+    private final String description;
 
     //Used as an indicator for adding and deleting things from the elasticsearch server
     private Boolean onServer;
@@ -67,7 +67,7 @@ public class Request {
         this.startAddress = "";     //
         this.endAddress = "";       //
         //////////////////////////////
-        this.potentialDrivers = new ArrayList<IdentificationCard>();
+        this.potentialDrivers = new ArrayList<>();
         this.computeEstimate();
 
         // We start assuming ESearch is going to work and switch to false/pending upload
@@ -88,7 +88,7 @@ public class Request {
      * Manhattan distance to list restaurants in order of distance.
      * to get from Lat/Long to kilometers
      */
-    public void computeEstimate() {
+    private void computeEstimate() {
 
         if ((startLocation == null) || (endLocation == null)) {
             return;
@@ -141,10 +141,7 @@ public class Request {
      * @param card Card to be compared.
      */
     public boolean checkCommittedDriver(IdentificationCard card) {
-        if (this.myDriver == null) {
-            return false;
-        }
-        return this.myDriver.equals(card);
+        return (this.myDriver != null) && (this.myDriver.equals(card));
     }
 
     /**
@@ -216,7 +213,7 @@ public class Request {
             }
         }
 
-        Boolean result = false;
+        Boolean result;
 
         try {
 

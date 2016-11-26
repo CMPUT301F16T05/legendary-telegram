@@ -2,8 +2,6 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-
 /**
  * Rider class. Creates Requests. Selects Drivers. Completes and Cancels Requests.
  * @author keith

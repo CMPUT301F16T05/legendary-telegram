@@ -6,7 +6,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CentralController {
     // Singleton stuff.
-    private static CentralController ourInstance = new CentralController();
+    private static final CentralController ourInstance = new CentralController();
     public static CentralController getInstance() {
         return ourInstance;
     }
@@ -107,9 +108,9 @@ public class CentralController {
 
     /**
      * Setter for current user.
-     * @param currentUser
+     * @param currentUser User to be set as current.
      */
-    public void setCurrentUser(User currentUser) {
+    private void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
@@ -119,7 +120,7 @@ public class CentralController {
      * @param requests a vararg of requests to add to the server
      * @return Boolean indicating whether the request was successfully added
      */
-    public Boolean addNewRequest(Request... requests){
+    private Boolean addNewRequest(Request... requests){
         //Assume failure until proven otherwise
         Boolean isGood = null;
 
@@ -186,7 +187,7 @@ public class CentralController {
         return isGood;
     }
 
-    public Boolean deleteRequests(Request... requests){
+    private Boolean deleteRequests(Request... requests){
 
         Boolean isGood = null;
 
@@ -223,13 +224,10 @@ public class CentralController {
      */
     public ArrayList<Request> getRequestsByID(String... searchItems){
         ArrayList<Request> gotRequest = new ArrayList<>();
-        String[] newSearchItems = new String[searchItems.length+1];
+        String [] searchParam = {ElasticSearchQueries.ID};
 
-        //Parse a new array to add as a new vararg
-        newSearchItems[0] = ElasticSearchQueries.ID;
-        for (int q = 0;q<searchItems.length;q++){
-            newSearchItems[q+1] = searchItems[q];
-        }
+        // http://stackoverflow.com/questions/80476/how-can-i-concatenate-two-arrays-in-java
+        String [] newSearchItems = ArrayUtils.addAll(searchParam, searchItems);
 
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
         try {
@@ -289,7 +287,7 @@ public class CentralController {
      * @param near Latlng coordinates that requests should be near.
      * @return An ArrayList of Requests.
      */
-    public ArrayList<Request> getRequestsByGeoDistance(LatLng near){
+    private ArrayList<Request> getRequestsByGeoDistance(LatLng near){
         ArrayList<Request> gotRequest = new ArrayList<>();
         String parsedString = String.valueOf(near.latitude) + "," + String.valueOf(near.longitude);
         ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
@@ -385,7 +383,7 @@ public class CentralController {
      */
     public boolean selectCurrentRequest(int index) {
         this.currentUser.getMyCurrentMode().setCurrentRequest(index);
-        return this.currentUser.askForMode();
+        return this.userMode();
     }
 
 
@@ -433,7 +431,7 @@ public class CentralController {
      * Tells the User to generate A Driver card
      * @return An IdentificationCard using the Driver constructor.
      */
-    public IdentificationCard generateDriverCard() {
+    private IdentificationCard generateDriverCard() {
         return new IdentificationCard(currentUser.getUserName(), currentUser.getTelephone(),
                 currentUser.getEmail(), currentUser.getVehicle());
     }
@@ -451,7 +449,7 @@ public class CentralController {
     }
 
     /**
-     * Makes a toast based on changes occuring in the program independantly of the
+     * Makes a toast based on changes occuring in the program independently of the
      * user activities (mostly updates for requests coming in)
      * @param message Message to be toasted.
      */
@@ -464,6 +462,45 @@ public class CentralController {
      */
     public void pingTheServer() {
         this.myObs.onButtonPress();
+    }
+
+    /**
+     * Checks the current mode of the User. Needed for activities.
+     * @return True if Driver, false if Rider
+     */
+    public boolean userMode() {
+        return this.getCurrentUser().askForMode();
+    }
+
+    /**
+     * Asks user for the current Request of it's current mode.
+     * @return Current Request.
+     */
+    public Request requestToShow() {
+        return this.getCurrentUser().workingRequest();
+    }
+
+    /**
+     * Asks the Current User's Driver if it was picked by the Rider.
+     * @return True if they were picked (and can therefore commit. False otherwise).
+     */
+    public boolean driverPickCheck() {
+        return this.getCurrentUser().getMyDriver().checkIfPicked();
+    }
+
+    /**
+     * Tell's User's Rider to Accept it's current Request, generating the necessary
+     * IdentificationCard Object in the process.
+     */
+    public void driverAcceptCurrent() {
+        this.getCurrentUser().driverAccepts(generateDriverCard());
+    }
+
+    /**
+     * Delete's Riders Request. Called either when complete or cancelled.
+     */
+    public void deleteCurrentRiderRequest() {
+        deleteRequests(this.getCurrentUser().riderFinishesCurrent());
     }
 
 }

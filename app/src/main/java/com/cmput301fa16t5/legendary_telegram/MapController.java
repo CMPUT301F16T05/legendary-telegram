@@ -1,6 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;

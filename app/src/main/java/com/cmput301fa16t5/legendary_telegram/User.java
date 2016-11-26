@@ -13,8 +13,8 @@ public class User {
     private String email;
     private String telephone;
     private String vehicle;
-    private Rider myRider;
-    private Driver myDriver;
+    private final Rider myRider;
+    private final Driver myDriver;
     private RiderDriverParent myCurrentMode;
 
     // Constructor - Initialize all attributes
@@ -50,6 +50,31 @@ public class User {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets the current Request from the myCurrentMode, which is either the Rider or Driver.
+     * @return Current Request.
+     */
+    public Request workingRequest() {
+        return this.myCurrentMode.getCurrentRequest();
+    }
+
+    /**
+     * Tells Driver to accept it's current Request with the IdentificationCard provided.
+     * @param cardToInsert Card to provide to Driver to accept Request.
+     */
+    public void driverAccepts(IdentificationCard cardToInsert) {
+        this.getMyDriver().acceptARequest(cardToInsert);
+    }
+
+    /**
+     * Tells Rider to remove request from list and return.
+     * Typically called when CentralController is going to remove from Server.
+     * @return Request which has been removed from OpenRequests, the CurrentRequest
+     */
+    public Request riderFinishesCurrent() {
+        return this.getMyRider().removeOrComplete();
     }
 
     public String getUserName() {

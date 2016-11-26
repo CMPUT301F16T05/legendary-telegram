@@ -37,7 +37,7 @@ public class GsonController {
     public static boolean checkIfExists(String userName, Context context) {
         // http://stackoverflow.com/questions/6290531/check-if-edittext-is-empty
         // At the last moment to ensure an empty EditText is wrong.
-        if (userName.matches("") || userName == null) {
+        if ((userName == null) || userName.matches("")) {
             return false;
         }
 

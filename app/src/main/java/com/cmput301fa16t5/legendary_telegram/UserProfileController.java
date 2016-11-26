@@ -8,8 +8,8 @@ package com.cmput301fa16t5.legendary_telegram;
  */
 public class UserProfileController {
 
-    private CentralController centralCommand;
-    private User currentUser;
+    private final CentralController centralCommand;
+    private final User currentUser;
 
     /**
      * Constructor.
@@ -26,15 +26,7 @@ public class UserProfileController {
      * @return True if username is invalid. False otherwise.
      */
     public boolean invalidateName(String username){
-        if (username.matches("")) {
-            return true;
-        }
-
-        if(centralCommand.checkUserName(username)){
-            return true;
-        }else{
-            return false;
-        }
+        return username.matches("") || centralCommand.checkUserName(username);
     }
 
     /**

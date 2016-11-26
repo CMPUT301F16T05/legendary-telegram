@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
  */
 public class RequestStatusController {
 
-    private CentralController centralCommand;
+    private final CentralController centralCommand;
 
     public RequestStatusController() {
         centralCommand = CentralController.getInstance();
@@ -20,7 +20,7 @@ public class RequestStatusController {
      */
     public String getRequestName() {
         try {
-            return centralCommand.getCurrentUser().getMyRider().getCurrentRequest().getId();
+            return centralCommand.requestToShow().getId();
         }
         catch (NullPointerException e) {
             centralCommand.pingTheServer();
@@ -31,7 +31,7 @@ public class RequestStatusController {
     /**
      * Sets the ArrayAdapter with appropriate information.
      * @param activity: Needed because Android.
-     * @return: Set ArrayAdapter.
+     * @return Set ArrayAdapter.
      */
     public ArrayAdapter<IdentificationCard> setRequestAdapter(RequestStatusActivity activity) {
         ArrayAdapter<IdentificationCard> adapt = new ArrayAdapter<>(activity, R.layout.card_items,
@@ -44,9 +44,7 @@ public class RequestStatusController {
      * Cancels Request. Tells ESearchController to delete. Saves to disk.
      */
     public void cancel() {
-        Request cancelledRequest = centralCommand.getCurrentUser().getMyRider().removeOrComplete();
-        ElasticSearchController.DeleteRequestsTask delRequest = new ElasticSearchController.DeleteRequestsTask();
-        delRequest.execute(cancelledRequest);
+        centralCommand.deleteCurrentRiderRequest();
         centralCommand.saveCurrentUser();
     }
 

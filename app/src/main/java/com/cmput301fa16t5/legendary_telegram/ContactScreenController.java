@@ -9,9 +9,9 @@ package com.cmput301fa16t5.legendary_telegram;
 
 public class ContactScreenController {
 
-    private CentralController centralCommand;
-    private Request requestOfFocus;
-    private boolean isDriverOrRider;
+    private final CentralController centralCommand;
+    private final Request requestOfFocus;
+    private final boolean isDriverOrRider;
     private int index;
 
     /**
@@ -22,8 +22,8 @@ public class ContactScreenController {
     public ContactScreenController() {
 
         centralCommand = CentralController.getInstance();
-        this.isDriverOrRider = centralCommand.getCurrentUser().askForMode();
-        this.requestOfFocus = centralCommand.getCurrentUser().getMyCurrentMode().getCurrentRequest();
+        this.isDriverOrRider = centralCommand.userMode();
+        this.requestOfFocus = centralCommand.requestToShow();
     }
 
     /**
@@ -49,13 +49,17 @@ public class ContactScreenController {
         return data;
     }
 
+    /**
+     * Getter for the Driver/Rider boolean for the Activity.
+     * @return True if Driver, false if Rider.
+     */
     public boolean isDriverOrRider() {
         return isDriverOrRider;
     }
 
     /**
      * In the Rider case it must know the index of the ID card to parse.
-     * @param i
+     * @param i Index of the ID in the list
      */
     public void getIndex(String i) {
         this.index = Integer.parseInt(i);
@@ -93,7 +97,7 @@ public class ContactScreenController {
     public String commitPress() {
         if (isDriverOrRider()) {
             if (requestOfFocus.getState().equals(RequestEnum.acceptedADriver)) {
-                if (centralCommand.getCurrentUser().getMyDriver().checkIfPicked()) {
+                if (centralCommand.driverPickCheck()) {
                     requestOfFocus.commitToRequest();
                     centralCommand.updateRequest(requestOfFocus);
                     centralCommand.saveCurrentUser();
@@ -103,7 +107,7 @@ public class ContactScreenController {
             }
 
             else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
-                centralCommand.getCurrentUser().getMyDriver().acceptARequest(centralCommand.generateDriverCard());
+                centralCommand.driverAcceptCurrent();
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
                 return "You've accepted this Request. Wait to see if you are selected.";
@@ -114,8 +118,7 @@ public class ContactScreenController {
 
         else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
 
-            centralCommand.deleteRequests(centralCommand.getCurrentUser().getMyRider().
-                    removeOrComplete());
+            centralCommand.deleteCurrentRiderRequest();
             centralCommand.saveCurrentUser();
             return "Request Completed. Pay the man.";
         }
