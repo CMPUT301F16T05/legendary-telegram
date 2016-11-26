@@ -188,6 +188,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
                     Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
                 }
+
+                // After drag - search again
+                final String url = myController.createURl(start, end);
+                Log.d("URL is ", url);
+
+                JSONObject jsonObject = myController.readUrl(url);
+                getInfoFromJson(jsonObject);
+                Log.d("Start LatLng is ", start.toString());
+                Log.d("End LatLng is ", end.toString());
+                Log.d("Start Address is ", startAddress);
+                Log.d("End Address is ", endAddress);
+                Log.d("Distance", String.valueOf(distance));
+
+                drawMarker();
+                drawRoute();
             }
         });
 
@@ -207,13 +222,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 JSONObject jsonObject = myController.readUrl(url);
                 getInfoFromJson(jsonObject);
-                drawMarker();
-                drawRoute();
                 Log.d("Start LatLng is ", start.toString());
                 Log.d("End LatLng is ", end.toString());
                 Log.d("Start Address is ", startAddress);
                 Log.d("End Address is ", endAddress);
                 Log.d("Distance", String.valueOf(distance));
+                drawMarker();
+                drawRoute();
+
 
             }
         });
@@ -374,6 +390,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
 
     }
+
+
 
     @Override
     protected void onResume(){
