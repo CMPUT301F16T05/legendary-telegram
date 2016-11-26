@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/locationET"
-        android:layout_alignBottom="@+id/location"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/location" />
+        android:layout_toEndOf="@+id/location"
+        android:layout_above="@+id/keywordET" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,24 +39,12 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="14dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#fdfdfd"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Location:"
-        android:id="@+id/location"
-        android:textSize="25dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/keywordET"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/keyword"
-        android:layout_alignBottom="@+id/keyword"
         android:layout_alignTop="@+id/keyword" />
 
     <RadioGroup
@@ -73,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="Price"
+            android:checked="true"
         />
 
         <RadioButton
@@ -94,6 +83,24 @@
         android:layout_alignTop="@+id/radioGroup"
         android:layout_alignParentStart="true" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/MaxET"
+        android:layout_alignTop="@+id/radioGroup"
+        android:layout_toStartOf="@+id/radioGroup"
+        android:layout_toEndOf="@+id/Max_Price"
+        android:layout_above="@+id/MinET" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#fdfdfd"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Location:"
+        android:id="@+id/location"
+        android:textSize="25dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,24 +110,15 @@
         android:id="@+id/Min_Price"
         android:textSize="25dp"
         android:layout_below="@+id/Max_Price"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/MaxET"
-        android:layout_alignBottom="@+id/Max_Price"
-        android:layout_alignTop="@+id/radioGroup"
-        android:layout_toStartOf="@+id/radioGroup"
-        android:layout_toEndOf="@+id/Max_Price"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/MinET"
-        android:layout_toStartOf="@+id/radioGroup"
-        android:layout_toEndOf="@+id/Min_Price"
-        android:layout_below="@+id/Max_Price"
-        android:layout_alignBottom="@+id/Min_Price" />
+        android:layout_alignTop="@+id/Min_Price"
+        android:layout_alignStart="@+id/MaxET"
+        android:layout_toStartOf="@+id/radioGroup" />
 
 </RelativeLayout>

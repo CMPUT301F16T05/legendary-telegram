@@ -40,7 +40,7 @@ public class FilterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int feeOption = option.getCheckedRadioButtonId();
                 feeButton = (RadioButton) findViewById(feeOption);
-                myController.feeOption(max_price_ET.getText().toString(), min_price_ET.getText().toString(), feeButton);
+                myController.feeOption(max_price_ET.getText().toString(), min_price_ET.getText().toString(), feeButton, keyword.getText().toString());
                 finish();
             }
         });
