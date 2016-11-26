@@ -31,8 +31,30 @@ public class CentralController {
     }
 
     private User currentUser = null;
+
+    /**
+     * Basically a setter and getter for a boolean that is set by Contact screen activity to true
+     * When it deletes a request. The Request status screen, onResume, checks this boolean and goes
+     * back if it is true.
+     * @return The boolean
+     */
+    public boolean isShouldStatusGoBack() {
+        return shouldStatusGoBack;
+    }
+
+    /**
+     * Basically a setter and getter for a boolean that is set by Contact screen activity to true
+     * When it deletes a request. The Request status screen, onResume, checks this boolean and goes
+     * back if it is true.
+     * @param shouldStatusGoBack Boolean to set.
+     */
+    public void setShouldStatusGoBack(boolean shouldStatusGoBack) {
+        this.shouldStatusGoBack = shouldStatusGoBack;
+    }
+
     private ContextFactory myCFact;
     private ArrayObserver myObs = null;
+    private boolean shouldStatusGoBack = false;
 
     /**
      * Initializes the ContextFactory and gives it the object.

@@ -152,7 +152,7 @@ public class ElasticSearchController {
                         query = "{\n" +
                                 "    \"query\": {\n" +
                                 "        \"range\" : {\n" +
-                                "            \"feeperkm\" : {\n" +
+                                "            \"feePerKM\" : {\n" +
                                 "                \"gte\" : "+search_params[q]+",\n" +
                                 "                \"lte\" : "+search_params[q+1]+"\n" +
                                 "            }\n" +

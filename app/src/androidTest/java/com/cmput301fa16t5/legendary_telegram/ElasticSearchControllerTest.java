@@ -239,7 +239,7 @@ public class ElasticSearchControllerTest {
                 }
             }
          */
-        assertTrue(gotRequest.size() > 1);
+        assertTrue(gotRequest.size() > 0);
         cleanUpRequests(far, near1, near2);
     }
 

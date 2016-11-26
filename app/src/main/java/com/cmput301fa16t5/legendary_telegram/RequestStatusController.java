@@ -51,4 +51,20 @@ public class RequestStatusController {
     public void removeAdapter(ArrayAdapter adapt) {
         centralCommand.removeArrayAdapter(adapt);
     }
+
+    /**
+     * Called by activity to determine if it should go back onResume. True whenever a request is
+     * completed.
+     * @return Boolean from CentralController.
+     */
+    public boolean shouldFinish() {
+        return centralCommand.isShouldStatusGoBack();
+    }
+
+    /**
+     * We go back but we reset the boolean to false so that we can get back to this activity.
+     */
+    public void resetFinish() {
+        centralCommand.setShouldStatusGoBack(false);
+    }
 }

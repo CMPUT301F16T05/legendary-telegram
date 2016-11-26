@@ -74,4 +74,18 @@ public class RequestStatusActivity extends AppCompatActivity {
         super.onDestroy();
         myController.removeAdapter(this.adapter);
     }
+
+    /**
+     * If we complete a request we remove it and delete it. Therefore when we go back to this screen
+     * we should skip past it to main request activity.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (myController.shouldFinish()) {
+            myController.resetFinish();
+            finish();
+        }
+    }
 }

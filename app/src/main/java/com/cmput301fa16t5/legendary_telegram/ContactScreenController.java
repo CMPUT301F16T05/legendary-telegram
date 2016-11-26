@@ -120,6 +120,7 @@ public class ContactScreenController {
         else if (requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
 
             centralCommand.deleteCurrentRiderRequest();
+            centralCommand.setShouldStatusGoBack(true);
             centralCommand.saveCurrentUser();
             return "Request Completed. Pay the man.";
         }
