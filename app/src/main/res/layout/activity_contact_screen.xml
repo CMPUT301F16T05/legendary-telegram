@@ -66,8 +66,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:layout_above="@+id/commitButton"
+        android:layout_below="@+id/EndFill" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/emailTextView"
-        android:layout_above="@+id/commitButton" />
+        android:id="@+id/StartFill"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/StartTextView"
+        android:hint="Start Address" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/StartFill"
+        android:id="@+id/EndFill"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/StartTextView"
+        android:hint="End Address" />
+
+    <TextView
+        android:text="Start: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailTextView"
+        android:layout_alignParentStart="true"
+        android:id="@+id/StartTextView" />
+
+    <TextView
+        android:text="End: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/StartFill"
+        android:layout_alignParentStart="true"
+        android:id="@+id/EndTextView" />
 
 
 </RelativeLayout>

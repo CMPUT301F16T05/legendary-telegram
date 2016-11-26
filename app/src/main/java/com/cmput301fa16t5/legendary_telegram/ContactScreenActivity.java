@@ -62,6 +62,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     private TextView infoDetail;
     private TextView phoneTxt;
     private TextView emailTxt;
+    private TextView startFillText;
+    private TextView endFillText;
     private Button commitButton;
 
     private ContactScreenController myController;
@@ -88,6 +90,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         infoDetail = (TextView) findViewById(R.id.infoTextView);
         phoneTxt = (TextView) findViewById(R.id.phoneTextView);
         emailTxt = (TextView) findViewById(R.id.emailTextView);
+        startFillText = (TextView) findViewById(R.id.StartFill);
+        endFillText = (TextView) findViewById(R.id.EndFill);
         commitButton = (Button) findViewById(R.id.commitButton);
 
         // In the case of a Rider we need the index of the Driver card they're viewing.
@@ -189,6 +193,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             endAddress = leg.getString("end_address");
             Log.d("Start Address is ", startAddress);
             Log.d("End Address is ", endAddress);
+            startFillText.setText(startAddress);
+            endFillText.setText(endAddress);
 
 
             // Parse the route
@@ -200,8 +206,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             // Clear the map
             mMap.clear();
 
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(false));
+            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(false));
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
             startMarker.setTitle("Start: "+ startAddress);

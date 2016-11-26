@@ -46,6 +46,7 @@ public class ContactScreenController {
         data[1] = info.getName();
         data[2] = info.getPhone();
         data[3] = info.getEmail();
+
         return data;
     }
 
