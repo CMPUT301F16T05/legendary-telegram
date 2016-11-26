@@ -371,7 +371,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    public void drawRoute() {
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
+        for (int z = 0; z < routeList.size(); z++) {
+            LatLng point = routeList.get(z);
+            options.add(point);
+        }
+        mMap.addPolyline(options);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(start);
+        builder.include(end);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
 
+    }
 
     @Override
     protected void onResume(){
