@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -62,7 +63,6 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     private TextView phoneTxt;
     private TextView emailTxt;
     private Button commitButton;
-    private Button mapButton;
 
     private ContactScreenController myController;
     private MapController mapController;
@@ -89,7 +89,6 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         phoneTxt = (TextView) findViewById(R.id.phoneTextView);
         emailTxt = (TextView) findViewById(R.id.emailTextView);
         commitButton = (Button) findViewById(R.id.commitButton);
-        mapButton = (Button)findViewById(R.id.map_button);
 
         // In the case of a Rider we need the index of the Driver card they're viewing.
         if (!myController.isDriverOrRider()) {
@@ -121,14 +120,6 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mapintent = new Intent(ContactScreenActivity.this, MapsActivity.class);
-                mapintent.putExtra("Map", "fromContactScreen");
-                startActivity(mapintent);
-            }
-        });
 
         // Clicking the email field is handled by
         // http://stackoverflow.com/questions/10464954/how-to-make-an-email-address-clickable
@@ -162,8 +153,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         JSONObject jsonObject = mapController.readUrl(url);
         getInfoFromJson(jsonObject);
 
-        Log.d("Start LatLng is ", start.toString());
-        Log.d("End LatLng is ", end.toString());
+
 
     }
 
@@ -214,8 +204,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
-            startMarker.setTitle(startAddress);
-            endMarker.setTitle(endAddress);
+            startMarker.setTitle("Start: "+ startAddress);
+            endMarker.setTitle("End: " + endAddress);
 
             PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
             for (int z = 0; z < routeList.size(); z++) {
@@ -226,10 +216,14 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(start);
             builder.include(end);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
+            Log.d("Start LatLng is ", start.toString());
+            Log.d("End LatLng is ", end.toString());
 
-
-
+            // Code from: http://stackoverflow.com/questions/25231949/add-bounds-to-map-to-avoid-swiping-outside-a-certain-region/30497039#30497039
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = getResources().getDisplayMetrics().heightPixels;
+            int padding = (int) (width * 0.30); // offset from edges of the map 12% of screen
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), width, height, padding));
 
         } catch (JSONException e) {
             e.printStackTrace();
