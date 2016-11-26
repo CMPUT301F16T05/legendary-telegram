@@ -190,19 +190,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 // Do something after it is clicked
-                startAddress = startEditText.getText().toString();
-                endAddress = endEditText.getText().toString();
-                startAddress = "5015+111+St+NW,+Edmonton";
-                endAddress = "11325+89+Ave+NW,+Edmonton";
-
-                // Code from: http://stackoverflow.com/questions/23430032/issue-streaming-directions-for-google-maps-api-v2-android
-                try {
-                    URLEncoder.encode(startAddress, "UTF-8");
-                    URLEncoder.encode(endAddress, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
+                startAddress = startEditText.getText().toString().replaceAll(" ", "+");
+                endAddress = endEditText.getText().toString().replaceAll(" ", "+");
+                // For test purpose:
+                startAddress = "5015 112 St NW, Edmonton".replaceAll(" ", "+");
+                endAddress = "11325 89 Ave NW, Edmonton".replaceAll(" ", "+");
 
                 final String url = myController.createURl(startAddress, endAddress);
                 Log.d("URL is ", url);
