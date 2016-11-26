@@ -53,7 +53,7 @@ public class MapController {
         // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(start.latitude) + "," + String.valueOf(start.longitude)
                 + "&destination=" + String.valueOf(end.latitude) + "," + String.valueOf(end.longitude) // + "&mode=driving" (Default mode is driving)
-                + "&key=" +"AIzaSyAfW1DRkl8pe0q6I2wHjfUnSwgPEs3BlbY"; //+ R.string.google_maps_key;
+                + "&key=" +R.string.google_maps_key; //+ R.string.google_maps_key;
     }
 
     public JSONObject readUrl(final String url) {
