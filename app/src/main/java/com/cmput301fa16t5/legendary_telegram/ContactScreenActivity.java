@@ -1,9 +1,11 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +16,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  *  What this class is:
@@ -36,6 +48,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class ContactScreenActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LatLng start;
+    private LatLng end;
+    private String startAddress;
+    private String endAddress;
+    private List<LatLng> routeList;
+    private Marker startMarker;
+    private Marker endMarker;
+    private Double distance;
+
     private TextView infoTitle;
     private TextView infoDetail;
     private TextView phoneTxt;
@@ -44,6 +65,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     private Button mapButton;
 
     private ContactScreenController myController;
+    private MapController mapController;
 
     /**
      * OnCreate Initializes views and Controller setup, and fills in button texts and fields.
@@ -60,6 +82,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         myController = new ContactScreenController();
+        mapController = new MapController();
 
         infoTitle = (TextView) findViewById(R.id.infoTitle);
         infoDetail = (TextView) findViewById(R.id.infoTextView);
@@ -122,12 +145,95 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    /**
+     * @author zhimao
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Request request = myController.getRequestOfFocus();
+        start = request.getStartLocation();
+        end = request.getEndLocation();
+
+        final String url = mapController.createURl(start, end, getString(R.string.google_maps_key));
+        Log.d("URL is ", url);
+
+        JSONObject jsonObject = mapController.readUrl(url);
+        getInfoFromJson(jsonObject);
+
+        Log.d("Start LatLng is ", start.toString());
+        Log.d("End LatLng is ", end.toString());
+
+    }
+
+    // Parse the Json file read from google map
+    // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
+    public void getInfoFromJson(JSONObject jsonObject) {
+        try {
+            // routesArray contains ALL routes
+            JSONArray routesArray = jsonObject.getJSONArray("routes");
+
+            // Grab the first route
+            JSONObject route = routesArray.getJSONObject(0);
+
+            // Get the overview_polyline
+            JSONObject polyLines = route.getJSONObject("overview_polyline");
+
+            // Take all legs from the route
+            JSONArray legs = route.getJSONArray("legs");
+
+            // Grab first leg
+            JSONObject leg = legs.getJSONObject(0);
+
+            // Get the distance in float
+            JSONObject distanceObject = leg.getJSONObject("distance");
+            String distanceString = distanceObject.getString("text");
+            String[] separated = distanceString.split(" ");
+            distance = Double.valueOf(separated[0].replaceAll(",", ""));
+            //Log.d("Distance", String.valueOf(distance));
+
+
+            // Get the start and end address
+            startAddress = leg.getString("start_address");
+            endAddress = leg.getString("end_address");
+            Log.d("Start Address is ", startAddress);
+            Log.d("End Address is ", endAddress);
+
+
+            // Parse the route
+            String encodedString = polyLines.getString("points");
+            // learn from: http://googlemaps.github.io/android-maps-utils/javadoc/com/google/maps/android/PolyUtil.html
+            // PolyUtil.decode() returns List<LatLng>
+            routeList = PolyUtil.decode(encodedString);
+
+            // Clear the map
+            mMap.clear();
+
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+            // Add a indicator for the marker
+            // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+            startMarker.setTitle(startAddress);
+            endMarker.setTitle(endAddress);
+
+            PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
+            for (int z = 0; z < routeList.size(); z++) {
+                LatLng point = routeList.get(z);
+                options.add(point);
+            }
+            mMap.addPolyline(options);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(start);
+            builder.include(end);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
