@@ -28,7 +28,8 @@
         android:ems="10"
         android:id="@+id/userNameSettings"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/emailSettings" />
+        android:layout_toEndOf="@+id/emailSettings"
+        android:textColor="#005CE0" />
 
     <Button
         android:text="@string/checkIfExists"
@@ -67,7 +68,8 @@
         android:id="@+id/userEmail"
         android:layout_below="@+id/userNameSettings"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/nameSettings" />
+        android:layout_toEndOf="@+id/nameSettings"
+        android:textColor="#005CE0" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -77,7 +79,8 @@
         android:id="@+id/userPhone"
         android:layout_below="@+id/userEmail"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/vehicleSetting" />
+        android:layout_toEndOf="@+id/vehicleSetting"
+        android:textColor="#005CE0" />
 
 
     <TextView
@@ -97,7 +100,8 @@
         android:id="@+id/userVehicle"
         android:layout_below="@+id/userPhone"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/vehicleSetting" />
+        android:layout_toEndOf="@+id/vehicleSetting"
+        android:textColor="#005CE0" />
 
     <Button
         android:layout_width="200dp"

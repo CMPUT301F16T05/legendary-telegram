@@ -15,7 +15,9 @@ public class RiderDriverParent {
     protected ArrayList<Request> openRequests;
     protected Request currentRequest;
 
-    public RiderDriverParent() {    }
+    public RiderDriverParent() {
+        openRequests = new ArrayList<>();
+    }
 
     /**
      * Sets a request from a list of Requests.

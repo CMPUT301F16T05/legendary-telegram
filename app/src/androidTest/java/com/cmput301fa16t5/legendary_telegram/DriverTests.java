@@ -26,7 +26,8 @@ public class DriverTests {
 
         Driver driver = new Driver();
         driver.setOpenRequests(requests);
-        driver.acceptARequest(0, me);
+        driver.setCurrentRequest(0);
+        driver.acceptARequest(me);
 
         assertEquals(driver.getCurrentRequest(), driver.getOpenRequests().get(0));
         assertTrue(driver.getCurrentRequest().getPotentialDrivers().contains(me));
@@ -46,7 +47,8 @@ public class DriverTests {
         Driver OtherDriver = new Driver();
         // Check if the driver is picker (return true)
         driver.setOpenRequests(requests);
-        driver.acceptARequest(0, me);
+        driver.setCurrentRequest(0);
+        driver.acceptARequest(me);
         requests.get(0).acceptADriver(0);
 
         assertTrue(driver.checkIfPicked());
@@ -54,9 +56,11 @@ public class DriverTests {
         // Check if the driver is not picker (return false)
         requests.add(new Request(rider1, start, end));
         driver.setOpenRequests(requests);
-        driver.acceptARequest(1, me);
+        driver.setCurrentRequest(1);
+        driver.acceptARequest(me);
         OtherDriver.setOpenRequests(requests);
-        OtherDriver.acceptARequest(1, driver1);
+        OtherDriver.setCurrentRequest(1);
+        OtherDriver.acceptARequest(driver1);
         requests.get(1).acceptADriver(1);
 
         assertFalse(driver.checkIfPicked());
@@ -73,7 +77,8 @@ public class DriverTests {
         requests.add(new Request(rider1, start, end));
         Driver driver = new Driver();
         driver.setOpenRequests(requests);
-        driver.acceptARequest(0, me);
+        driver.setCurrentRequest(0);
+        driver.acceptARequest(me);
         requests.get(0).addADriver(me);
 
         driver.commit();

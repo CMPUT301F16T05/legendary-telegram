@@ -127,18 +127,8 @@ public class ArrayObserver {
         }
 
         // Get the updated Requests.
-        //ArrayList<Request> newList = centralCommand.getRequestsByID(myOperand.getIDArray());
         String[] idList = myOperand.getIDArray();
-        ArrayList<Request> newList = new ArrayList<>();
-
-        ElasticSearchController.GetRequests getRequestsTask = new ElasticSearchController.GetRequests();
-        for (String ID : idList) {
-            try {
-                newList = getRequestsTask.execute(ElasticSearchQueries.ID, ID).get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        ArrayList<Request> newList = centralCommand.getRequestsByID(idList);
 
         // We didn't get anything. Stop.
         if ((newList.size() == 1) && (newList.get(0).getMyRider() == null)) {

@@ -42,7 +42,7 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.userNameET), "TestUsername_main");
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Should be main request activity", MainRequestActivity.class);
-        solo.clickOnButton("Setting");
+        solo.clickOnButton("Edit Profile");
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
 
         solo.clickOnButton("Check");
@@ -67,7 +67,7 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.userNameET), "TestUsername_main");
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("Should be main request activity", MainRequestActivity.class);
-        solo.clickOnButton("Setting");
+        solo.clickOnButton("Edit Profile");
         solo.assertCurrentActivity("Should be user profile activity", UserProfileActivity.class);
 
         solo.enterText((EditText) solo.getView(R.id.userEmail), "AA@test.gmail.com");

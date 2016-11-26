@@ -103,7 +103,7 @@ public class ContactScreenController {
             }
 
             else if (!requestOfFocus.getState().equals(RequestEnum.driverHasCommitted)) {
-                centralCommand.getCurrentUser().getMyDriver().acceptARequest(index, centralCommand.generateDriverCard());
+                centralCommand.getCurrentUser().getMyDriver().acceptARequest(centralCommand.generateDriverCard());
                 centralCommand.updateRequest(requestOfFocus);
                 centralCommand.saveCurrentUser();
                 return "You've accepted this Request. Wait to see if you are selected.";

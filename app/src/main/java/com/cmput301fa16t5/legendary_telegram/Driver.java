@@ -24,18 +24,15 @@ public class Driver extends RiderDriverParent {
      */
     public Driver() {
         super();
-        openRequests = new ArrayList<>();
     }
 
     /**
      * Called when a User clicks on a Request object, as a Driver,
      * that they would like to accept.
-     * @param index The index in an ArrayAdapter
      * @param me An identification card created by the User class.
      */
-    public void acceptARequest(Integer index, IdentificationCard me) {
+    public void acceptARequest(IdentificationCard me) {
         this.cardToRequest = me;
-        this.currentRequest = this.openRequests.get(index);
         this.currentRequest.addADriver(this.cardToRequest);
     }
 

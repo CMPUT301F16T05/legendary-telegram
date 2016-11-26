@@ -81,7 +81,7 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
         solo.assertCurrentActivity("Should be main request activity", MainRequestActivity.class);
         solo.clickOnButton("Find Requests");
         solo.waitForText("Vehicle Field");
-        solo.clickOnButton("Settings");
+        solo.clickOnButton("Edit Profile");
 
         solo.assertCurrentActivity("Should be User Profile Activity", UserProfileActivity.class);
         solo.clearEditText((EditText) solo.getView(R.id.userNameSettings));
@@ -185,8 +185,8 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
          * the actual pins on the map. Reason? Getting Solo to long click the pins and drag them is
          * more trouble than it's worth
          */
-        // St. Johns
-        LatLng start = new LatLng(47.5605, 52.7128);
+        // Athabasca
+        LatLng start = new LatLng(54.7214, 113.2862);
 
         // Victoria
         LatLng end = new LatLng(48.4284, 123.3656);
@@ -215,9 +215,8 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
         solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
 
         solo.clickOnButton("Make A Request");
-        solo.sleep(2000);
+        solo.assertCurrentActivity("Should be maps", MapsActivity.class);
         solo.goBack();
-        solo.waitForText("Requests Updated");
         solo.clickOnText(id);
 
         solo.assertCurrentActivity("Request Status Screen", RequestStatusActivity.class);
@@ -231,8 +230,9 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
         solo.assertCurrentActivity("Should be Main Request", MainRequestActivity.class);
 
         solo.clickOnButton("Find Requests");
-        solo.sleep(2000);
+        solo.assertCurrentActivity("Should be maps", MapsActivity.class);
         solo.goBack();
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
 
         solo.clickOnText(id);
         solo.assertCurrentActivity("Contact Screen", ContactScreenActivity.class);
@@ -241,8 +241,9 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
 
         solo.assertCurrentActivity("Should be Main Request", MainRequestActivity.class);
         solo.clickOnButton("Make A Request");
-        solo.sleep(2000);
+        solo.assertCurrentActivity("Should be maps", MapsActivity.class);
         solo.goBack();
+        solo.assertCurrentActivity("Should be main", MainRequestActivity.class);
         solo.clickOnText(id);
 
         solo.assertCurrentActivity("Request Status Screen", RequestStatusActivity.class);
@@ -313,6 +314,7 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
     public void tearDown() throws Exception {
         Context testContext = InstrumentationRegistry.getTargetContext();
         testContext.deleteFile("Cthulhu_Driver.sav");
+        testContext.deleteFile("Cthulhu_Test.sav");
         testContext.deleteFile("TestRiderDriver.sav");
         testContext.deleteFile("TestCancel.sav");
         testContext.deleteFile("TestOffline.sav");
