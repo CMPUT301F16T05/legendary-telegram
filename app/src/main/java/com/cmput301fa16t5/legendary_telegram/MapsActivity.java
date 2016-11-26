@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
 import org.apache.http.protocol.RequestUserAgentHC4;
 import org.json.JSONArray;
@@ -329,22 +330,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //Log.d("End Address is ", endAddress);
 
 
-
-
-            /*
-            // Code from: http://stackoverflow.com/questions/17425499/how-to-draw-interactive-polyline-on-route-google-maps-v2-android
-            // Draw the polyLine
+            // Parse the route
             String encodedString = polyLines.getString("points");
-            List<LatLng> list = PolyUtil.decode(encodedString);
-            PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
-            for (int z = 0; z < list.size(); z++) {
-                LatLng point = list.get(z);
-                options.add(point);
-            }
-            mMap.addPolyline(options);
-            LatLng locationA = new LatLng(53.527400, -113.529435);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(locationA));
-            */
+            // learn from: http://googlemaps.github.io/android-maps-utils/javadoc/com/google/maps/android/PolyUtil.html
+            // PolyUtil.decode() returns List<LatLng>
+            routeList = PolyUtil.decode(encodedString);
 
 
         } catch (JSONException e) {
