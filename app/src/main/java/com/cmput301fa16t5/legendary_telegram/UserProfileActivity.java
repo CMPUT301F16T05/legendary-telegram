@@ -146,11 +146,11 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         else if (returnEnum.equals(UserProfileEnum.badEmail)) {
-            message = "User Name must contain one '@' and one '.'";
+            message = "Email must contain one '@' and one '.'";
         }
 
         else if (returnEnum.equals(UserProfileEnum.badPhone)) {
-            message = "User name must only contain numbers and dashes";
+            message = "Phone number must only contain numbers and dashes";
         }
 
         else {
