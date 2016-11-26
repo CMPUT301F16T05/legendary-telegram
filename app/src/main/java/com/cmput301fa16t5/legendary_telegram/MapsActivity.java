@@ -39,6 +39,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -188,8 +190,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 // Do something after it is clicked
-                String startAddress = startEditText.getText().toString();
-                String endAddress = endEditText.getText().toString();
+                startAddress = startEditText.getText().toString();
+                endAddress = endEditText.getText().toString();
+                startAddress = "5015+111+St+NW,+Edmonton";
+                endAddress = "11325+89+Ave+NW,+Edmonton";
+
+                // Code from: http://stackoverflow.com/questions/23430032/issue-streaming-directions-for-google-maps-api-v2-android
+                try {
+                    URLEncoder.encode(startAddress, "UTF-8");
+                    URLEncoder.encode(endAddress, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+
+                final String url = myController.createURl(startAddress, endAddress);
+                Log.d("URL is ", url);
+
+                JSONObject jsonObject = myController.readUrl(url);
+                getInfoFromJson(jsonObject);
+                Log.d("Start LatLng is ", start.toString());
+                Log.d("End LatLng is ", end.toString());
+                Log.d("Start Address is ", startAddress);
+                Log.d("End Address is ", endAddress);
+                Log.d("Distance", String.valueOf(distance));
 
             }
         });
