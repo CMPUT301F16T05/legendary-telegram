@@ -323,7 +323,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else {
                     // Do something about the filter
                     //go to filter activity
-                    String location_cordinate = new String();
+                    String location_cordinate = startAddress;
                     backFromFilter = true;
                     Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
                     filter_intent.putExtra("Location", location_cordinate);
