@@ -132,7 +132,7 @@ public class ArrayObserver {
 
         // REMOVE NULL REQUESTS THAT CAUSE TROUBLE ON SERVER/CLIENT TALKS
         for (Request r: newList) {
-            if ((r.getState() == null) &&(r.getId() == null)) {
+            if ((r.getState() == null) || (r.getId() == null)) {
                 newList.remove(r);
             }
         }
