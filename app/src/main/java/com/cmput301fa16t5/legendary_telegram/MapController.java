@@ -57,6 +57,20 @@ public class MapController {
                 + "&key=" + key; //+ R.string.google_maps_key;
     }
 
+    public String createPlaceURL(String address, String key) {
+        // Learn from: https://developers.google.com/maps/documentation/geocoding/start
+        // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=
+        return "https://maps.googleapis.com/maps/api/geocode/json?address=" + address
+                + "&key=" + key; //+ R.string.google_maps_key;
+    }
+
+    public String createLatLngURL(LatLng point, String key) {
+        // Learn from: https://developers.google.com/maps/documentation/geocoding/start
+        // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=
+        return "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + String.valueOf(point.latitude) + "," + String.valueOf(point.longitude)
+                + "&key=" + key; //+ R.string.google_maps_key;
+    }
+
     public JSONObject readUrl(final String url) {
         // Running URL has to be in another thread. Not in main thread.
         // Code from: http://stackoverflow.com/questions/6343166/how-to-fix-android-os-networkonmainthreadexception/6343299#6343299
