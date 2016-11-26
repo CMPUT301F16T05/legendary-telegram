@@ -130,6 +130,13 @@ public class ArrayObserver {
         String[] idList = myOperand.getIDArray();
         ArrayList<Request> newList = centralCommand.getRequestsByID(idList);
 
+        // REMOVE NULL REQUESTS THAT CAUSE TROUBLE ON SERVER/CLIENT TALKS
+        for (Request r: newList) {
+            if ((r.getState() == null) &&(r.getId() == null)) {
+                newList.remove(r);
+            }
+        }
+
         // We didn't get anything. Stop.
         if ((newList.size() == 1) && (newList.get(0).getMyRider() == null)) {
             return;

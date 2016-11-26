@@ -216,9 +216,13 @@ public class Request {
             }
         }
 
-        return (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
-                && (this.state.equals(request.getState()));
-
+        try {
+            return (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
+                    && (this.state.equals(request.getState()));
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
     }
 
 

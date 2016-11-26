@@ -121,7 +121,7 @@ public class UserProfileController {
     private UserProfileEnum checkUserInput(String name, String email, String phone) {
 
         try{
-            Integer.parseInt(phone.replaceAll("-", "").replaceAll(" ", ""));
+            Double.parseDouble(phone.replaceAll("-", "").replaceAll(" ", ""));
         }
 
         catch (NumberFormatException e) {
