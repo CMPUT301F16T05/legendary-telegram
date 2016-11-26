@@ -31,6 +31,8 @@ public class FilterActivity extends AppCompatActivity {
         min_price_ET = (EditText)findViewById(R.id.MinET);
         filter_B = (Button)findViewById(R.id.filter_button);
 
+        myController = new FilterController();
+
         String location = getIntent().getStringExtra("Location");
 
         location_ET.setText(location);
@@ -40,7 +42,18 @@ public class FilterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int feeOption = option.getCheckedRadioButtonId();
                 feeButton = (RadioButton) findViewById(feeOption);
-                myController.feeOption(max_price_ET.getText().toString(), min_price_ET.getText().toString(), feeButton, keyword.getText().toString());
+
+
+                double maxPrice = 100000000;
+                double minPrice = 0;
+                String keywordstr = keyword.getText().toString();
+                if (!max_price_ET.getText().toString().equals("")) {
+                    maxPrice = Double.parseDouble(max_price_ET.getText().toString());
+                }
+                if (!min_price_ET.getText().toString().equals("")) {
+                    minPrice = Double.parseDouble(min_price_ET.getText().toString());;
+                }
+                myController.feeOption(maxPrice, minPrice, feeButton.getText().toString(), keywordstr);
                 finish();
             }
         });

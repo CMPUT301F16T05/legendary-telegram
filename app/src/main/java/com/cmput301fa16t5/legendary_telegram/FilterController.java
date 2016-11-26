@@ -15,26 +15,18 @@ public class FilterController {
         centralCommand = CentralController.getInstance();
     }
 
-    public void feeOption(String maxPriceStr, String minPriceStr, RadioButton option, String keyword){
-        double maxPrice = 100000000;
-        double minPrice = 0;
-        if (!maxPriceStr.equals(null)) {
-            maxPrice = Double.parseDouble(maxPriceStr);
-        }
-        if (!minPriceStr.equals(null)) {
-            minPrice = Double.parseDouble(minPriceStr);;
-        }
-
+    public void feeOption(Double maxPrice, Double minPrice,String option, String keyword){
         ArrayList<Request> priceFilterRequest;
         ArrayList<Request> keywordFilterRequest;
         ArrayList<Request> filterRequest = new ArrayList<>();
-        if (option.getText().equals("Price")){
+
+        if (option.equals("Price")){
             priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, false);
         } else{
             priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, true);
         }
 
-        if (!keyword.equals(null)) {
+        if (!keyword.equals("")) {
             keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword);
             for (int i = 0; i < priceFilterRequest.size(); i++){
                 if (keywordFilterRequest.contains(priceFilterRequest.get(i))){
