@@ -8,6 +8,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+/**
+ * Created by yutang and chuan1 on 22/11/26.
+ */
 public class FilterActivity extends AppCompatActivity {
 
     private EditText location_ET;
@@ -43,9 +46,9 @@ public class FilterActivity extends AppCompatActivity {
                 int feeOption = option.getCheckedRadioButtonId();
                 feeButton = (RadioButton) findViewById(feeOption);
 
-
                 double maxPrice = 100000000;
                 double minPrice = 0;
+
                 String keywordstr = keyword.getText().toString();
                 if (!max_price_ET.getText().toString().equals("")) {
                     maxPrice = Double.parseDouble(max_price_ET.getText().toString());
