@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,12 +32,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
 import org.apache.http.protocol.RequestUserAgentHC4;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MapsActivity class is the view of the map.
@@ -50,6 +60,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LatLng start;
     private LatLng end;
+    private String startAddress;
+    private String endAddress;
+    private float distance;
+    private List<LatLng> routeList;
     private Marker startMarker;
     private Marker endMarker;
 
@@ -78,6 +92,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        okButton = (Button) findViewById(R.id.OkButton);
+        searchButton = (Button) findViewById(R.id.SearchButton);
+        filterButton = (Button) findViewById(R.id.FilterButton);
+        startEditText = (EditText) findViewById(R.id.StartEditText);
+        endEditText = (EditText) findViewById(R.id.EndEditText);
+
         Intent intent = getIntent();
         myController = new MapController();
         riderOrDriver = intent.getStringExtra("Map");
@@ -98,11 +118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        okButton = (Button) findViewById(R.id.OkButton);
-        searchButton = (Button) findViewById(R.id.SearchButton);
-        filterButton = (Button) findViewById(R.id.FilterButton);
-        startEditText = (EditText) findViewById(R.id.StartEditText);
-        endEditText = (EditText) findViewById(R.id.EndEditText);
+
 
         // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
         // Show the zoom button on the map
@@ -172,6 +188,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
                     Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
                 }
+
+                // After drag - search again
+                final String url = myController.createURl(start, end);
+                Log.d("URL is ", url);
+
+                JSONObject jsonObject = myController.readUrl(url);
+                getInfoFromJson(jsonObject);
+                Log.d("Start LatLng is ", start.toString());
+                Log.d("End LatLng is ", end.toString());
+                Log.d("Start Address is ", startAddress);
+                Log.d("End Address is ", endAddress);
+                Log.d("Distance", String.valueOf(distance));
+
+                drawMarker();
+                drawRoute();
             }
         });
 
@@ -180,8 +211,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 // Do something after it is clicked
-                String startAddress = startEditText.getText().toString();
-                String endAddress = endEditText.getText().toString();
+                startAddress = startEditText.getText().toString().replaceAll(" ", "+");
+                endAddress = endEditText.getText().toString().replaceAll(" ", "+");
+                // For test purpose:
+                startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
+                endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
+
+                final String url = myController.createURl(startAddress, endAddress);
+                Log.d("URL is ", url);
+
+                JSONObject jsonObject = myController.readUrl(url);
+                getInfoFromJson(jsonObject);
+                Log.d("Start LatLng is ", start.toString());
+                Log.d("End LatLng is ", end.toString());
+                Log.d("Start Address is ", startAddress);
+                Log.d("End Address is ", endAddress);
+                Log.d("Distance", String.valueOf(distance));
+                drawMarker();
+                drawRoute();
+
 
             }
         });
@@ -251,6 +299,99 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
     }
+
+    // Parse the Json file read from google map
+    // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
+    public void getInfoFromJson(JSONObject jsonObject) {
+        try {
+            // routesArray contains ALL routes
+            JSONArray routesArray = jsonObject.getJSONArray("routes");
+
+            // Grab the first route
+            JSONObject route = routesArray.getJSONObject(0);
+
+            // Get the overview_polyline
+            JSONObject polyLines = route.getJSONObject("overview_polyline");
+
+            // Take all legs from the route
+            JSONArray legs = route.getJSONArray("legs");
+
+            // Grab first leg
+            JSONObject leg = legs.getJSONObject(0);
+
+            // Get the distance in float
+            JSONObject distanceObject = leg.getJSONObject("distance");
+            String distanceString = distanceObject.getString("text");
+            String[] separated = distanceString.split(" ");
+            distance = Float.valueOf(separated[0]);
+            //Log.d("Distance", String.valueOf(distance));
+
+            // Get start and end lat and lng
+            JSONObject latlngStartObject = leg.getJSONObject("start_location");
+            String latStartString = latlngStartObject.getString("lat");
+            String lngStartString = latlngStartObject.getString("lng");
+            start = new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString));
+            //Log.d("Start LatLng is ", start.toString());
+
+            JSONObject latlngEndObject = leg.getJSONObject("end_location");
+            String latEndString = latlngEndObject.getString("lat");
+            String lngEndString = latlngEndObject.getString("lng");
+            end = new LatLng(Double.valueOf(latEndString), Double.valueOf(lngEndString));
+            //Log.d("End LatLng is ", end.toString());
+
+            // Get the start and end address
+            startAddress = leg.getString("start_address");
+            endAddress = leg.getString("end_address");
+            //Log.d("Start Address is ", startAddress);
+            //Log.d("End Address is ", endAddress);
+
+
+            // Parse the route
+            String encodedString = polyLines.getString("points");
+            // learn from: http://googlemaps.github.io/android-maps-utils/javadoc/com/google/maps/android/PolyUtil.html
+            // PolyUtil.decode() returns List<LatLng>
+            routeList = PolyUtil.decode(encodedString);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void drawMarker() {
+        // Clear the map
+        mMap.clear();
+
+        startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+        endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+
+        // Add a indicator for the marker
+        // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+        startMarker.setTitle("Start");
+        endMarker.setTitle("End");
+
+
+        //zoom to start position:
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+    }
+
+    public void drawRoute() {
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
+        for (int z = 0; z < routeList.size(); z++) {
+            LatLng point = routeList.get(z);
+            options.add(point);
+        }
+        mMap.addPolyline(options);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(start);
+        builder.include(end);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
+
+    }
+
+
 
     @Override
     protected void onResume(){
