@@ -1,5 +1,6 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -42,18 +43,18 @@ public class MapController {
         }
     }
 
-    public String createURl(String startAddress, String endAddress) {
+    public String createURl(String startAddress, String endAddress, String key) {
         // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" + startAddress
                 + "&destination=" + endAddress // + "&mode=driving" (Default mode is driving)
-                + "&key=" + R.string.google_maps_key;
+                + "&key=" + key;
     }
 
-    public String createURl(LatLng start, LatLng end) {
+    public String createURl(LatLng start, LatLng end, String key) {
         // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(start.latitude) + "," + String.valueOf(start.longitude)
                 + "&destination=" + String.valueOf(end.latitude) + "," + String.valueOf(end.longitude) // + "&mode=driving" (Default mode is driving)
-                + "&key=" +R.string.google_maps_key; //+ R.string.google_maps_key;
+                + "&key=" + key; //+ R.string.google_maps_key;
     }
 
     public JSONObject readUrl(final String url) {

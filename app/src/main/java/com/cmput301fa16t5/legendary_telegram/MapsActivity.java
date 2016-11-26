@@ -33,6 +33,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.res.Resources.getSystem;
+
 /**
  * MapsActivity class is the view of the map.
  * @author zhimao
@@ -47,7 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng end;
     private String startAddress;
     private String endAddress;
-    private float distance;
+    private Double distance;
     private List<LatLng> routeList;
     private Marker startMarker;
     private Marker endMarker;
@@ -175,7 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 // After drag - search again
-                final String url = myController.createURl(start, end);
+                final String url = myController.createURl(start, end, getString(R.string.google_maps_key));
                 Log.d("URL is ", url);
 
                 JSONObject jsonObject = myController.readUrl(url);
@@ -199,10 +201,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startAddress = startEditText.getText().toString().replaceAll(" ", "+");
                 endAddress = endEditText.getText().toString().replaceAll(" ", "+");
                 // For test purpose:
-                startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
-                endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
+//                startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
+//                endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
 
-                final String url = myController.createURl(startAddress, endAddress);
+                final String url = myController.createURl(startAddress, endAddress, getString(R.string.google_maps_key));
                 Log.d("URL is ", url);
 
                 JSONObject jsonObject = myController.readUrl(url);
@@ -304,11 +306,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Grab first leg
             JSONObject leg = legs.getJSONObject(0);
 
-            // Get the distance in float
+            // Get the distance in Double
             JSONObject distanceObject = leg.getJSONObject("distance");
             String distanceString = distanceObject.getString("text");
             String[] separated = distanceString.split(" ");
-            distance = Float.valueOf(separated[0]);
+            distance = Double.valueOf(separated[0].replaceAll(",", ""));
             //Log.d("Distance", String.valueOf(distance));
 
             // Get start and end lat and lng
