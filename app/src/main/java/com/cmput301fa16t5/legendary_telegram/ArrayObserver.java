@@ -85,11 +85,11 @@ public class ArrayObserver {
 
         // We only bother if the Rider/Driver lists have any content in them.
         if (!centralCommand.getCurrentUser().getMyRider().getOpenRequests().isEmpty()) {
-            doItSaysPalpatine(centralCommand.getCurrentUser().getMyRider());
+            parseAndRefreshRequests(centralCommand.getCurrentUser().getMyRider());
         }
 
         if (!centralCommand.getCurrentUser().getMyDriver().getOpenRequests().isEmpty()) {
-            doItSaysPalpatine(centralCommand.getCurrentUser().getMyDriver());
+            parseAndRefreshRequests(centralCommand.getCurrentUser().getMyDriver());
         }
     }
 
@@ -103,9 +103,8 @@ public class ArrayObserver {
          * new. If the new is updated, it notifies the user and replaces the old list with the new.
          *
          * @param myOperand RiderDriverParent (Rider or Driver) with a list to update
-         * @return Nothing.
          */
-    public void doItSaysPalpatine(RiderDriverParent myOperand) {
+    public void parseAndRefreshRequests(RiderDriverParent myOperand) {
 
         //RiderDriverParent myOperand = rdp[0];
         ArrayList<Request> requests = myOperand.getOpenRequests();
@@ -130,21 +129,23 @@ public class ArrayObserver {
         String[] idList = myOperand.getIDArray();
         ArrayList<Request> newList = centralCommand.getRequestsByID(idList);
 
-        // REMOVE NULL REQUESTS THAT CAUSE TROUBLE ON SERVER/CLIENT TALKS
-        for (Request r: newList) {
-            if ((r.getState() == null) || (r.getId() == null)) {
-                newList.remove(r);
-            }
-        }
-
         // We didn't get anything. Stop.
         if ((newList.size() == 1) && (newList.get(0).getMyRider() == null)) {
             return;
         }
 
+        // REMOVE NULL REQUESTS THAT CAUSE TROUBLE ON SERVER/CLIENT TALKS
+        else {
+            for (Request r: newList) {
+                if ((r.getState() == null) || (r.getId() == null)) {
+                    newList.remove(r);
+                }
+            }
+        }
+
         // The size is different. Clearly at least one of them has been deleted (and therefore
         // changed). So we must update.
-        else if (newList.size() < requests.size()) {
+        if (newList.size() < requests.size()) {
             myOperand.setOpenRequests(newList);
             sendUpdateNotification(myOperand);
         }

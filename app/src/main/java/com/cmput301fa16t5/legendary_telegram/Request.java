@@ -216,13 +216,18 @@ public class Request {
             }
         }
 
+        Boolean result = false;
+
         try {
-            return (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
+
+            result = (this.getId().equals(request.getId())) && (this.myRider.equals(request.getMyRider()))
                     && (this.state.equals(request.getState()));
         }
         catch (NullPointerException e) {
             return false;
         }
+
+        return result;
     }
 
 
