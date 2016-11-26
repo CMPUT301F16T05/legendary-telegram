@@ -130,4 +130,8 @@ public class ContactScreenController {
             return "Driver Accepted.";
         }
     }
+
+    public Request getRequestOfFocus() {
+        return requestOfFocus;
+    }
 }
