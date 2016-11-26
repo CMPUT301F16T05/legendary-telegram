@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,8 +32,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.protocol.RequestUserAgentHC4;
 import org.json.JSONArray;
@@ -42,6 +45,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MapsActivity class is the view of the map.
@@ -58,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String startAddress;
     private String endAddress;
     private float distance;
+    private List<LatLng> routeList;
     private Marker startMarker;
     private Marker endMarker;
 
@@ -193,14 +198,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startAddress = startEditText.getText().toString().replaceAll(" ", "+");
                 endAddress = endEditText.getText().toString().replaceAll(" ", "+");
                 // For test purpose:
-                startAddress = "5015 112 St NW, Edmonton".replaceAll(" ", "+");
-                endAddress = "11325 89 Ave NW, Edmonton".replaceAll(" ", "+");
+                startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
+                endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
 
                 final String url = myController.createURl(startAddress, endAddress);
                 Log.d("URL is ", url);
 
                 JSONObject jsonObject = myController.readUrl(url);
                 getInfoFromJson(jsonObject);
+                drawMarker();
+                drawRoute();
                 Log.d("Start LatLng is ", start.toString());
                 Log.d("End LatLng is ", end.toString());
                 Log.d("Start Address is ", startAddress);
@@ -344,6 +351,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
+
+    public void drawMarker() {
+        // Clear the map
+        mMap.clear();
+
+        startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+        endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+
+        // Add a indicator for the marker
+        // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+        startMarker.setTitle("Start");
+        endMarker.setTitle("End");
+
+
+        //zoom to start position:
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+    }
+
+
 
     @Override
     protected void onResume(){
