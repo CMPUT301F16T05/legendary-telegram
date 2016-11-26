@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,6 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button filterButton;
     private EditText startEditText;
     private EditText endEditText;
+    private TextView endTextView;
 
     private ArrayList<LatLng> positionPair;
     private String riderOrDriver;
@@ -84,6 +86,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         filterButton = (Button) findViewById(R.id.FilterButton);
         startEditText = (EditText) findViewById(R.id.StartEditText);
         endEditText = (EditText) findViewById(R.id.EndEditText);
+        endTextView = (TextView) findViewById(R.id.EndTextView);
 
         Intent intent = getIntent();
         myController = new MapController();
@@ -123,6 +126,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
             startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
             startMarker.setTitle("Start");
+
+            endEditText.setEnabled(false);
+            endEditText.setVisibility(View.INVISIBLE);
+            endTextView.setEnabled(false);
+            endTextView.setVisibility(View.INVISIBLE);
+
+
         }
 
         /**
@@ -164,32 +174,52 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (marker.getTitle().equals("Start")) {
-                    Context context = getApplicationContext();
-                    start = marker.getPosition();
-                    Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
-                } else if (marker.getTitle().equals("End")) {
-                    Context context = getApplicationContext();
-                    end = marker.getPosition();
-                    Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                // If it is Driver
+                if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
+                    if (marker.getTitle().equals("Start") || marker.getTitle().equals(startAddress)) {
+                        Context context = getApplicationContext();
+                        start = marker.getPosition();
+                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    final String url = myController.createLatLngURL(start, getString(R.string.google_maps_key));
+                    Log.d("URL Driver is ", url);
+                    JSONObject jsonObject = myController.readUrl(url);
+
+                    getPlace(jsonObject);
+                    drawMarker();
+
+                }
+                // As a rider
+                else {
+                    if (marker.getTitle().equals("Start")) {
+                        Context context = getApplicationContext();
+                        start = marker.getPosition();
+                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                    } else if (marker.getTitle().equals("End")) {
+                        Context context = getApplicationContext();
+                        end = marker.getPosition();
+                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    // After drag - search again
+                    final String url = myController.createURl(start, end, getString(R.string.google_maps_key));
+                    Log.d("URL is ", url);
+
+                    JSONObject jsonObject = myController.readUrl(url);
+                    getInfoFromJson(jsonObject);
+                    Log.d("Start LatLng is ", start.toString());
+                    Log.d("End LatLng is ", end.toString());
+                    Log.d("Start Address is ", startAddress);
+                    Log.d("End Address is ", endAddress);
+                    Log.d("Distance", String.valueOf(distance));
+
+                    drawMarker();
+                    drawRoute();
                 }
 
-                // After drag - search again
-                final String url = myController.createURl(start, end, getString(R.string.google_maps_key));
-                Log.d("URL is ", url);
-
-                JSONObject jsonObject = myController.readUrl(url);
-                getInfoFromJson(jsonObject);
-                Log.d("Start LatLng is ", start.toString());
-                Log.d("End LatLng is ", end.toString());
-                Log.d("Start Address is ", startAddress);
-                Log.d("End Address is ", endAddress);
-                Log.d("Distance", String.valueOf(distance));
-
-                drawMarker();
-                drawRoute();
             }
         });
 
@@ -197,25 +227,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Do something after it is clicked
-                startAddress = startEditText.getText().toString().replaceAll(" ", "+");
-                endAddress = endEditText.getText().toString().replaceAll(" ", "+");
-                // For test purpose:
-//                startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
-//                endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
+                // If it is Driver
+                if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
+                    startAddress = startEditText.getText().toString().replaceAll(" ", "+");
+                    final String url = myController.createPlaceURL(startAddress, getString(R.string.google_maps_key));
+                    Log.d("URL Driver is ", url);
+                    JSONObject jsonObject = myController.readUrl(url);
 
-                final String url = myController.createURl(startAddress, endAddress, getString(R.string.google_maps_key));
-                Log.d("URL is ", url);
+                    getPlace(jsonObject);
+                    drawMarker();
+                }
 
-                JSONObject jsonObject = myController.readUrl(url);
-                getInfoFromJson(jsonObject);
-                Log.d("Start LatLng is ", start.toString());
-                Log.d("End LatLng is ", end.toString());
-                Log.d("Start Address is ", startAddress);
-                Log.d("End Address is ", endAddress);
-                Log.d("Distance", String.valueOf(distance));
-                drawMarker();
-                drawRoute();
+                // As a rider
+                else {
+                    // Do something after it is clicked
+                    startAddress = startEditText.getText().toString().replaceAll(" ", "+");
+                    endAddress = endEditText.getText().toString().replaceAll(" ", "+");
+                    // For test purpose:
+//                    startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
+//                    endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
+
+                    final String url = myController.createURl(startAddress, endAddress, getString(R.string.google_maps_key));
+                    Log.d("URL is ", url);
+
+                    JSONObject jsonObject = myController.readUrl(url);
+                    getInfoFromJson(jsonObject);
+                    Log.d("Start LatLng is ", start.toString());
+                    Log.d("End LatLng is ", end.toString());
+                    Log.d("Start Address is ", startAddress);
+                    Log.d("End Address is ", endAddress);
+                    Log.d("Distance", String.valueOf(distance));
+                    drawMarker();
+                    drawRoute();
+                }
+
+
+
 
 
             }
@@ -287,6 +334,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    private void getPlace(JSONObject jsonObject) {
+        try {
+            // resultsArray contains the place
+            JSONArray resultsArray = jsonObject.getJSONArray("results");
+
+            // Grab the first route
+            JSONObject result = resultsArray.getJSONObject(0);
+
+            // Get the format string
+            startAddress = result.getString("formatted_address");
+
+            // Get the geometry object
+            JSONObject geometry = result.getJSONObject("geometry");
+
+            // Get location object
+            JSONObject location = geometry.getJSONObject("location");
+
+            // Get the LatLng
+            String latStartString = location.getString("lat");
+            String lngStartString = location.getString("lng");
+            start = new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString));
+            Log.d("Start LatLng is ", start.toString());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Parse the Json file read from google map
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
     public void getInfoFromJson(JSONObject jsonObject) {
@@ -346,22 +422,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void drawMarker() {
-        // Clear the map
-        mMap.clear();
+        // If it is Driver
+        if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
+            // Clear the map
+            mMap.clear();
 
-        startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-        endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
 
-        // Add a indicator for the marker
-        // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
-        startMarker.setTitle("Start");
-        endMarker.setTitle("End");
+            // Add a indicator for the marker
+            // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+            startMarker.setTitle(startAddress);
+
+            //zoom to start position:
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+
+        // If it is rider
+        else {
+            // Clear the map
+            mMap.clear();
+
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+
+            // Add a indicator for the marker
+            // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
+            startMarker.setTitle("Start");
+            endMarker.setTitle("End");
 
 
-        //zoom to start position:
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+            //zoom to start position:
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
     }
 
     public void drawRoute() {
