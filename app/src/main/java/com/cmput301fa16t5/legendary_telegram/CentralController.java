@@ -286,7 +286,7 @@ public class CentralController {
      */
     public ArrayList<Request> getRequestsByFee(double min, double max, Boolean usePerKM) {
         ArrayList<Request> gotRequest = new ArrayList<>();
-        String parsedString[] = new String[2];
+        String parsedString[] = new String[3];
         if (usePerKM) {
             parsedString[0] = ElasticSearchQueries.FEEPERKM;
         } else {
