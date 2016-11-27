@@ -190,6 +190,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             JSONObject leg = legs.getJSONObject(0);
 
             // Get the distance in float
+            // Can be used for future part 6
             JSONObject distanceObject = leg.getJSONObject("distance");
             String distanceString = distanceObject.getString("text");
             String[] separated = distanceString.split(" ");
