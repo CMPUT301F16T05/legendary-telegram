@@ -1,6 +1,9 @@
 package com.cmput301fa16t5.legendary_telegram;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by yutang and chuan1 on 22/11/26.
@@ -36,17 +39,26 @@ public class FilterController {
 
         if (!keyword.equals("")) {
             keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword.toLowerCase());
-
-        }else{
-            filterRequest = priceFilterRequest;
         }
 
+        //Values were found for both filters
         if ((!keywordFilterRequest.isEmpty()) && (!priceFilterRequest.isEmpty())) {
+            Log.d("TEST", "both");
             for (int i = 0; i < priceFilterRequest.size(); i++) {
                 if (keywordFilterRequest.contains(priceFilterRequest.get(i))) {
                     filterRequest.add(priceFilterRequest.get(i));
                 }
             }
+            //Only keyword was found to have a filter attached
+        }else if (!keywordFilterRequest.isEmpty()){
+            Log.d("TEST", "both");
+            Collections.copy(filterRequest, keywordFilterRequest);
+            //Only price was found to have a filter attached
+        }else if (!priceFilterRequest.isEmpty()){
+            Log.d("TEST", "both");
+            Collections.copy(filterRequest, priceFilterRequest);
+        }else{
+            //Nothing was found to have a filter attached or nothing was found
         }
 
         centralCommand.getCurrentUser().getMyDriver().setOpenRequests(filterRequest);
