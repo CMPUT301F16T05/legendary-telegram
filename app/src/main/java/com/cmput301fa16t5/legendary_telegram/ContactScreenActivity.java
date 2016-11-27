@@ -48,6 +48,7 @@ import java.util.List;
  */
 public class ContactScreenActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    // Used for google map display
     private GoogleMap mMap;
     private LatLng start;
     private LatLng end;
@@ -56,6 +57,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     private List<LatLng> routeList;
     private Marker startMarker;
     private Marker endMarker;
+    // Can be used for future part 6
     private Double distance;
 
     private TextView infoTitle;
@@ -84,6 +86,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         myController = new ContactScreenController();
+        // Construct map controller
         mapController = new MapController();
 
         infoTitle = (TextView) findViewById(R.id.infoTitle);
@@ -141,6 +144,9 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     }
 
     /**
+     * When google map is ready, get the URL from start and end point.
+     * Send the URL to google map server, which returns a JSON object.
+     * Read the JSON object in order to draw the route.
      * @author zhimao
      * @param googleMap
      */
@@ -161,7 +167,10 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
 
     }
 
-    // Parse the Json file read from google map
+    /**
+     * Parse the Json file read from google map
+     * @param jsonObject
+     */
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
     public void getInfoFromJson(JSONObject jsonObject) {
         try {
@@ -187,12 +196,13 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             distance = Double.valueOf(separated[0].replaceAll(",", ""));
             //Log.d("Distance", String.valueOf(distance));
 
-
             // Get the start and end address
             startAddress = leg.getString("start_address");
             endAddress = leg.getString("end_address");
             Log.d("Start Address is ", startAddress);
             Log.d("End Address is ", endAddress);
+
+            // Display the Address - Regarding to User Story: 04.04.01
             startFillText.setText(startAddress);
             endFillText.setText(endAddress);
 
@@ -203,22 +213,25 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             // PolyUtil.decode() returns List<LatLng>
             routeList = PolyUtil.decode(encodedString);
 
-            // Clear the map
+            // Clear the map and draw the marker and route
             mMap.clear();
-
+            // Add Start and End markers
             startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(false));
             endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(false));
-            // Add a indicator for the marker
+            // Add a title for the marker - showing by click the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
             startMarker.setTitle("Start: "+ startAddress);
             endMarker.setTitle("End: " + endAddress);
 
+            // Draw the route
             PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
             for (int z = 0; z < routeList.size(); z++) {
                 LatLng point = routeList.get(z);
                 options.add(point);
             }
             mMap.addPolyline(options);
+
+            // Move the camera to the route
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(start);
             builder.include(end);
