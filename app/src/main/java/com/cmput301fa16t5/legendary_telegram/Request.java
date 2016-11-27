@@ -223,7 +223,6 @@ public class Request {
         catch (NullPointerException e) {
             return false;
         }
-
         return result;
     }
 
@@ -286,5 +285,9 @@ public class Request {
 
     public String getElasticEnd(){
         return elasticEnd;
+    }
+
+    public Double getFeePerKM() {
+        return feePerKM;
     }
 }

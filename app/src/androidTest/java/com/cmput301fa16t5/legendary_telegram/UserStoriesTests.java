@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -136,6 +137,7 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
      * US 02.01.01
      * US 03.03.01
      * US 04.01.01
+     * US 04.05.01
      * US 05.01.01
      * US 05.02.01
      * US 05.03.01
@@ -144,7 +146,7 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
      * US 10.02.01
      *
      *                         *****US 01.05.01*****
-     * Implicitely, when you see the contact screen activity, you will see the highlighted text
+     * Implicitly, when you see the contact screen activity, you will see the highlighted text
      * that makes US 01.05.01 Possible. I DID NOT include clicking those links in this test. Why?
      * If you have an email account setup on the Emulator/Phone you're running the tests on, it will
      * take you to an email client, or prompt you as to which email client to use if you have many
@@ -303,6 +305,122 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
 
     }
 
+    /**
+     * US 04.03.01
+     * US 04.04.01
+     *
+     * US 04.02.01 - Would do but can't find a way to get Solo to enter text into pop-up...
+     * See https://archive.org/details/LTPromotional
+     */
+    public void testSearchFilters() {
+
+        CentralController myController = CentralController.getInstance();
+
+        solo.clickOnButton("New User");
+        solo.assertCurrentActivity("User Profile Activity", UserProfileActivity.class);
+
+        solo.enterText((EditText) solo.getView(R.id.userNameSettings), "TestFilters");
+        solo.enterText((EditText) solo.getView(R.id.userEmail), "filters@ggmail.com");
+        solo.enterText((EditText) solo.getView(R.id.userPhone), "5550123");
+        solo.enterText((EditText) solo.getView(R.id.userVehicle), "Blah Blah");
+
+        solo.clickOnButton("Create New User");
+        solo.assertCurrentActivity("Log In Screen", LogInActivity.class);
+
+        solo.enterText((EditText) solo.getView(R.id.userNameET), "TestFilters");
+        solo.clickOnButton("Login");
+        solo.assertCurrentActivity("Should be Main Request", MainRequestActivity.class);
+        solo.clickOnButton("Make A Request");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.enterText((EditText) solo.getView(R.id.EndEditText), "Athabasca Canada");
+        solo.clickOnText("Search");
+        solo.clickOnText("Ok");
+        solo.assertCurrentActivity("Should be main request", MainRequestActivity.class);
+
+        solo.clickOnButton("Make A Request");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.enterText((EditText) solo.getView(R.id.EndEditText), "Fort McMurray Canada");
+        solo.clickOnText("Search");
+        solo.clickOnText("Ok");
+
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        String id1 = myController.getCurrentUser().getMyCurrentMode().getIDArray()[0];
+        String id2 = myController.getCurrentUser().getMyCurrentMode().getIDArray()[1];
+
+        ArrayList<Request> req = myController.getCurrentUser().getMyCurrentMode().getOpenRequests();
+        Double cost0Upper = req.get(0).getFeePerKM() * 1.01;
+        Double cost0Lower = req.get(0).getFeePerKM() * 0.99;
+        Double cost1Upper = req.get(1).getFeePerKM() * 1.01;
+        Double cost1Lower = req.get(1).getFeePerKM() * 0.99;
+
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.clickOnText("Filter");
+
+        solo.assertCurrentActivity("Filters", FilterActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.MaxET), "300");
+        solo.enterText((EditText) solo.getView(R.id.MinET), "100");
+        solo.clickOnButton("Filter And Search");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.clickOnText("Filter");
+
+        solo.assertCurrentActivity("Filters", FilterActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.MaxET), "500");
+        solo.enterText((EditText) solo.getView(R.id.MinET), "200");
+        solo.clickOnButton("Filter And Search");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.clickOnText("Filter");
+
+        solo.assertCurrentActivity("Filters", FilterActivity.class);
+        solo.clickOnText("KM");
+        solo.enterText((EditText) solo.getView(R.id.MaxET), cost0Upper.toString());
+        solo.enterText((EditText) solo.getView(R.id.MinET), cost0Lower.toString());
+        solo.clickOnButton("Filter And Search");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnButton("Find Requests");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "Edmonton Canada");
+        solo.clickOnText("Filter");
+
+        solo.assertCurrentActivity("Filters", FilterActivity.class);
+        solo.clickOnText("KM");
+        solo.enterText((EditText) solo.getView(R.id.MaxET), cost1Upper.toString());
+        solo.enterText((EditText) solo.getView(R.id.MinET), cost1Lower.toString());
+        solo.clickOnButton("Filter And Search");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnText("Make A Request");
+        solo.assertCurrentActivity("Maps", MapsActivity.class);
+        solo.goBack();
+
+        solo.clickOnText(id1);
+        solo.assertCurrentActivity("Request Status", RequestStatusActivity.class);
+        solo.clickOnText("Cancel");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        solo.clickOnText(id2);
+        solo.assertCurrentActivity("Request Status", RequestStatusActivity.class);
+        solo.clickOnText("Cancel");
+        solo.assertCurrentActivity("Main Request", MainRequestActivity.class);
+
+        // Edmonton Athabasca is about $123
+        // Edmonton Ft McMurray is about $457
+    }
+
     public void tearDown() throws Exception {
         Context testContext = InstrumentationRegistry.getTargetContext();
         testContext.deleteFile("Cthulhu_Driver.sav");
@@ -310,6 +428,7 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
         testContext.deleteFile("TestRiderDriver.sav");
         testContext.deleteFile("TestCancel.sav");
         testContext.deleteFile("TestOffline.sav");
+        testContext.deleteFile("TestFilters.sav");
 
     }
 
