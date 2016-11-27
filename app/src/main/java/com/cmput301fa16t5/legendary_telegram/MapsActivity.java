@@ -38,23 +38,27 @@ import static android.content.res.Resources.getSystem;
 
 /**
  * MapsActivity class is the view of the map.
+ * It is used to show and get the geometric information of rider and driver.
  * @author zhimao
  */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
-    // This is the actual map object
+    // Actual map onject
     private GoogleMap mMap;
+    // Geometric information
     private LatLng start;
     private LatLng end;
     private String startAddress;
     private String endAddress;
     private Double distance;
+    // Used for draw a polyline
     private List<LatLng> routeList;
+    //Markers of start and end points
     private Marker startMarker;
     private Marker endMarker;
 
+    // Buttons and Text boxes
     private Button okButton;
     private Button searchButton;
     private Button filterButton;
@@ -95,12 +99,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         description = "";
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -108,16 +110,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
         // Show the zoom button on the map
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         start = new LatLng(53.522945, -113.525594);
         end = new LatLng(53.525037, -113.521324);
-        // Learn from: https://developers.google.com/maps/documentation/android-api/marker
-        // https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker
 
         /**
          * Null in case of tests since there is nothing.
@@ -149,17 +147,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             filterButton.setText("Description");
         }
+
         //zoom to start position:
         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        /* Sample code
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        */
-
+        // Long click marker and drag to get accurate location
         // Learn from: http://stackoverflow.com/questions/30067228/onmarkerdraglistener-for-marker-position-along-associated-circles-google-maps-an
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -292,6 +285,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        // Click filter button - set the filter
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,6 +328,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Input address and return the Latitude and Longtitude of the address
+     * @param jsonObject
+     */
     private void getPlace(JSONObject jsonObject) {
         try {
             // resultsArray contains the place
@@ -363,7 +361,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    // Parse the Json file read from google map
+    /**
+     * Parse the Json file read from google map.
+     * We can get folloing information:
+     * Start location
+     * End location
+     * Start address
+     * End address
+     * distance (For future part 6)
+     * Route
+     * @param jsonObject
+     */
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
     public void getInfoFromJson(JSONObject jsonObject) {
         try {
@@ -421,6 +429,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Clear the map and draw the start marker and end marker.
+     */
     public void drawMarker() {
         // If it is Driver
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
@@ -458,6 +469,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * After draw the marker, it will draw the route.
+     */
     public void drawRoute() {
         PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
         for (int z = 0; z < routeList.size(); z++) {
@@ -472,8 +486,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
-
+    /**
+     * Finish the activity when come back from filter.
+     */
     @Override
     protected void onResume(){
         super.onResume();
