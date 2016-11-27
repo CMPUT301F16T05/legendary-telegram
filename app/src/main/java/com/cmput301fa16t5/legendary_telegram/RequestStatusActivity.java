@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * Clicking on a Request in MainRequestActivity should lead to this.
+ * Clicking on a Request in MainRequestActivity should lead to this (if Rider)
  * For a Rider this would be more detailed information like the number of
  * Drivers have offered to fulfill that request. From there they could click on a driver shown
  * in a ListView and go to ContactScreenActivity to see the phone/email and contact them.
@@ -28,7 +28,7 @@ public class RequestStatusActivity extends AppCompatActivity {
      * This view shows the IdentificationCards.
      * We initialize the ArrayAdapter in onCreate
      * because it is linked to a specific ArrayList and does not change (unlike main request activity)
-     * @param savedInstanceState: Because Android.
+     * @param savedInstanceState Because Android.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

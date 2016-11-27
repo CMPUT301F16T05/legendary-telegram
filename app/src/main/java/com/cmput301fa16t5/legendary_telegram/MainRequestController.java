@@ -3,8 +3,9 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.widget.ArrayAdapter;
 
 /**
- * Created by keith on 11/2/2016.
  * Corresponds to MainRequestActivity
+ * Processes inputs by setting current requests if ArrayAdapter is clicked or setting the User
+ * as a Rider or Driver depending on what button is clicked.
  */
 public class MainRequestController {
 
@@ -34,7 +35,7 @@ public class MainRequestController {
 
     /**
      * Sets the ArrayAdapter to show the appropriate requests.
-     * @param activity: Needed to set command.
+     * @param activity Needed to set command.
      * @return The set ArrayAdapter
      */
     public ArrayAdapter<Request> setRequestAdapter(MainRequestActivity activity) {

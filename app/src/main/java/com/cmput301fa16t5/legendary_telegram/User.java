@@ -1,14 +1,13 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * Created by keith on 11/2/2016.
- * User class.
- * Holds name, phone number, email.
+ * User class. Holds name, phone number, email, Rider and Driver objects.
+ *
  * Talks with CentralController, and other controllers, a lot.
  * Or should I say, is manipulated by, and manipulates what it has, based on what the user enters on the screen.
  *  Originally created by Keith.
     Filled out by Chuan
-    Refactored and Improved by Keith
+    Refactored and Improved by Kgmills
  */
 public class User {
 

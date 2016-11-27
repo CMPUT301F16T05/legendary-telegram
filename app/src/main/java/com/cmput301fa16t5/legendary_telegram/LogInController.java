@@ -20,7 +20,7 @@ public class LogInController {
      * Activity class passes EditText input. Controller checks if valid through Gson Controller.
      * If so, it'll tell the singleton to save whatever it has and load the new user.
      * Else the Activity will be notified to post a toast.
-     * @param userName: Username from activity class EditText
+     * @param userName Username from activity class EditText
      * @return True if valid user name. False if it does not exist.
      */
     public boolean validateUserName(String userName, Context context) {

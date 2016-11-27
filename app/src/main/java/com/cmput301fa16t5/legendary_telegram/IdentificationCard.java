@@ -1,7 +1,8 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * Created by keith on 11/9/2016.
+ * Small object that simply holds Username, Phone, Email, Vehicle fields.
+ *
  * Instead of passing around an entire user, rider, or driver object
  * This will contain the relevant fields.
  * This is used instead of sending a tuple with the information fields.
@@ -48,7 +49,7 @@ public class IdentificationCard {
 
     /**
      * Compares two and see if they're the same.
-     * @param card: Another card to be compared.
+     * @param card Another card to be compared.
      * @return True if a match, false otherwise.
      */
     public boolean equals(IdentificationCard card) {

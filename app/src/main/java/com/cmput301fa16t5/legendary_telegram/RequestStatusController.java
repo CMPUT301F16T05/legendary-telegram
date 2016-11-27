@@ -3,8 +3,8 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.widget.ArrayAdapter;
 
 /**
- * Created by keith on 11/2/2016.
  * Controller for the Request Status screen.
+ * Most important job is to cancel requests when needed.
  */
 public class RequestStatusController {
 
@@ -30,7 +30,7 @@ public class RequestStatusController {
 
     /**
      * Sets the ArrayAdapter with appropriate information.
-     * @param activity: Needed because Android.
+     * @param activity Needed because Android.
      * @return Set ArrayAdapter.
      */
     public ArrayAdapter<IdentificationCard> setRequestAdapter(RequestStatusActivity activity) {

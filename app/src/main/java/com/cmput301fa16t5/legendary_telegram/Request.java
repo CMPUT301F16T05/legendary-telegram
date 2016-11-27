@@ -8,8 +8,8 @@ import java.util.Locale;
 import io.searchbox.annotations.JestId;
 
 /**
- * Created by keith on 10/30/2016.
- * Request class.
+ * Request class - Major "Model" class. Lots of information.
+ *
  * Contains fields for ID (given by ESearch),
  * An IdentificationCard of the Rider who made it.
  * IdentificationCards of the Drivers who accepted it.
@@ -116,7 +116,7 @@ public class Request {
 
     /**
      * Should only ever be called when acting as Driver.
-     * @param newDriver: Card of the new Driver.
+     * @param newDriver Card of the new Driver.
      */
     public void addADriver(IdentificationCard newDriver) {
         if (state.equals(RequestEnum.openRequest) || state.equals(RequestEnum.hasADriver)) {
@@ -128,7 +128,7 @@ public class Request {
 
     /**
      * Should only ever be called when acting as Rider.
-     * @param index: Index of the Driver accepted.
+     * @param index Index of the Driver accepted.
      */
     public void acceptADriver(Integer index) {
         this.myDriver = potentialDrivers.get(index);

@@ -1,7 +1,8 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * User Profile Controller.
+ * User Profile Controller, checks if entered information is any good.
+ *
  * Does all the parsing of information from User Activity to see if it's correct.
  * If it is, uses CentralController to proceed further with data edits.
  * @author kgmills

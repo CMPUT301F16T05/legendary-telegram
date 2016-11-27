@@ -8,24 +8,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
-This is the activity called upon when:
-1) A new user account is to be created (reached by login activity).
-2) An existing user account to be modified (reached by main request activity)
-
-In the first case, the fields are to be blank, filled with nothing, and the button at the bottom (changeSettings)
-says "create new account"
-
-In the second case, the fields are to be filled with the existing information about the user, which they can modify.
-The button at the bottom will say "change settings"
-
-The check button at the top checks the name entered into the field. If a user with that name already exists
-a new user account cannot be made/the existing account cannot be modified. 
-
-When the user creates or modifies an account the function that checks the name should be called anyway. THe 
-separate button exists for convience.
- Originally created by Keith.
- Filled out by Yu Tang Lin
- Refactored by Keith
+ * Activity for making new Users or modifying old ones.
+ *
+ * This is the activity called upon when:
+ * 1) A new user account is to be created (reached by login activity).
+ * 2) An existing user account to be modified (reached by main request activity)
+ *
+ * In the first case, the fields are to be blank, filled with nothing, and the button at the bottom (changeSettings)
+ * says "create new account"
+ *
+ * In the second case, the fields are to be filled with the existing information about the user, which they can modify.
+ * The button at the bottom will say "change settings"
+ *
+ * The check button at the top checks the name entered into the field. If a user with that name already exists
+ * a new user account cannot be made/the existing account cannot be modified.
+ *
+ * When the user creates or modifies an account the function that checks the name should be called anyway. THe
+ * separate button exists for convience.
+ * Originally created by Keith.
+ * Filled out by Yu Tang Lin
+ * Refactored by Keith
 */
 public class UserProfileActivity extends AppCompatActivity {
 

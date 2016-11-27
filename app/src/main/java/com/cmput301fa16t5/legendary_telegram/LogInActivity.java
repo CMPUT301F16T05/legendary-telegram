@@ -30,13 +30,13 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     /**
-     * @ Yu Tang Lin
+     * Yu Tang Lin
      * On click function for R.id.newUserLogin
      * Go to UserProfileActivity to create new User.
      * Since we got 2 Activity calling the UserProfileActivity, we
      * pass a message see which activity is calling the UserProfileActivity
      * (MainRequestActivity also called the UserProfileActivity to change setting)
-     * @param v: Needed or else runtime exception.
+     * @param v Needed or else runtime exception.
      */
     public void newUserClick(View v) {
         Intent intent = new Intent(LogInActivity.this, UserProfileActivity.class);

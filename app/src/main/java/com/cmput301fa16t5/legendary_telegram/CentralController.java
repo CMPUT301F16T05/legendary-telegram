@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Lone Singleton for the App; Mediator between activities, data, server and disk.
+ *
  * This class implements the Singleton pattern.
  * Only one exists in the system at any given time.
- * Does most of the work with GsonController and ESearchController.
+ *
+ * It also implements the Mediator pattern, as all Activity Controllers call upon it.
+ * Does most of the work with GsonController and ESearchController (wrappers!)
  * Talks to the User class which controllers the Rider and Driver behaviour.
  * Essentially acts as a crossroad between the live data (User and it's Rider/Driver),
  * the outside world/database and the user Via the activities and their controllers.
@@ -209,7 +213,7 @@ public class CentralController {
         return isGood;
     }
 
-    private Boolean deleteRequests(Request... requests){
+    private void deleteRequests(Request... requests){
 
         Boolean isGood = null;
 
@@ -222,21 +226,16 @@ public class CentralController {
                     isGood = deleteRequestsTask.execute(r).get();
                 }
                 catch (Exception e) {
-                    isGood = Boolean.FALSE;
                     e.printStackTrace();
                 }
             }else{
-                isGood = Boolean.FALSE;
                 Log.i("ESCErr","Tried to delete something that wasn't on the server");
             }
         }
 
         if (isGood == null){
             Log.d("ESCErr", "Major error occurred in deleteRequests wrapper");
-            isGood = Boolean.FALSE;
         }
-
-        return isGood;
     }
 
     /**

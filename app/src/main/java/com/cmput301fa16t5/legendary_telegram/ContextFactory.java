@@ -3,13 +3,17 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.content.Context;
 
 /**
- * Created on 11/18/2016.
+ * Created and given Context at the start of the app so that Context isn't being dragged around constantly.
+ *
  * Purpose of this class:
  * Gson Requires a Context Object to work.
  * If one were to pass a Singleton  (Central Controller) a context object at the start of the
  * code and tell it to hold onto that context for Gson use, Android Studio would complain that
  * this is a memory leak, potentially.
  * Instead, we have a class object that will hold onto our context, but is not a singleton itself.
+ *
+ * Inspired by Professor Hindle making mention of a "Context Factory" (Pattern) in the lectures,
+ * though we're not sure if this necessarily qualifies as an implementation of said pattern.
  * @author kgmills
  */
 public class ContextFactory {

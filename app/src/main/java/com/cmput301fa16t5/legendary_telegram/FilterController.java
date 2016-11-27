@@ -3,17 +3,20 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
- * Created by yutang and chuan1 on 22/11/26.
+ * Filter Controller, processes inputs to Filter Activity.
+ *
  * The filter controller for the activity
  * Update the current requests for the driver using the filter
  * Talk to the central controller
+ * @author yutang
+ * @author chuan1
+ * @author baron
  */
 public class FilterController {
 
-    private CentralController centralCommand;
+    private final CentralController centralCommand;
 
     public FilterController() {
         centralCommand = CentralController.getInstance();
@@ -78,11 +81,11 @@ public class FilterController {
                     }
                 }
             }
-        }else if ((usedKeyword) && (!usedPrice)){
+        }else if (usedKeyword){
             //Only keyword was found to have a filter attached
             Log.d("TEST", "keyword");
             filterRequest = keywordFilterRequest;
-        }else if ((!usedKeyword) && (usedPrice)){
+        }else if (usedPrice){
             //Only price was found to have a filter attached
             Log.d("TEST", "price");
             filterRequest = priceFilterRequest;

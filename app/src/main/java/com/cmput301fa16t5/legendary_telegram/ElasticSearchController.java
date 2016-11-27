@@ -17,6 +17,8 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
+ * Major Module designated to implement Wifi connectivity.
+ *
  * Created by keith on 11/2/2016.
  * filled in by Randy
  * It's the ESearch Controller

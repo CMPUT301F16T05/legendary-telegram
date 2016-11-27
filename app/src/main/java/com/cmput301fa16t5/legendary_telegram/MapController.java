@@ -1,6 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    private CentralController centralCommand;
+    private final CentralController centralCommand;
     private JSONObject jsonObject;
 
     public MapController() {
@@ -33,7 +32,7 @@ public class MapController {
     /**
      * Sends the Central Controller coordinates depending on whether a new Request will be made
      * (Rider) or whether requests will be looked for (Driver).
-     * @param positionPair: An ArrayList of Coordinates.
+     * @param positionPair An ArrayList of Coordinates.
      */
     public void sendCoordinates(ArrayList<LatLng> positionPair, String description) {
         if (positionPair.size() == 1) {
@@ -98,7 +97,7 @@ public class MapController {
     }
 
     // Code from: http://stackoverflow.com/questions/4308554/simplest-way-to-read-json-from-a-url-in-java
-    public JSONObject readJsonFromUrl(String urlString) throws IOException, JSONException {
+    private JSONObject readJsonFromUrl(String urlString) throws IOException, JSONException {
         InputStream is = new URL(urlString).openStream();
         try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));

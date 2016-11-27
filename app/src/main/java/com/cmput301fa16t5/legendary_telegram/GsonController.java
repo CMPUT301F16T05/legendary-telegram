@@ -51,8 +51,8 @@ public class GsonController {
 
     /**
      * Deletes an old user name.
-     * @param oldName: String of the old user.
-     * @param context: Needed to use Gson.
+     * @param oldName String of the old user.
+     * @param context Needed to use Gson.
      */
     public static void deleteOldUserName(String oldName, Context context) {
         context.deleteFile(oldName + ".sav");
@@ -61,8 +61,8 @@ public class GsonController {
     /**
      * Uses GSON to load a user object related to a given
      * username from disk.
-     * @param userName: The username as a string.
-     * @param context: Context needed to use GSON.
+     * @param userName The username as a string.
+     * @param context Context needed to use GSON.
      * @return The User object, if successful. Null otherwise.
      */
     public static User loadUserInfo(String userName, Context context) {
@@ -84,8 +84,8 @@ public class GsonController {
 
     /**
      * Uses GSON to save a User object to disk
-     * @param user: The User object to be saved.
-     * @param context: Context needed to use GSON.
+     * @param user The User object to be saved.
+     * @param context Context needed to use GSON.
      */
     public static void saveUserToDisk(User user, Context context) {
         // Taken from LonelyTwitter and assignment 1

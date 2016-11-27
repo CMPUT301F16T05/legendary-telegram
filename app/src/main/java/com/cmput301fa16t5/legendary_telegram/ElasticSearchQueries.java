@@ -1,9 +1,9 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
+ * A number of Queries for ElasticSearch. Kind of like Enums.
  * Created by Randy on 2016-11-10.
  */
-
 public final class ElasticSearchQueries {
 
     public static final String ID = "id";

@@ -15,7 +15,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -30,6 +29,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 /**
+ * Contact Screen -- Accept/Commit to Requests/Drivers, Phone/Email Contact info, see Route on Map.
+ *
  *  What this class is:
  *  1) Allows a Rider to accept a Driver.
  *  2) Allows a Driver to accept/commit to a request.
@@ -42,9 +43,6 @@ import java.util.List;
  *  a) A Rider Clicking on a specific driver in the RequestStatusActivity
  *  b) A Driver clicking on a Request in their MainRequestActivity.
  *
- *  This class is responsible for telling the GUI what it should display, the numbers
- *  to call or the addresses to email. It doesn't actually invoke the function call
- *  to call that number or make an email, that is left to ContactScreenController.
  */
 public class ContactScreenActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -147,8 +145,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
      * When google map is ready, get the URL from start and end point.
      * Send the URL to google map server, which returns a JSON object.
      * Read the JSON object in order to draw the route.
-     * @author zhimao
-     * @param googleMap
+     * Coded by Zhimao
+     * @param googleMap Map object
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -169,10 +167,10 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
 
     /**
      * Parse the Json file read from google map
-     * @param jsonObject
+     * @param jsonObject Object to read from
      */
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
-    public void getInfoFromJson(JSONObject jsonObject) {
+    private void getInfoFromJson(JSONObject jsonObject) {
         try {
             // routesArray contains ALL routes
             JSONArray routesArray = jsonObject.getJSONArray("routes");

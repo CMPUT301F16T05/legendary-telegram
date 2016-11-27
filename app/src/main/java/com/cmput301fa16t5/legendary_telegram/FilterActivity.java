@@ -9,11 +9,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 /**
- * Created by yutang and chuan1 on 22/11/26.
- * Filter Activity
+ * Filter Activity for when a Driver picks requests by keyword/cost.
+ *
  * For drivers to search the proper requests that they want
  * Using the keyword and price search
- * Filled out by Chuan and Yutang
+ * @author yutang
+ * @author chuan1
  */
 public class FilterActivity extends AppCompatActivity {
 
@@ -55,7 +56,7 @@ public class FilterActivity extends AppCompatActivity {
                     maxPrice = Double.parseDouble(max_price_ET.getText().toString());
                 }
                 if (!min_price_ET.getText().toString().equals("")) {
-                    minPrice = Double.parseDouble(min_price_ET.getText().toString());;
+                    minPrice = Double.parseDouble(min_price_ET.getText().toString());
                 }
                 myController.feeOption(maxPrice, minPrice, feeButton.getText().toString(),
                         keyword.getText().toString());

@@ -34,8 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.res.Resources.getSystem;
-
 /**
  * MapsActivity class is the view of the map.
  * @author zhimao
@@ -365,7 +363,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Parse the Json file read from google map
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
-    public void getInfoFromJson(JSONObject jsonObject) {
+    private void getInfoFromJson(JSONObject jsonObject) {
         try {
             // routesArray contains ALL routes
             JSONArray routesArray = jsonObject.getJSONArray("routes");
@@ -421,7 +419,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void drawMarker() {
+    private void drawMarker() {
         // If it is Driver
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
             // Clear the map
@@ -458,7 +456,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void drawRoute() {
+    private void drawRoute() {
         PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
         for (int z = 0; z < routeList.size(); z++) {
             LatLng point = routeList.get(z);

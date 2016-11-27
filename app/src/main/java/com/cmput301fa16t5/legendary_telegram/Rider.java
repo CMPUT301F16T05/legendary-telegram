@@ -14,9 +14,9 @@ public class Rider extends RiderDriverParent {
 
     /**
      * Creates new Request.
-     * @param me: IdentificationCard for Requests creator.
-     * @param start: Start coordinates.
-     * @param end: End coordinates.
+     * @param me IdentificationCard for Requests creator.
+     * @param start Start coordinates.
+     * @param end End coordinates.
      * @return A new Request.
      */
     public Request createNewRequest(IdentificationCard me, LatLng start, LatLng end) {
@@ -27,10 +27,10 @@ public class Rider extends RiderDriverParent {
 
     /**
      * Creates new Request with an optional description field.
-     * @param me: IdentificationCard for Requests creator.
-     * @param start: Start coordinates.
-     * @param end: End coordinates.
-     * @param description: Description provided for the request
+     * @param me IdentificationCard for Requests creator.
+     * @param start Start coordinates.
+     * @param end End coordinates.
+     * @param description Description provided for the request
      * @return A new Request with a filled in description
      */
     public Request createNewRequest(IdentificationCard me, LatLng start, LatLng end, String description) {

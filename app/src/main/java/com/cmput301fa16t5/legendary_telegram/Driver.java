@@ -1,7 +1,7 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * Driver class. Accepts and Commits Requests. Asks if it has been picked.
+ * Accepts and Commits Requests. Asks if it has been picked.
  * @author keith
  */
 public class Driver extends RiderDriverParent {

@@ -1,7 +1,10 @@
 package com.cmput301fa16t5.legendary_telegram;
 
 /**
- * See ContactScreenActivity.
+ * Contact Screen Controller - Retrieves data for the activity and does logical computations.
+ * Separation of where/how info is displayed and what is to be displayed.
+ *
+ * Not an official pattern, but an implementation of Abram's "OO Butterknife"
  *
  * The guts of said activity, like where a function is called to initiate a phone call, go here.
  * This class, more than others, needs serious refactoring.
@@ -136,7 +139,7 @@ public class ContactScreenController {
     /**
      * Getter method, which helps ContactScreenActivity to get the Latitude and Longtitude of start and end points.
      * @return request
-     * @author zhimao
+     * zhimao
      */
     public Request getRequestOfFocus() {
         return requestOfFocus;
