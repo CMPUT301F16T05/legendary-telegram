@@ -412,26 +412,13 @@ public class CentralController {
     /**
      * Creates a new Request based on two LatLng coordinate sets.
      * @param positionPair ArrayList containing two coordinates.
-     */
-    public void createRequest(ArrayList<LatLng> positionPair) {
-        IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
-                currentUser.getTelephone(), currentUser.getEmail());
-        Request rToUpload = currentUser.getMyRider().createNewRequest(me,
-                positionPair.get(0), positionPair.get(1));
-        saveCurrentUser();
-        rToUpload.setOnServer(addNewRequest(rToUpload));
-    }
-
-    /**
-     * Creates a new Request based on two LatLng coordinate sets.
-     * @param positionPair ArrayList containing two coordinates.
      * @param description Optional string that can be attached to a request
      */
     public void createRequest(ArrayList<LatLng> positionPair, String description) {
         IdentificationCard me = new IdentificationCard(currentUser.getUserName(),
                 currentUser.getTelephone(), currentUser.getEmail());
         Request rToUpload = currentUser.getMyRider().createNewRequest(me,
-                positionPair.get(0), positionPair.get(1), description);
+                positionPair.get(0), positionPair.get(1), description.toLowerCase());
         saveCurrentUser();
         rToUpload.setOnServer(addNewRequest(rToUpload));
     }

@@ -20,6 +20,11 @@ import java.util.ArrayList;
  *
  * Each test is commented with the User Stories it ensures can be fulfilled.
  *
+ * A word of note is that sometimes the tests may slow down, either due to the ESearch algorithm,
+ * or because I think Robotium's Solo has a hard time identifying what is a button and what is not
+ * with the designs we used. (Aka it thinks a big green square with "Ok" in the middle is a textview,
+ * not a button and waits a little before clicking it.
+ *
  * @author kgmills
  */
 public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActivity>{
@@ -180,34 +185,26 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
 
         solo.assertCurrentActivity("Should be Maps", MapsActivity.class);
 
-        /**
-         * This is somewhat cheating on my part. I plug the coordinate data in instead of using
-         * the actual pins on the map. Reason? Getting Solo to long click the pins and drag them is
-         * more trouble than it's worth
-         */
-        // Athabasca
-        LatLng start = new LatLng(54.7214, 113.2862);
+        // Capilano Mall, Edmonton
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "5004 98 Ave Edmonton Alberta");
 
-        // Victoria
-        LatLng end = new LatLng(48.4284, 123.3656);
+        // West Edmonton Mall, Edmonton
+        solo.enterText((EditText) solo.getView(R.id.EndEditText), "8882 170 NW Edmonton Alberta");
 
-        ArrayList<LatLng> injection = new ArrayList<>();
-        injection.add(start);
-        injection.add(end);
-
-        myController.createRequest(injection);
-
-        String id = myController.getCurrentUser().getMyCurrentMode().getIDArray()[0];
-
-        solo.goBack();
+        solo.clickOnText("Search");
+        solo.clickOnText("Ok");
         solo.assertCurrentActivity("Main Request Activity", MainRequestActivity.class);
+
+        // We need to get the ID of the request so we actually know what to click on later.
+        String id = myController.getCurrentUser().getMyCurrentMode().getIDArray()[0];
 
         solo.clickOnButton("Find Requests");
         solo.assertCurrentActivity("Maps", MapsActivity.class);
 
-        myController.searchRequests(injection);
+        // Searching for Requests beginning in Capilano
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "5004 98 Ave Edmonton Alberta");
 
-        solo.goBack();
+        solo.clickOnText("Ok");
         solo.assertCurrentActivity("MainRequest", MainRequestActivity.class);
         solo.clickOnText(id);
         solo.assertCurrentActivity("Contact Screen", ContactScreenActivity.class);
@@ -270,7 +267,6 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
      *
      */
     public void testCancel() {
-        CentralController myController = CentralController.getInstance();
         solo.clickOnButton("New User");
         solo.assertCurrentActivity("User Profile Activity", UserProfileActivity.class);
 
@@ -288,19 +284,15 @@ public class UserStoriesTests extends ActivityInstrumentationTestCase2<LogInActi
 
         solo.assertCurrentActivity("Should be Maps", MapsActivity.class);
 
-        // Antarctica :0
-        LatLng start = new LatLng(82.8628, 135.0000);
+        // Bonnie Doon Mall, Edmonton
+        solo.enterText((EditText) solo.getView(R.id.StartEditText), "160 82 Ave NW Edmonton");
 
-        // Uranium City, Sask.
-        LatLng end = new LatLng(59.57, -108.6);
+        // Biggest Canadian Tire in Canada :0
+        solo.enterText((EditText) solo.getView(R.id.EndEditText), "2110 101 St NW Edmonton");
 
-        ArrayList<LatLng> injection = new ArrayList<>();
-        injection.add(start);
-        injection.add(end);
-
-        myController.createRequest(injection);
-
-        solo.goBack();
+        solo.clickOnText("Search");
+        solo.clickOnText("Ok");
+        solo.assertCurrentActivity("Main Request Activity", MainRequestActivity.class);
 
         solo.clickOnText("No Accepting");
         solo.assertCurrentActivity("Should be contact screen activity.", RequestStatusActivity.class);

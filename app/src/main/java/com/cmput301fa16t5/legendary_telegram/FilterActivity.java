@@ -40,9 +40,7 @@ public class FilterActivity extends AppCompatActivity {
 
         myController = new FilterController();
 
-        String location = getIntent().getStringExtra("Location");
-
-        location_ET.setText(location);
+        location_ET.setText(getIntent().getStringExtra("Location"));
 
         filter_B.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +51,14 @@ public class FilterActivity extends AppCompatActivity {
                 double maxPrice = 100000000;
                 double minPrice = 0;
 
-                String keywordstr = keyword.getText().toString();
                 if (!max_price_ET.getText().toString().equals("")) {
                     maxPrice = Double.parseDouble(max_price_ET.getText().toString());
                 }
                 if (!min_price_ET.getText().toString().equals("")) {
                     minPrice = Double.parseDouble(min_price_ET.getText().toString());;
                 }
-                myController.feeOption(maxPrice, minPrice, feeButton.getText().toString(), keywordstr);
+                myController.feeOption(maxPrice, minPrice, feeButton.getText().toString(),
+                        keyword.getText().toString());
                 finish();
             }
         });

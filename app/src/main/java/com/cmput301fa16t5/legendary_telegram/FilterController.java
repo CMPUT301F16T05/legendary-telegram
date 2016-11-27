@@ -1,7 +1,5 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.widget.RadioButton;
-
 import java.util.ArrayList;
 
 /**
@@ -27,7 +25,7 @@ public class FilterController {
      */
     public void feeOption(Double maxPrice, Double minPrice,String option, String keyword){
         ArrayList<Request> priceFilterRequest;
-        ArrayList<Request> keywordFilterRequest;
+        ArrayList<Request> keywordFilterRequest = new ArrayList<>();
         ArrayList<Request> filterRequest = new ArrayList<>();
 
         if (option.equals("Price")){
@@ -37,14 +35,18 @@ public class FilterController {
         }
 
         if (!keyword.equals("")) {
-            keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword);
-            for (int i = 0; i < priceFilterRequest.size(); i++){
-                if (keywordFilterRequest.contains(priceFilterRequest.get(i))){
+            keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword.toLowerCase());
+
+        }else{
+            filterRequest = priceFilterRequest;
+        }
+
+        if ((!keywordFilterRequest.isEmpty()) && (!priceFilterRequest.isEmpty())) {
+            for (int i = 0; i < priceFilterRequest.size(); i++) {
+                if (keywordFilterRequest.contains(priceFilterRequest.get(i))) {
                     filterRequest.add(priceFilterRequest.get(i));
                 }
             }
-        }else{
-            filterRequest = priceFilterRequest;
         }
 
         centralCommand.getCurrentUser().getMyDriver().setOpenRequests(filterRequest);
