@@ -133,6 +133,11 @@ public class ContactScreenController {
         }
     }
 
+    /**
+     * Getter method, which helps ContactScreenActivity to get the Latitude and Longtitude of start and end points.
+     * @return request
+     * @author zhimao
+     */
     public Request getRequestOfFocus() {
         return requestOfFocus;
     }
