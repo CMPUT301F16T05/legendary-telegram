@@ -6,6 +6,9 @@ package com.cmput301fa16t5.legendary_telegram;
  * Holds name, phone number, email.
  * Talks with CentralController, and other controllers, a lot.
  * Or should I say, is manipulated by, and manipulates what it has, based on what the user enters on the screen.
+ *  Originally created by Keith.
+    Filled out by Chuan
+    Refactored and Improved by Keith
  */
 public class User {
 

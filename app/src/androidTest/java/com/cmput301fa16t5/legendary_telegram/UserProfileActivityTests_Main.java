@@ -11,6 +11,8 @@ import com.robotium.solo.Solo;
 
 /**
  * Created by idrea on 2016/11/12.
+ * Use to test if the UserprofileActivity works when enter from the Main Request
+ * @author Chuan
  */
 
 public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCase2<LogInActivity> {
@@ -18,11 +20,11 @@ public class UserProfileActivityTests_Main extends ActivityInstrumentationTestCa
     public UserProfileActivityTests_Main(){
         super(com.cmput301fa16t5.legendary_telegram.LogInActivity.class);
     }
-
+    //Begin the Test from the MainrequestActivity
     public void testStart() throws Exception {
         Activity activity = getActivity();
     }
-
+    //Set up Solo
     public void setUp() throws Exception {
         Log.d("TAG1", "setUp()");
         solo = new Solo(getInstrumentation(), getActivity());

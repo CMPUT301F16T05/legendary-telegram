@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 
 /**
  * Created by idrea on 2016/11/7.
+ * Test the methods in the Rider Class
+ * @author Chuan
  */
 
 public class RiderTests {

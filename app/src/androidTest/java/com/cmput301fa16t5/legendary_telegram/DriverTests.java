@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 /**
  * Created by idrea on 2016/11/10.
+ * Test the methods in the Driver Class
+ * @author Chuan
  */
 
 public class DriverTests {

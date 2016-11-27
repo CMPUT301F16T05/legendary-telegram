@@ -10,6 +10,10 @@ import android.widget.RadioGroup;
 
 /**
  * Created by yutang and chuan1 on 22/11/26.
+ * Filter Activity
+ * For drivers to search the proper requests that they want
+ * Using the keyword and price search
+ * Filled out by Chuan and Yutang
  */
 public class FilterActivity extends AppCompatActivity {
 

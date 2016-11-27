@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 /**
  * Created by yutang and chuan1 on 22/11/26.
+ * The filter controller for the activity
+ * Update the current requests for the driver using the filter
+ * Talk to the central controller
  */
 public class FilterController {
 
@@ -15,6 +18,13 @@ public class FilterController {
         centralCommand = CentralController.getInstance();
     }
 
+    /**
+     * Update the current opening request for the driver
+     * @param maxPrice  Max value for the range
+     * @param minPrice  Min value for the range
+     * @param option    Check using the total price or price/km
+     * @param keyword   Keyword searching for
+     */
     public void feeOption(Double maxPrice, Double minPrice,String option, String keyword){
         ArrayList<Request> priceFilterRequest;
         ArrayList<Request> keywordFilterRequest;

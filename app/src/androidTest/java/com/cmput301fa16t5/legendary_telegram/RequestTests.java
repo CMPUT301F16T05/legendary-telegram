@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
 
 /**
  * Created by idrea on 2016/11/5.
+ * Test the methods in the Request Class
+ * @author Chuan
  */
 
 public class RequestTests {

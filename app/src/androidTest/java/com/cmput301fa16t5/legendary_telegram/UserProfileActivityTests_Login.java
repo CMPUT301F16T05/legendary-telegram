@@ -18,6 +18,8 @@ import static junit.framework.Assert.fail;
 
 /**
  * Created by idrea on 2016/11/5.
+ * Use to test if the UserprofileActivity works when enter from the Login Interface
+ * @author Chuan
  */
 
 public class UserProfileActivityTests_Login extends ActivityInstrumentationTestCase2<LogInActivity> {
@@ -26,6 +28,7 @@ public class UserProfileActivityTests_Login extends ActivityInstrumentationTestC
         super(com.cmput301fa16t5.legendary_telegram.LogInActivity.class);
     }
 
+    //Begin the test from login interface
     public void testStart() throws Exception {
         Activity activity = getActivity();
     }
