@@ -48,8 +48,8 @@ public class FilterActivity extends AppCompatActivity {
                 int feeOption = option.getCheckedRadioButtonId();
                 feeButton = (RadioButton) findViewById(feeOption);
 
-                double maxPrice = 100000000;
-                double minPrice = 0;
+                Double maxPrice = null;
+                Double minPrice = null;
 
                 if (!max_price_ET.getText().toString().equals("")) {
                     maxPrice = Double.parseDouble(max_price_ET.getText().toString());

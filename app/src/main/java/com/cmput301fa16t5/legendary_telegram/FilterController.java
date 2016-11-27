@@ -27,37 +27,67 @@ public class FilterController {
      * @param keyword   Keyword searching for
      */
     public void feeOption(Double maxPrice, Double minPrice,String option, String keyword){
-        ArrayList<Request> priceFilterRequest;
+        ArrayList<Request> priceFilterRequest = new ArrayList<>();
         ArrayList<Request> keywordFilterRequest = new ArrayList<>();
         ArrayList<Request> filterRequest = new ArrayList<>();
+        Boolean usedKeyword = Boolean.FALSE;
+        Boolean usedPrice = Boolean.FALSE;
 
-        if (option.equals("Price")){
-            priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, false);
-        } else{
-            priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, true);
+        //Assume price filter is not being used
+        Boolean priceIsAllowed = Boolean.FALSE;
+        if (minPrice != null){
+            if (maxPrice != null){
+                //Valid values were given for both max and min
+                priceIsAllowed = Boolean.TRUE;
+            } else{
+                //Valid value was given for min only
+                priceIsAllowed = Boolean.TRUE;
+                maxPrice = 100000.0;
+            }
+        } else if (maxPrice != null){
+            //valid price was given for max only
+            priceIsAllowed = Boolean.TRUE;
+            minPrice = 0.0;
+        }
+
+        if (priceIsAllowed){
+            Log.d("TEST", "Price search");
+            if (option.equals("Price")){
+                priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, false);
+                usedPrice = Boolean.TRUE;
+            } else{
+                priceFilterRequest = centralCommand.getRequestsByFee(minPrice, maxPrice, true);
+                usedPrice = Boolean.TRUE;
+            }
         }
 
         if (!keyword.equals("")) {
-            keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword.toLowerCase());
+            Log.d("TEST","Keyword search");
+            keywordFilterRequest = centralCommand.getRequestsByKeyword(keyword);
+            usedKeyword = Boolean.TRUE;
         }
 
-        //Values were found for both filters
-        if ((!keywordFilterRequest.isEmpty()) && (!priceFilterRequest.isEmpty())) {
+
+        if ((usedKeyword) && (usedPrice)) {
+            //Values were found for both filters
             Log.d("TEST", "both");
-            for (int i = 0; i < priceFilterRequest.size(); i++) {
-                if (keywordFilterRequest.contains(priceFilterRequest.get(i))) {
-                    filterRequest.add(priceFilterRequest.get(i));
+            for (Request rp:priceFilterRequest){
+                for (Request rk:keywordFilterRequest){
+                    if (rp.getId().equals(rk.getId())){
+                        filterRequest.add(rp);
+                    }
                 }
             }
+        }else if ((usedKeyword) && (!usedPrice)){
             //Only keyword was found to have a filter attached
-        }else if (!keywordFilterRequest.isEmpty()){
-            Log.d("TEST", "both");
-            Collections.copy(filterRequest, keywordFilterRequest);
+            Log.d("TEST", "keyword");
+            filterRequest = keywordFilterRequest;
+        }else if ((!usedKeyword) && (usedPrice)){
             //Only price was found to have a filter attached
-        }else if (!priceFilterRequest.isEmpty()){
-            Log.d("TEST", "both");
-            Collections.copy(filterRequest, priceFilterRequest);
+            Log.d("TEST", "price");
+            filterRequest = priceFilterRequest;
         }else{
+            Log.d("TEST","FAILURE");
             //Nothing was found to have a filter attached or nothing was found
         }
 
