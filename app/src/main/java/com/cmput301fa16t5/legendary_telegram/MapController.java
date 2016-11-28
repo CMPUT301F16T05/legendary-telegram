@@ -49,9 +49,9 @@ public class MapController {
 
     /**
      * It returns a URL for searching directions between two addresses.
-     * @param startAddress
-     * @param endAddress
-     * @param key
+     * @param startAddress Address of start point
+     * @param endAddress Address of end point
+     * @param key Google api key
      * @return URL for searching directions between two addresses
      */
     public String createURl(String startAddress, String endAddress, String key) {
@@ -63,9 +63,9 @@ public class MapController {
 
     /**
      * It returns a URL searching for directions between two LatLng points.
-     * @param start
-     * @param end
-     * @param key
+     * @param start Start location point in LatLng form
+     * @param end End location point in LatLng form
+     * @param key Google api key
      * @return URL for searching directions between two LatLng points
      */
     public String createURl(LatLng start, LatLng end, String key) {
@@ -77,8 +77,8 @@ public class MapController {
 
     /**
      * It returns a URL for searching a place by its address.
-     * @param address
-     * @param key
+     * @param address Address that being searched
+     * @param key Google api key
      * @return URL for searching a place by its address
      */
     public String createPlaceURL(String address, String key) {
@@ -90,8 +90,8 @@ public class MapController {
 
     /**
      * It returns a URL for searching a place by its LatLng points.
-     * @param point
-     * @param key
+     * @param point Location point in LatLng form
+     * @param key Google api key
      * @return URL for searching a place by its LatLng points
      */
     public String createLatLngURL(LatLng point, String key) {
@@ -104,7 +104,7 @@ public class MapController {
     /**
      * Send the URL to google map server in the background.
      * It returns a JSON object.
-     * @param url
+     * @param url URL that sent to Google Map Server
      * @return JSON object of the searching result
      */
     public JSONObject readUrl(final String url) {
@@ -135,7 +135,7 @@ public class MapController {
 
     /**
      * Read URL
-     * @param urlString
+     * @param urlString URL that sent to Google Map Server
      * @return JSON object from URL.
      * @throws IOException
      * @throws JSONException
@@ -161,4 +161,5 @@ public class MapController {
             is.close();
         }
     }
+
 }
