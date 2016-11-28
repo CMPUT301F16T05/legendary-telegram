@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -215,8 +216,8 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
             // Clear the map and draw the marker and route
             mMap.clear();
             // Add Start and End markers
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(false));
-            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(false));
+            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(false).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             // Add a title for the marker - showing by click the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
             startMarker.setTitle("Start: "+ startAddress);
