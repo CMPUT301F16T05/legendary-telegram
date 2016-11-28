@@ -2,6 +2,8 @@ package com.cmput301fa16t5.legendary_telegram;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 /**
  * Data class created to hold the start and end location data so it can
  * be passed more easily between the map and any activities it might call.
@@ -18,6 +20,8 @@ public class MapData {
     private LatLng end;
     private String startAddress;
     private String endAddress;
+    private Double distance;
+    private List<LatLng> routeList;
 
     public MapData(){
         //Basic constructor, expects nothing
@@ -54,4 +58,25 @@ public class MapData {
     public void setEndAddress(String endAddress) {
         this.endAddress = endAddress;
     }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public List<LatLng> getRouteList() {
+        return routeList;
+    }
+
+    public void setRouteList(List<LatLng> routeList) {
+        this.routeList = routeList;
+    }
+
+    public void addToRouteList(LatLng point){
+        routeList.add(point);
+    }
+
 }

@@ -3,7 +3,9 @@ package com.cmput301fa16t5.legendary_telegram;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.PolyUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -161,4 +163,114 @@ public class MapController {
             is.close();
         }
     }
+
+    /**
+     * Input address and return the Latitude and Longtitude of the address
+     * @param jsonObject
+     * @return a MapData object containing all the parsed information
+     */
+    public MapData getPlace(JSONObject jsonObject) {
+        MapData mapData = new MapData();
+        try {
+            // resultsArray contains the place
+            JSONArray resultsArray = jsonObject.getJSONArray("results");
+
+            // Grab the first route
+            JSONObject result = resultsArray.getJSONObject(0);
+
+            // Get the format string
+            mapData.setStartAddress(result.getString("formatted_address"));
+
+            // Get the geometry object
+            JSONObject geometry = result.getJSONObject("geometry");
+
+            // Get location object
+            JSONObject location = geometry.getJSONObject("location");
+
+            // Get the LatLng
+            String latStartString = location.getString("lat");
+            String lngStartString = location.getString("lng");
+            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
+            Log.d("Start LatLng is ", mapData.getStart().toString());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return mapData;
+    }
+
+    /**
+     * Parse the Json file read from google map.
+     * We can get folloing information:
+     * Start location
+     * End location
+     * Start address
+     * End address
+     * distance (For future part 6)
+     * Route
+     * @param jsonObject
+     * @return a MapData object containing all the parsed information
+     */
+    // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
+    public MapData getInfoFromJson(JSONObject jsonObject) {
+        MapData mapData = new MapData();
+        try {
+            // routesArray contains ALL routes
+            JSONArray routesArray = jsonObject.getJSONArray("routes");
+
+            // Grab the first route
+            JSONObject route = routesArray.getJSONObject(0);
+
+            // Get the overview_polyline
+            JSONObject polyLines = route.getJSONObject("overview_polyline");
+
+            // Take all legs from the route
+            JSONArray legs = route.getJSONArray("legs");
+
+            // Grab first leg
+            JSONObject leg = legs.getJSONObject(0);
+
+            // Get the distance in Double
+            JSONObject distanceObject = leg.getJSONObject("distance");
+            String distanceString = distanceObject.getString("text");
+            String[] separated = distanceString.split(" ");
+            mapData.setDistance(Double.valueOf(separated[0].replaceAll(",", "")));
+            //Log.d("Distance", String.valueOf(distance));
+
+            // Get start and end lat and lng
+            JSONObject latlngStartObject = leg.getJSONObject("start_location");
+            String latStartString = latlngStartObject.getString("lat");
+            String lngStartString = latlngStartObject.getString("lng");
+            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
+            //Log.d("Start LatLng is ", start.toString());
+
+            JSONObject latlngEndObject = leg.getJSONObject("end_location");
+            String latEndString = latlngEndObject.getString("lat");
+            String lngEndString = latlngEndObject.getString("lng");
+            mapData.setEnd(new LatLng(Double.valueOf(latEndString), Double.valueOf(lngEndString)));
+            //Log.d("End LatLng is ", end.toString());
+
+            // Get the start and end address
+            mapData.setStartAddress(leg.getString("start_address"));
+            mapData.setEndAddress(leg.getString("end_address"));
+            //Log.d("Start Address is ", startAddress);
+            //Log.d("End Address is ", endAddress);
+
+
+            // Parse the route
+            String encodedString = polyLines.getString("points");
+            // learn from: http://googlemaps.github.io/android-maps-utils/javadoc/com/google/maps/android/PolyUtil.html
+            // PolyUtil.decode() returns List<LatLng>
+            mapData.setRouteList(PolyUtil.decode(encodedString));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return mapData;
+    }
+
 }

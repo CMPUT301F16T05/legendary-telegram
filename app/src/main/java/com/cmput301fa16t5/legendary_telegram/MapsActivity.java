@@ -44,12 +44,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Actual map onject
     private GoogleMap mMap;
+
     //Data class for map
     private MapData mapData;
-    // Geometric information
-    private Double distance;
-    // Used for draw a polyline
-    private List<LatLng> routeList;
+
     //Markers of start and end points
     private Marker startMarker;
     private Marker endMarker;
@@ -177,7 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("URL Driver is ", url);
                     JSONObject jsonObject = myController.readUrl(url);
 
-                    getPlace(jsonObject);
+                    mapData = myController.getPlace(jsonObject);
                     drawMarker();
 
                 }
@@ -201,12 +199,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("URL is ", url);
 
                     JSONObject jsonObject = myController.readUrl(url);
-                    getInfoFromJson(jsonObject);
+                    mapData = myController.getInfoFromJson(jsonObject);
                     Log.d("Start LatLng is ", mapData.getStart().toString());
                     Log.d("End LatLng is ", mapData.getEnd().toString());
                     Log.d("Start Address is ", mapData.getStartAddress());
                     Log.d("End Address is ", mapData.getEndAddress());
-                    Log.d("Distance", String.valueOf(distance));
+                    Log.d("Distance", String.valueOf(mapData.getDistance()));
 
                     drawMarker();
                     drawRoute();
@@ -226,7 +224,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("URL Driver is ", url);
                     JSONObject jsonObject = myController.readUrl(url);
 
-                    getPlace(jsonObject);
+                    mapData = myController.getPlace(jsonObject);
                     drawMarker();
                 }
 
@@ -243,12 +241,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("URL is ", url);
 
                     JSONObject jsonObject = myController.readUrl(url);
-                    getInfoFromJson(jsonObject);
+                    mapData = myController.getInfoFromJson(jsonObject);
                     Log.d("Start LatLng is ", mapData.getStart().toString());
                     Log.d("End LatLng is ", mapData.getEnd().toString());
                     Log.d("Start Address is ", mapData.getStartAddress());
                     Log.d("End Address is ", mapData.getEndAddress());
-                    Log.d("Distance", String.valueOf(distance));
+                    Log.d("Distance", String.valueOf(mapData.getDistance()));
                     drawMarker();
                     drawRoute();
                 }
@@ -328,107 +326,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Input address and return the Latitude and Longtitude of the address
-     * @param jsonObject
-     */
-    private void getPlace(JSONObject jsonObject) {
-        try {
-            // resultsArray contains the place
-            JSONArray resultsArray = jsonObject.getJSONArray("results");
-
-            // Grab the first route
-            JSONObject result = resultsArray.getJSONObject(0);
-
-            // Get the format string
-            mapData.setStartAddress(result.getString("formatted_address"));
-
-            // Get the geometry object
-            JSONObject geometry = result.getJSONObject("geometry");
-
-            // Get location object
-            JSONObject location = geometry.getJSONObject("location");
-
-            // Get the LatLng
-            String latStartString = location.getString("lat");
-            String lngStartString = location.getString("lng");
-            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
-            Log.d("Start LatLng is ", mapData.getStart().toString());
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Parse the Json file read from google map.
-     * We can get folloing information:
-     * Start location
-     * End location
-     * Start address
-     * End address
-     * distance (For future part 6)
-     * Route
-     * @param jsonObject
-     */
-    // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
-    private void getInfoFromJson(JSONObject jsonObject) {
-        try {
-            // routesArray contains ALL routes
-            JSONArray routesArray = jsonObject.getJSONArray("routes");
-
-            // Grab the first route
-            JSONObject route = routesArray.getJSONObject(0);
-
-            // Get the overview_polyline
-            JSONObject polyLines = route.getJSONObject("overview_polyline");
-
-            // Take all legs from the route
-            JSONArray legs = route.getJSONArray("legs");
-
-            // Grab first leg
-            JSONObject leg = legs.getJSONObject(0);
-
-            // Get the distance in Double
-            JSONObject distanceObject = leg.getJSONObject("distance");
-            String distanceString = distanceObject.getString("text");
-            String[] separated = distanceString.split(" ");
-            distance = Double.valueOf(separated[0].replaceAll(",", ""));
-            //Log.d("Distance", String.valueOf(distance));
-
-            // Get start and end lat and lng
-            JSONObject latlngStartObject = leg.getJSONObject("start_location");
-            String latStartString = latlngStartObject.getString("lat");
-            String lngStartString = latlngStartObject.getString("lng");
-            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
-            //Log.d("Start LatLng is ", start.toString());
-
-            JSONObject latlngEndObject = leg.getJSONObject("end_location");
-            String latEndString = latlngEndObject.getString("lat");
-            String lngEndString = latlngEndObject.getString("lng");
-            mapData.setEnd(new LatLng(Double.valueOf(latEndString), Double.valueOf(lngEndString)));
-            //Log.d("End LatLng is ", end.toString());
-
-            // Get the start and end address
-            mapData.setStartAddress(leg.getString("start_address"));
-            mapData.setEndAddress(leg.getString("end_address"));
-            //Log.d("Start Address is ", startAddress);
-            //Log.d("End Address is ", endAddress);
-
-
-            // Parse the route
-            String encodedString = polyLines.getString("points");
-            // learn from: http://googlemaps.github.io/android-maps-utils/javadoc/com/google/maps/android/PolyUtil.html
-            // PolyUtil.decode() returns List<LatLng>
-            routeList = PolyUtil.decode(encodedString);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Clear the map and draw the start marker and end marker.
      */
     private void drawMarker() {
@@ -473,6 +370,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     public void drawRoute() {
         PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
+        List<LatLng> routeList = mapData.getRouteList();
         for (int z = 0; z < routeList.size(); z++) {
             LatLng point = routeList.get(z);
             options.add(point);
