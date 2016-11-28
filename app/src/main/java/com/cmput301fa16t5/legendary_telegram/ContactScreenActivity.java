@@ -84,6 +84,7 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.ContactMap);
         mapFragment.getMapAsync(this);
 
+
         myController = new ContactScreenController();
         // Construct map controller
         mapController = new MapController();
@@ -152,6 +153,10 @@ public class ContactScreenActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
+        // Show the zoom button on the map
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
         Request request = myController.getRequestOfFocus();
         start = request.getStartLocation();
         end = request.getEndLocation();
