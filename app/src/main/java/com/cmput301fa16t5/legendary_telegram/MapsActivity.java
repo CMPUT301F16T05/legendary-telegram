@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -42,7 +43,7 @@ import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    // Actual map onject
+    // Actual map object
     private GoogleMap mMap;
     //Data class for map
     private MapData mapData;
@@ -122,7 +123,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          */
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
             startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
-            startMarker.setTitle("Start");
+            startMarker.setTitle("Search Point");
 
             endEditText.setEnabled(false);
             endEditText.setVisibility(View.INVISIBLE);
@@ -136,8 +137,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          * "fromRider" aka two points.
          */
         else {
-            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
-            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true));
+            // Code from: http://stackoverflow.com/questions/16598169/changing-colour-of-markers-google-map-v2-android
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
@@ -148,7 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         //zoom to start position:
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(14).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(17).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         // Long click marker and drag to get accurate location
@@ -168,10 +170,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMarkerDragEnd(Marker marker) {
                 // If it is Driver
                 if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
-                    if (marker.getTitle().equals("Start") || marker.getTitle().equals(mapData.getStartAddress())) {
+                    if (marker.getTitle().equals("Search Point") || marker.getTitle().equals(mapData.getStartAddress())) {
                         Context context = getApplicationContext();
                         mapData.setStart(marker.getPosition());
-                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Moved Search Point: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     final String url = myController.createLatLngURL(mapData.getStart(), getString(R.string.google_maps_key));
@@ -187,13 +189,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (marker.getTitle().equals("Start")) {
                         Context context = getApplicationContext();
                         mapData.setStart(marker.getPosition());
-                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context,"E: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Moved Start: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"E: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
                     } else if (marker.getTitle().equals("End")) {
                         Context context = getApplicationContext();
                         mapData.setEnd(marker.getPosition());
-                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context,"E: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"Moved End: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     // After drag - search again
@@ -317,10 +319,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else {
                     // Do something about the filter
                     //go to filter activity
-                    String location_cordinate = mapData.getStartAddress();
+                    String location_coordinate = mapData.getStartAddress();
                     backFromFilter = true;
                     Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
-                    filter_intent.putExtra("Location", location_cordinate);
+                    filter_intent.putExtra("Location", location_coordinate);
                     startActivity(filter_intent);
                 }
             }
@@ -329,8 +331,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Input address and return the Latitude and Longtitude of the address
-     * @param jsonObject
+     * Input address and return the Latitude and Longitude of the address
+     * @param jsonObject JSON object returned from Google Map
      */
     private void getPlace(JSONObject jsonObject) {
         try {
@@ -363,14 +365,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Parse the Json file read from google map.
-     * We can get folloing information:
+     * We can get following information:
      * Start location
      * End location
      * Start address
      * End address
      * distance (For future part 6)
      * Route
-     * @param jsonObject
+     * @param jsonObject JSON object returned from Google Map
      */
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
     private void getInfoFromJson(JSONObject jsonObject) {
@@ -445,7 +447,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startMarker.setTitle(mapData.getStartAddress());
 
             //zoom to start position:
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(14).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(17).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
@@ -454,8 +456,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Clear the map
             mMap.clear();
 
-            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
-            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
@@ -472,7 +474,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * After draw the marker, it will draw the route.
      */
-    public void drawRoute() {
+    private void drawRoute() {
         PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
         for (int z = 0; z < routeList.size(); z++) {
             LatLng point = routeList.get(z);
