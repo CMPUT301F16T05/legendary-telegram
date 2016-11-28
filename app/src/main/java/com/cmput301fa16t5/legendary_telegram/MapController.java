@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 /**
  * MapController class is the controller of the map.
+ * It is used to create the URL according to different parameters.
+ * It is also used to sent the URL to the server and get JSON object return.
  * @author zhimao
  */
 
@@ -25,6 +27,9 @@ public class MapController {
     private final CentralController centralCommand;
     private JSONObject jsonObject;
 
+    /**
+     * Constructor
+     */
     public MapController() {
         centralCommand = CentralController.getInstance();
     }
@@ -42,6 +47,13 @@ public class MapController {
         }
     }
 
+    /**
+     * It returns a URL for searching directions between two addresses.
+     * @param startAddress
+     * @param endAddress
+     * @param key
+     * @return URL for searching directions between two addresses
+     */
     public String createURl(String startAddress, String endAddress, String key) {
         // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" + startAddress
@@ -49,6 +61,13 @@ public class MapController {
                 + "&key=" + key;
     }
 
+    /**
+     * It returns a URL searching for directions between two LatLng points.
+     * @param start
+     * @param end
+     * @param key
+     * @return URL for searching directions between two LatLng points
+     */
     public String createURl(LatLng start, LatLng end, String key) {
         // example: https://maps.googleapis.com/maps/api/directions/json?origin=Edmonton&destination=vancouver&key=KKKEEEYYY
         return "https://maps.googleapis.com/maps/api/directions/json?origin=" + String.valueOf(start.latitude) + "," + String.valueOf(start.longitude)
@@ -56,6 +75,12 @@ public class MapController {
                 + "&key=" + key; //+ R.string.google_maps_key;
     }
 
+    /**
+     * It returns a URL for searching a place by its address.
+     * @param address
+     * @param key
+     * @return URL for searching a place by its address
+     */
     public String createPlaceURL(String address, String key) {
         // Learn from: https://developers.google.com/maps/documentation/geocoding/start
         // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=
@@ -63,6 +88,12 @@ public class MapController {
                 + "&key=" + key; //+ R.string.google_maps_key;
     }
 
+    /**
+     * It returns a URL for searching a place by its LatLng points.
+     * @param point
+     * @param key
+     * @return URL for searching a place by its LatLng points
+     */
     public String createLatLngURL(LatLng point, String key) {
         // Learn from: https://developers.google.com/maps/documentation/geocoding/start
         // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=
@@ -70,6 +101,12 @@ public class MapController {
                 + "&key=" + key; //+ R.string.google_maps_key;
     }
 
+    /**
+     * Send the URL to google map server in the background.
+     * It returns a JSON object.
+     * @param url
+     * @return JSON object of the searching result
+     */
     public JSONObject readUrl(final String url) {
         // Running URL has to be in another thread. Not in main thread.
         // Code from: http://stackoverflow.com/questions/6343166/how-to-fix-android-os-networkonmainthreadexception/6343299#6343299
@@ -96,6 +133,13 @@ public class MapController {
         return jsonObject;
     }
 
+    /**
+     * Read URL
+     * @param urlString
+     * @return JSON object from URL.
+     * @throws IOException
+     * @throws JSONException
+     */
     // Code from: http://stackoverflow.com/questions/4308554/simplest-way-to-read-json-from-a-url-in-java
     private JSONObject readJsonFromUrl(String urlString) throws IOException, JSONException {
         InputStream is = new URL(urlString).openStream();

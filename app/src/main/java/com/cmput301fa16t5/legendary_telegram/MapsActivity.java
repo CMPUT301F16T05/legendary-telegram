@@ -36,23 +36,25 @@ import java.util.List;
 
 /**
  * MapsActivity class is the view of the map.
+ * It is used to show and get the geometric information of rider and driver.
  * @author zhimao
  */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
-    // This is the actual map object
+    // Actual map onject
     private GoogleMap mMap;
-    private LatLng start;
-    private LatLng end;
-    private String startAddress;
-    private String endAddress;
+    //Data class for map
+    private MapData mapData;
+    // Geometric information
     private Double distance;
+    // Used for draw a polyline
     private List<LatLng> routeList;
+    //Markers of start and end points
     private Marker startMarker;
     private Marker endMarker;
 
+    // Buttons and Text boxes
     private Button okButton;
     private Button searchButton;
     private Button filterButton;
@@ -86,6 +88,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         endEditText = (EditText) findViewById(R.id.EndEditText);
         endTextView = (TextView) findViewById(R.id.EndTextView);
 
+        mapData = new MapData();
+
         Intent intent = getIntent();
         myController = new MapController();
         riderOrDriver = intent.getStringExtra("Map");
@@ -93,12 +97,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         description = "";
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -106,23 +108,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         // Code from: http://stackoverflow.com/questions/17412882/positioning-google-maps-v2-zoom-in-controls-in-android
         // Show the zoom button on the map
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        start = new LatLng(53.522945, -113.525594);
-        end = new LatLng(53.525037, -113.521324);
-        // Learn from: https://developers.google.com/maps/documentation/android-api/marker
-        // https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker
+        mapData.setStart(new LatLng(53.522945, -113.525594));
+        mapData.setEnd(new LatLng(53.525037, -113.521324));
 
         /**
          * Null in case of tests since there is nothing.
          * Not fromRider means Driver.
          */
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
             startMarker.setTitle("Start");
 
             endEditText.setEnabled(false);
@@ -137,8 +135,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          * "fromRider" aka two points.
          */
         else {
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
+            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true));
 
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
@@ -147,17 +145,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             filterButton.setText("Description");
         }
+
         //zoom to start position:
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(14).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        /* Sample code
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        */
-
+        // Long click marker and drag to get accurate location
         // Learn from: http://stackoverflow.com/questions/30067228/onmarkerdraglistener-for-marker-position-along-associated-circles-google-maps-an
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -174,13 +167,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMarkerDragEnd(Marker marker) {
                 // If it is Driver
                 if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
-                    if (marker.getTitle().equals("Start") || marker.getTitle().equals(startAddress)) {
+                    if (marker.getTitle().equals("Start") || marker.getTitle().equals(mapData.getStartAddress())) {
                         Context context = getApplicationContext();
-                        start = marker.getPosition();
-                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
+                        mapData.setStart(marker.getPosition());
+                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
                     }
 
-                    final String url = myController.createLatLngURL(start, getString(R.string.google_maps_key));
+                    final String url = myController.createLatLngURL(mapData.getStart(), getString(R.string.google_maps_key));
                     Log.d("URL Driver is ", url);
                     JSONObject jsonObject = myController.readUrl(url);
 
@@ -192,26 +185,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 else {
                     if (marker.getTitle().equals("Start")) {
                         Context context = getApplicationContext();
-                        start = marker.getPosition();
-                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                        mapData.setStart(marker.getPosition());
+                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"E: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
                     } else if (marker.getTitle().equals("End")) {
                         Context context = getApplicationContext();
-                        end = marker.getPosition();
-                        Toast.makeText(context,"S: "+start.toString(),Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context,"E: "+end.toString(),Toast.LENGTH_SHORT).show();
+                        mapData.setEnd(marker.getPosition());
+                        Toast.makeText(context,"S: " + mapData.getStart().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"E: " + mapData.getEnd().toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     // After drag - search again
-                    final String url = myController.createURl(start, end, getString(R.string.google_maps_key));
+                    final String url = myController.createURl(mapData.getStart(),
+                            mapData.getEnd(), getString(R.string.google_maps_key));
                     Log.d("URL is ", url);
 
                     JSONObject jsonObject = myController.readUrl(url);
                     getInfoFromJson(jsonObject);
-                    Log.d("Start LatLng is ", start.toString());
-                    Log.d("End LatLng is ", end.toString());
-                    Log.d("Start Address is ", startAddress);
-                    Log.d("End Address is ", endAddress);
+                    Log.d("Start LatLng is ", mapData.getStart().toString());
+                    Log.d("End LatLng is ", mapData.getEnd().toString());
+                    Log.d("Start Address is ", mapData.getStartAddress());
+                    Log.d("End Address is ", mapData.getEndAddress());
                     Log.d("Distance", String.valueOf(distance));
 
                     drawMarker();
@@ -227,8 +221,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 // If it is Driver
                 if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
-                    startAddress = startEditText.getText().toString().replaceAll(" ", "+");
-                    final String url = myController.createPlaceURL(startAddress, getString(R.string.google_maps_key));
+                    mapData.setStartAddress(startEditText.getText().toString().replaceAll(" ", "+"));
+                    final String url = myController.createPlaceURL(mapData.getStartAddress(), getString(R.string.google_maps_key));
                     Log.d("URL Driver is ", url);
                     JSONObject jsonObject = myController.readUrl(url);
 
@@ -239,21 +233,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // As a rider
                 else {
                     // Do something after it is clicked
-                    startAddress = startEditText.getText().toString().replaceAll(" ", "+");
-                    endAddress = endEditText.getText().toString().replaceAll(" ", "+");
+                    mapData.setStartAddress(startEditText.getText().toString().replaceAll(" ", "+"));
+                    mapData.setEndAddress(endEditText.getText().toString().replaceAll(" ", "+"));
                     // For test purpose:
 //                    startAddress = "10310 102 Ave NW, Edmonton".replaceAll(" ", "+");
 //                    endAddress = "11020 53 Ave. NW, Edmonton".replaceAll(" ", "+");
 
-                    final String url = myController.createURl(startAddress, endAddress, getString(R.string.google_maps_key));
+                    final String url = myController.createURl(mapData.getStartAddress(), mapData.getEndAddress(), getString(R.string.google_maps_key));
                     Log.d("URL is ", url);
 
                     JSONObject jsonObject = myController.readUrl(url);
                     getInfoFromJson(jsonObject);
-                    Log.d("Start LatLng is ", start.toString());
-                    Log.d("End LatLng is ", end.toString());
-                    Log.d("Start Address is ", startAddress);
-                    Log.d("End Address is ", endAddress);
+                    Log.d("Start LatLng is ", mapData.getStart().toString());
+                    Log.d("End LatLng is ", mapData.getEnd().toString());
+                    Log.d("Start Address is ", mapData.getStartAddress());
+                    Log.d("End Address is ", mapData.getEndAddress());
                     Log.d("Distance", String.valueOf(distance));
                     drawMarker();
                     drawRoute();
@@ -272,16 +266,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 positionPair = new ArrayList<>();
                 if (riderOrDriver.equals("fromRider")) {
-                    positionPair.add(start);
-                    positionPair.add(end);
-                    Log.d("Start: ", start.toString());
-                    Log.d("End: ", end.toString());
+                    positionPair.add(mapData.getStart());
+                    positionPair.add(mapData.getEnd());
+                    Log.d("Start: ", mapData.getStart().toString());
+                    Log.d("End: ", mapData.getEnd().toString());
 
                 }
                 else {
                     positionPair = new ArrayList<>();
-                    positionPair.add(start);
-                    Log.d("Start: ", start.toString());
+                    positionPair.add(mapData.getStart());
+                    Log.d("Start: ", mapData.getStart().toString());
                     
                 }
 
@@ -290,6 +284,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        // Click filter button - set the filter
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,7 +316,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else {
                     // Do something about the filter
                     //go to filter activity
-                    String location_cordinate = startAddress;
+                    String location_cordinate = mapData.getStartAddress();
                     backFromFilter = true;
                     Intent filter_intent = new Intent(MapsActivity.this, FilterActivity.class);
                     filter_intent.putExtra("Location", location_cordinate);
@@ -332,6 +327,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * Input address and return the Latitude and Longtitude of the address
+     * @param jsonObject
+     */
     private void getPlace(JSONObject jsonObject) {
         try {
             // resultsArray contains the place
@@ -341,7 +340,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             JSONObject result = resultsArray.getJSONObject(0);
 
             // Get the format string
-            startAddress = result.getString("formatted_address");
+            mapData.setStartAddress(result.getString("formatted_address"));
 
             // Get the geometry object
             JSONObject geometry = result.getJSONObject("geometry");
@@ -352,8 +351,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Get the LatLng
             String latStartString = location.getString("lat");
             String lngStartString = location.getString("lng");
-            start = new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString));
-            Log.d("Start LatLng is ", start.toString());
+            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
+            Log.d("Start LatLng is ", mapData.getStart().toString());
 
 
         } catch (JSONException e) {
@@ -361,7 +360,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    // Parse the Json file read from google map
+    /**
+     * Parse the Json file read from google map.
+     * We can get folloing information:
+     * Start location
+     * End location
+     * Start address
+     * End address
+     * distance (For future part 6)
+     * Route
+     * @param jsonObject
+     */
     // Code from: http://stackoverflow.com/questions/7237290/json-parsing-of-google-maps-api-in-android-app
     private void getInfoFromJson(JSONObject jsonObject) {
         try {
@@ -391,18 +400,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             JSONObject latlngStartObject = leg.getJSONObject("start_location");
             String latStartString = latlngStartObject.getString("lat");
             String lngStartString = latlngStartObject.getString("lng");
-            start = new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString));
+            mapData.setStart(new LatLng(Double.valueOf(latStartString), Double.valueOf(lngStartString)));
             //Log.d("Start LatLng is ", start.toString());
 
             JSONObject latlngEndObject = leg.getJSONObject("end_location");
             String latEndString = latlngEndObject.getString("lat");
             String lngEndString = latlngEndObject.getString("lng");
-            end = new LatLng(Double.valueOf(latEndString), Double.valueOf(lngEndString));
+            mapData.setEnd(new LatLng(Double.valueOf(latEndString), Double.valueOf(lngEndString)));
             //Log.d("End LatLng is ", end.toString());
 
             // Get the start and end address
-            startAddress = leg.getString("start_address");
-            endAddress = leg.getString("end_address");
+            mapData.setStartAddress(leg.getString("start_address"));
+            mapData.setEndAddress(leg.getString("end_address"));
             //Log.d("Start Address is ", startAddress);
             //Log.d("End Address is ", endAddress);
 
@@ -419,20 +428,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Clear the map and draw the start marker and end marker.
+     */
     private void drawMarker() {
         // If it is Driver
         if ((riderOrDriver == null) || (!riderOrDriver.equals("fromRider"))) {
             // Clear the map
             mMap.clear();
 
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
 
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
-            startMarker.setTitle(startAddress);
+            startMarker.setTitle(mapData.getStartAddress());
 
             //zoom to start position:
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(14).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
@@ -441,8 +453,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Clear the map
             mMap.clear();
 
-            startMarker = mMap.addMarker(new MarkerOptions().position(start).draggable(true));
-            endMarker = mMap.addMarker(new MarkerOptions().position(end).draggable(true));
+            startMarker = mMap.addMarker(new MarkerOptions().position(mapData.getStart()).draggable(true));
+            endMarker = mMap.addMarker(new MarkerOptions().position(mapData.getEnd()).draggable(true));
 
             // Add a indicator for the marker
             // Learn from: https://developers.google.com/android/reference/com/google/android/gms/maps/model/Marker.html#setSnippet(java.lang.String)
@@ -451,12 +463,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             //zoom to start position:
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(14).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(mapData.getStart()).zoom(14).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
 
-    private void drawRoute() {
+    /**
+     * After draw the marker, it will draw the route.
+     */
+    public void drawRoute() {
         PolylineOptions options = new PolylineOptions().width(10).color(Color.argb(255, 66, 133, 244)).geodesic(true);
         for (int z = 0; z < routeList.size(); z++) {
             LatLng point = routeList.get(z);
@@ -464,14 +479,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mMap.addPolyline(options);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(start);
-        builder.include(end);
+        builder.include(mapData.getStart());
+        builder.include(mapData.getEnd());
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 200));
 
     }
 
-
-
+    /**
+     * Finish the activity when come back from filter.
+     */
     @Override
     protected void onResume(){
         super.onResume();

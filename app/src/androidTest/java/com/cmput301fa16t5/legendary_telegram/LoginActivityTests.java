@@ -56,7 +56,7 @@ public class LoginActivityTests extends ActivityInstrumentationTestCase2<LogInAc
         // Look at me with the dependency injection.
         // It's off the Hindle.
         Context testContext = InstrumentationRegistry.getTargetContext();
-        String[] params = {"huhuhuhuhuhuhuhuhuhuhuhuTestCthuhluNobodyPickthis", "2", "3"};
+        String[] params = {"ATestUserName", "2", "3"};
         User testUser = new User(params[0], params[1], params[2]);
         GsonController.saveUserToDisk(testUser, testContext);
 
