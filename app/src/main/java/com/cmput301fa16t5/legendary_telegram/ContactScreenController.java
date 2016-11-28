@@ -137,7 +137,7 @@ public class ContactScreenController {
     }
 
     /**
-     * Getter method, which helps ContactScreenActivity to get the Latitude and Longtitude of start and end points.
+     * Getter method, which helps ContactScreenActivity to get the Latitude and Longitude of start and end points.
      * @return request
      * zhimao
      */
