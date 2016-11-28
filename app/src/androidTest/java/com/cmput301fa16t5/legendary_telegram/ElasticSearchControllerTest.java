@@ -1,13 +1,10 @@
 package com.cmput301fa16t5.legendary_telegram;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
