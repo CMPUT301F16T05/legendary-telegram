@@ -112,8 +112,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Show the zoom button on the map
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        mapData.setStart(new LatLng(53.522945, -113.525594));
-        mapData.setEnd(new LatLng(53.525037, -113.521324));
+        // If we need to get current location, we need to increase the minimum sdk to 22.
+        mapData.setStart(new LatLng(53.527366, -113.529481));
+        mapData.setEnd(new LatLng(53.527168, -113.528987));
 
         /**
          * Null in case of tests since there is nothing.
